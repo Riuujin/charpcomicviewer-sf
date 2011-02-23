@@ -44,7 +44,7 @@ namespace csharp_comicviewer
 		
 		void Website_lblLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			ProcessStartInfo psi = new ProcessStartInfo("http://sourceforge.net/projects/csharpcomicview/");
+			ProcessStartInfo psi = new ProcessStartInfo("http://csharpcomicview.sf.net/);
 			psi.UseShellExecute = true;
 			Process.Start(psi);
 		}
