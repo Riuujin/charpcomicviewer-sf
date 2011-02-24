@@ -24,6 +24,9 @@ using System.Collections.Generic;
 
 namespace csharp_comicviewer
 {
+    /// <summary>
+    /// A Collection of ComicFile's (archives)
+    /// </summary>
     class ComicBook
     {
         List<ComicFile> Files = new List<ComicFile>();
@@ -32,6 +35,9 @@ namespace csharp_comicviewer
         int CurrentPageOfFile;
         int CurrentPageOfTotal;
 
+        /// <summary>
+        /// Create a ComicBook
+        /// </summary>
         public ComicBook()
         {
             TotalPages = 0;

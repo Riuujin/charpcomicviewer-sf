@@ -155,7 +155,6 @@ namespace csharp_comicviewer
 
         private String previousDir(String currentdir)
         {
-            Boolean next = false;
             try
             {
                 String[] Dirs = Directory.GetDirectories(Directory.GetParent(currentdir).ToString());
