@@ -46,6 +46,9 @@ namespace csharp_comicviewer
             CurrentPageOfTotal = 0;
         }
 
+        /// <summary>
+        /// Check if the ComicBook has ComicFiles
+        /// </summary>
         public Boolean HasFiles()
         {
             if (Files.Count > 0)
@@ -54,6 +57,9 @@ namespace csharp_comicviewer
                 return false;
         }
 
+        /// <summary>
+        /// Count the total pages of the ComicBook (Pages of all ComicFiles)
+        /// </summary>
         private void CountTotalPages()
         {
             TotalPages = 0;
@@ -63,6 +69,10 @@ namespace csharp_comicviewer
             }
         }
 
+        /// <summary>
+        /// Get the total pages of the ComicBook (Pages of all ComicFiles)
+        /// </summary>
+        /// <returns>The total pages of the ComicBook (Pages of all ComicFiles)</returns>
         public int GetTotalPages()
         {
             if (TotalPages == 0)
@@ -70,6 +80,10 @@ namespace csharp_comicviewer
             return TotalPages;
         }
 
+        /// <summary>
+        /// Get the current of total pages of the ComicBook
+        /// </summary>
+        /// <returns>The current of  total pages of the ComicBook</returns>
         public int GetCurrentPageOfTotal()
         {
         	if(GetCurrentFile() != 0)
@@ -85,21 +99,40 @@ namespace csharp_comicviewer
             return CurrentPageOfTotal;
         }
 
+        /// <summary>
+        /// Get the current of total pages of the ComicFile
+        /// </summary>
+        /// <param name="FilesIndex">The number of the ComicFile</param>
+        /// <returns>The current of  total pages of the ComicFile</returns>
         public int GetTotalPagesOfFile(int FilesIndex)
         {
             return Files[FilesIndex].GetTotalPages();
         }
 
+        /// <summary>
+        /// Get the total number of ComicFiles of the ComicBook
+        /// </summary>
+        /// <returns>Total files in the ComicBook</returns>
         public int GetTotalFiles()
         {
             return Files.Count;
         }
 
+        /// <summary>
+        /// Get the index of the current ComicFile of the ComicBook
+        /// </summary>
+        /// <returns>The index of the current ComicFile in the ComicBook</returns>
         public int GetCurrentFile()
         {
             return CurrentFile;
         }
 
+        /// <summary>
+        /// Get a page (image) of the ComicBook
+        /// </summary>
+        /// <param name="FileNumber">Index number of the ComicFile</param>
+        /// <param name="PageNumber">Index number of page from the ComicFile</param>
+        /// <returns>The requested image</returns>
         public Image GetPage(int FileNumber, int PageNumber)
         {
             if (GetTotalFiles() > 0)
@@ -118,31 +151,50 @@ namespace csharp_comicviewer
                     return null;
         }
 
-        public String GetInfoTxt(int FileNumber)
+        /// <summary>
+        /// Get the information text from a ComicFile
+        /// </summary>
+        /// <param name="FileNumber">Index number of the ComicFile</param>
+        /// <returns>The text</returns>
+        public String GetInfoText(int FileNumber)
         {
             return Files[CurrentFile].GetInfoTxt();
         }
 
-        public ArrayList GetData()
+        /// <summary>
+        /// Get the information needed to save the ComicBook as bookmark or resume
+        /// </summary>
+        /// <returns>ArrayList with the information, [0] = ComicFile locations, [1] = current ComicFile, [2] = current page of ComicFile</returns>
+        public ArrayList GetComicBookSaveInformation()
         {
             ArrayList Data = new ArrayList();
-            String[] FileNames = new String[Files.Count];
+            String[] FileLocations = new String[Files.Count];
             for (int i = 0; i < Files.Count; i++)
             {
-                FileNames[i] = Files[i].GetLocation();
+                FileLocations[i] = Files[i].GetLocation();
             }
-            Data.Add(FileNames); //[0]
+            Data.Add(FileLocations); //[0]
             Data.Add(CurrentFile); //[1]
             Data.Add(CurrentPageOfFile); //[2]
             return Data;
         }
 
-        public void CreateFile(String Location, List<byte[]> Images, String InfoTxt)
+        /// <summary>
+        /// Create a ComicFile
+        /// </summary>
+        /// <param name="Location">Location of the ComicFile</param>
+        /// <param name="Images">Images inside the ComicFile</param>
+        /// <param name="InfoTxt">Information text if any in the ComicFile</param>
+        public void CreateComicFile(String Location, List<byte[]> Images, String InfoText)
         {
-            ComicFile File = new ComicFile(Location, Images, InfoTxt);
+            ComicFile File = new ComicFile(Location, Images, InfoText);
             Files.Add(File);
         }
 
+        /// <summary>
+        /// Get the next page of the ComicBook
+        /// </summary>
+        /// <returns>The next page of the ComicBook</returns>
         public Image NextPage()
         {
             Image Page = null;
@@ -160,6 +212,10 @@ namespace csharp_comicviewer
             return Page;
         }
 
+        /// <summary>
+        /// Get the previous page of the ComicBook
+        /// </summary>
+        /// <returns>The previous page of the ComicBook</returns>
         public Image PreviousPage()
         {
             Image Page = null;
@@ -177,13 +233,22 @@ namespace csharp_comicviewer
             return Page;
         }
 
+        /// <summary>
+        /// Get the current page of the ComicBook
+        /// </summary>
+        /// <returns>The current page of the ComicBook</returns>
         public Image GetCurrentPage()
         {
             Image Page = null;
             Page = GetPage(CurrentFile, CurrentPageOfFile);
             return Page;
         }
-        
+
+        /// <summary>
+        /// Get the file location of a ComicFile
+        /// </summary>
+        /// <param name="FileNumber">Index of the ComicFile</param>
+        /// <returns>The file location of the ComicFile</returns>
         public String GetFileLocation(int FileNumber)
         {
         	return Files[FileNumber].GetLocation();

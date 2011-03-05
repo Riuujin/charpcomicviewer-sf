@@ -535,7 +535,7 @@ namespace csharp_comicviewer
 		{
 			if (ComicBook != null && ComicBook.GetTotalFiles() != 0)
 			{
-				ArrayList Data = ComicBook.GetData();
+				ArrayList Data = ComicBook.GetComicBookSaveInformation();
 				Configuration.Resume_Files = (String[])Data[0];
 				Configuration.Resume_Start_At[0] = Convert.ToInt32(Data[1]);
 				Configuration.Resume_Start_At[1] = Convert.ToInt32(Data[2]);
@@ -563,10 +563,10 @@ namespace csharp_comicviewer
             {
                 if (ComicBook != null && ComicBook.GetTotalFiles() != 0)
 				{
-					if(String.IsNullOrEmpty(ComicBook.GetInfoTxt(ComicBook.GetCurrentFile())))
+					if(String.IsNullOrEmpty(ComicBook.GetInfoText(ComicBook.GetCurrentFile())))
 						ShowMessage("No info text");
 					else
-						InfoText = new InfoText(ComicBook.GetFileLocation(ComicBook.GetCurrentFile()),ComicBook.GetInfoTxt(ComicBook.GetCurrentFile()));
+						InfoText = new InfoText(ComicBook.GetFileLocation(ComicBook.GetCurrentFile()),ComicBook.GetInfoText(ComicBook.GetCurrentFile()));
 				}
 				else
 					ShowMessage("No archive loaded");
@@ -783,7 +783,7 @@ namespace csharp_comicviewer
 		{
 			if (ComicBook.GetTotalFiles() != 0)
 			{
-				ArrayList Data = ComicBook.GetData();
+				ArrayList Data = ComicBook.GetComicBookSaveInformation();
 				Configuration.Bookmarks.Add(Data);
 				String[] Names = (String[])Data[0];
 				ShowMessage("Bookmark added");

@@ -124,9 +124,9 @@ namespace csharp_comicviewer
 					if (ImagesAsBytes.Count > 0)
 					{
 						if (InfoTxt.Length > 0 )
-							ComicBook.CreateFile(File, ImagesAsBytes, InfoTxt);
+							ComicBook.CreateComicFile(File, ImagesAsBytes, InfoTxt);
 						else
-							ComicBook.CreateFile(File, ImagesAsBytes, null);
+							ComicBook.CreateComicFile(File, ImagesAsBytes, null);
 					}
 					ImagesAsBytes.Clear();
 				}
