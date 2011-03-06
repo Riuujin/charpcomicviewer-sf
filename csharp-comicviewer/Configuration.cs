@@ -24,6 +24,9 @@ using System.Collections;
 
 namespace csharp_comicviewer
 {
+    /// <summary>
+    /// Configuration that is saved to an xml file
+    /// </summary>
     [Serializable]
     public class Configuration
     {

@@ -27,32 +27,53 @@ using System.IO;
 
 namespace csharp_comicviewer
 {
+    /// <summary>
+    /// A ComicFile contains the images and possible some information text from one archive
+    /// </summary>
     class ComicFile
     {
         List<byte[]> ImagesAsBytes = new List<byte[]>();
-        String InfoTxt;
+        String InfoText;
         int TotalPages;
         String Location;
 
-        public ComicFile(String Location, List<byte[]> Images, String InfoTxt)
+        /// <summary>
+        /// Create a ComicFile
+        /// </summary>
+        /// <param name="Location">Location of the archive</param>
+        /// <param name="Images">The images of the archive</param>
+        /// <param name="InfoText">Information text within the archive</param>
+        public ComicFile(String Location, List<byte[]> Images, String InfoText)
         {
             this.Location = Location;
             this.ImagesAsBytes.AddRange(Images);
             CountTotalPages();
-            if (InfoTxt != null)
-                this.InfoTxt = InfoTxt;
+            if (InfoText != null)
+                this.InfoText = InfoText;
         }
 
+        /// <summary>
+        /// Count the total pages(images) inside the ComicFile
+        /// </summary>
         private void CountTotalPages()
         {
             TotalPages = ImagesAsBytes.Count;
         }
 
+        /// <summary>
+        /// Get the total pages(images) of the ComicFile
+        /// </summary>
+        /// <returns>Total pages of the ComicFile</returns>
         public int GetTotalPages()
         {
             return TotalPages;
         }
 
+        /// <summary>
+        /// Get a page(image)
+        /// </summary>
+        /// <param name="PageNumber">The page number</param>
+        /// <returns>The page(image) with the corresponding number</returns>
         public Image GetPage(int PageNumber)
         {
             using (MemoryStream ms = new MemoryStream(ImagesAsBytes[PageNumber], 0, ImagesAsBytes[PageNumber].Length))
@@ -62,11 +83,19 @@ namespace csharp_comicviewer
             
         }
 
-        public String GetInfoTxt()
+        /// <summary>
+        /// Get the information text from the ComicFile
+        /// </summary>
+        /// <returns>The information text</returns>
+        public String GetInfoText()
         {
-            return InfoTxt;
+            return InfoText;
         }
 
+        /// <summary>
+        /// Get the location of the ComicFile
+        /// </summary>
+        /// <returns>Location of the ComicFile(archive)</returns>
         public String GetLocation()
         {
             return Location;

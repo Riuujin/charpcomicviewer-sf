@@ -158,7 +158,7 @@ namespace csharp_comicviewer
         /// <returns>The text</returns>
         public String GetInfoText(int FileNumber)
         {
-            return Files[CurrentFile].GetInfoTxt();
+            return Files[CurrentFile].GetInfoText();
         }
 
         /// <summary>

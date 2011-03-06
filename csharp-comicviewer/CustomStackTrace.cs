@@ -23,8 +23,14 @@ using System.Windows.Forms;
 
 namespace csharp_comicviewer
 {
+    /// <summary>
+    /// Class that allows the creation of custom stacktraces within install directory
+    /// </summary>
     class CustomStackTrace
     {
+        /// <summary>
+        /// Create a custom stacktrace and show a pop-up message
+        /// </summary>
         public void CreateStackTrace()
         {
             String name = "StackTrace_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm") + ".txt";
@@ -51,6 +57,9 @@ namespace csharp_comicviewer
             MessageBox.Show(String.Format("An error has occured. A stack trace has been saved in the installation directory with the name: \"{0}\" \r\nYou can, if you want, upload the file by making a new item in this projects bug tracker (found on the website).", name));
         }
 
+        /// <summary>
+        /// Create a custom stacktrace and show a pop-up message
+        /// </summary>
         public void CreateStackTrace(String ExceptionStackTrace)
         {
             String name = "StackTrace_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm") + ".txt";
