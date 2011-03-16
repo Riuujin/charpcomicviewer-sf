@@ -25,6 +25,9 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Collections;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
 
 namespace csharp_comicviewer
 {
@@ -35,6 +38,7 @@ namespace csharp_comicviewer
     {
 
         private Configuration Configuration = new Configuration();
+        private Configuration ConfigurationBackup = new Configuration();
 
         /// <summary>
         /// Load configuration
@@ -44,6 +48,37 @@ namespace csharp_comicviewer
         {
             InitializeComponent();
             this.Configuration = Configuration;
+            BackupConfiguration();
+        }
+
+        /// <summary>
+        /// Back up configuration in case of cancel
+        /// </summary>
+        private void BackupConfiguration()
+        {
+            IFormatter formatter = new BinaryFormatter();
+            Stream stream = new MemoryStream();
+            using (stream)
+            {
+                formatter.Serialize(stream, Configuration);
+                stream.Seek(0, SeekOrigin.Begin);
+                ConfigurationBackup = (Configuration)formatter.Deserialize(stream);
+            }
+        }
+
+        /// <summary>
+        /// Return the configuration to the backup made
+        /// </summary>
+        private void ReturnToBackupConfiguration()
+        {
+            IFormatter formatter = new BinaryFormatter();
+            Stream stream = new MemoryStream();
+            using (stream)
+            {
+                formatter.Serialize(stream, ConfigurationBackup);
+                stream.Seek(0, SeekOrigin.Begin);
+                Configuration = (Configuration)formatter.Deserialize(stream);
+            }
         }
 
         /// <summary>
@@ -69,7 +104,7 @@ namespace csharp_comicviewer
         }
 
         /// <summary>
-        /// Delete checked bookmarks
+        /// Delete checked bookmarks and update display
         /// </summary>
         private void Delete_btn_Click(object sender, EventArgs e)
         {
@@ -83,17 +118,34 @@ namespace csharp_comicviewer
                     i = 0;
                 }
             }
+            ManageBookmarks_Load(sender, e);
+        }
+
+        /// <summary>
+        /// Cancel all actions and close dialog
+        /// </summary>
+        private void Cancel_btn_Click(object sender, EventArgs e)
+        {
+            ReturnToBackupConfiguration();
             this.Close();
         }
 
         /// <summary>
-        /// Cancel all actions
+        /// Close this dialog
         /// </summary>
-        private void Cancel_btn_Click(object sender, EventArgs e)
+        private void Ok_btn_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
+        /// <summary>
+        /// Get the new configuration
+        /// </summary>
+        /// <returns>A configuration with updated bookmarks</returns>
+        public Configuration GetConfiguration()
+        {
+            return Configuration;
+        }
 
     }
 }

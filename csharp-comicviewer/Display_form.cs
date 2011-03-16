@@ -905,7 +905,9 @@ namespace csharp_comicviewer
 		{
 			ManageBookmarks mb = new ManageBookmarks(Configuration);
 			mb.ShowDialog();
-			SetBookmarkMenu();
+            Configuration = mb.GetConfiguration();
+            SetBookmarkMenu();
+            mb.Dispose();
 		}
 
         /// <summary>

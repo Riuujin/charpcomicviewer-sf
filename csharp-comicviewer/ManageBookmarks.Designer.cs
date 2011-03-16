@@ -32,6 +32,7 @@
             this.Bookmarks_lbl = new System.Windows.Forms.Label();
             this.Delete_btn = new System.Windows.Forms.Button();
             this.Cancel_btn = new System.Windows.Forms.Button();
+            this.Ok_btn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // Bookmarks_chckdLstBx
@@ -57,24 +58,34 @@
             // 
             // Delete_btn
             // 
-            this.Delete_btn.Location = new System.Drawing.Point(312, 297);
+            this.Delete_btn.Location = new System.Drawing.Point(339, 297);
             this.Delete_btn.Name = "Delete_btn";
-            this.Delete_btn.Size = new System.Drawing.Size(75, 23);
+            this.Delete_btn.Size = new System.Drawing.Size(92, 23);
             this.Delete_btn.TabIndex = 2;
-            this.Delete_btn.Text = "Delete";
+            this.Delete_btn.Text = "Delete Checked";
             this.Delete_btn.UseVisualStyleBackColor = true;
             this.Delete_btn.Click += new System.EventHandler(this.Delete_btn_Click);
             // 
             // Cancel_btn
             // 
             this.Cancel_btn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.Cancel_btn.Location = new System.Drawing.Point(393, 297);
+            this.Cancel_btn.Location = new System.Drawing.Point(689, 297);
             this.Cancel_btn.Name = "Cancel_btn";
             this.Cancel_btn.Size = new System.Drawing.Size(75, 23);
             this.Cancel_btn.TabIndex = 3;
             this.Cancel_btn.Text = "Cancel";
             this.Cancel_btn.UseVisualStyleBackColor = true;
             this.Cancel_btn.Click += new System.EventHandler(this.Cancel_btn_Click);
+            // 
+            // Ok_btn
+            // 
+            this.Ok_btn.Location = new System.Drawing.Point(608, 297);
+            this.Ok_btn.Name = "Ok_btn";
+            this.Ok_btn.Size = new System.Drawing.Size(75, 23);
+            this.Ok_btn.TabIndex = 4;
+            this.Ok_btn.Text = "Ok";
+            this.Ok_btn.UseVisualStyleBackColor = true;
+            this.Ok_btn.Click += new System.EventHandler(this.Ok_btn_Click);
             // 
             // ManageBookmarks
             // 
@@ -83,6 +94,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.Cancel_btn;
             this.ClientSize = new System.Drawing.Size(776, 332);
+            this.Controls.Add(this.Ok_btn);
             this.Controls.Add(this.Cancel_btn);
             this.Controls.Add(this.Delete_btn);
             this.Controls.Add(this.Bookmarks_lbl);
@@ -108,5 +120,6 @@
         private System.Windows.Forms.Label Bookmarks_lbl;
         private System.Windows.Forms.Button Delete_btn;
         private System.Windows.Forms.Button Cancel_btn;
+        private System.Windows.Forms.Button Ok_btn;
     }
 }

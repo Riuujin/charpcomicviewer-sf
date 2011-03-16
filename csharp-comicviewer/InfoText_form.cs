@@ -51,6 +51,7 @@ namespace csharp_comicviewer
 		void Close_btnClick(object sender, EventArgs e)
 		{
 			this.Close();
+            this.Dispose();
 		}
 	}
 }
