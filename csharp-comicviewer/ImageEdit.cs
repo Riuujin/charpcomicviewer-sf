@@ -24,12 +24,20 @@ using System.Windows.Forms;
 
 namespace csharp_comicviewer
 {
+    /// <summary>
+    /// Calculate stat location,background color and resize images
+    /// </summary>
 	class ImageEdit
 	{
 		private Point LocationImage = new Point(0, 0);
 		private Color BackColor;
 
-		public Point CalculateLocationImage(Image image)
+        /// <summary>
+        /// Get start location of an image
+        /// </summary>
+        /// <param name="image">The image</param>
+        /// <returns>Start location</returns>
+		public Point GetImageStartLocation(Image image)
 		{
 			int Primary_Monitor_Width = SystemInformation.PrimaryMonitorSize.Width;
 			int Primary_Monitor_Height = SystemInformation.PrimaryMonitorSize.Height;
@@ -60,11 +68,12 @@ namespace csharp_comicviewer
 			return LocationImage;
 		}
 
-		/*
-		 * change background color to make it easier on the eyes
-		 * image - the image used to get values
-		 */
-		public Color setBackColor(Image image)
+        /// <summary>
+        /// Change background color to make it easier on the eyes
+        /// </summary>
+        /// <param name="image">The image used to get values</param>
+        /// <returns>Recommended background color</returns>
+		public Color GetBackgroundColor(Image image)
 		{
 			Bitmap objBitmap = new Bitmap(image);
 			int DividedBy = 100;
@@ -95,7 +104,7 @@ namespace csharp_comicviewer
 				Colors[i++] = objBitmap.GetPixel(x * (objBitmap.Width / DividedBy), objBitmap.Height - 1);
 			}
 			//get mode of colors
-			int Color = ModeOfColorArray(Colors);
+			int Color = GetModeOfColorArray(Colors);
 			//set bgcolor
 
 			if (Color != -1)
@@ -104,11 +113,12 @@ namespace csharp_comicviewer
 			return BackColor;
 		}
 
-		/*
-		 * Gets mode from Color[]. Returns the index of the mode, if there isnt any it returns -1
-		 * colors - an Color[]
-		 */
-		private int ModeOfColorArray(Color[] colors)
+        /// <summary>
+        /// Gets the mode of a Color[]
+        /// </summary>
+        /// <param name="colors">Array of Colors</param>
+        /// <returns>Index of mode, -1 if non found</returns>
+		private int GetModeOfColorArray(Color[] colors)
 		{
 			Color[] distinctcolors = colors.Distinct().ToArray();
 			int[] countcolors = new int[distinctcolors.Length];
@@ -143,6 +153,11 @@ namespace csharp_comicviewer
 				return -1;
 		}
 
+        /// <summary>
+        /// Is the images widther or equel then the display?
+        /// </summary>
+        /// <param name="image">The image</param>
+        /// <returns>True if widther, false if not</returns>
 		public Boolean IsImageWidtherOrEquelThenScreen(Image image)
 		{
 			if (image.Width >= SystemInformation.PrimaryMonitorSize.Width)
@@ -150,6 +165,11 @@ namespace csharp_comicviewer
 			else return false;
 		}
 
+        /// <summary>
+        /// Is the images higher or equel then the display?
+        /// </summary>
+        /// <param name="image">The image</param>
+        /// <returns>True if higher, false if not</returns>
 		public Boolean IsImageHigherOrEquelThenScreen(Image image)
 		{
 			if (image.Height >= SystemInformation.PrimaryMonitorSize.Height)
@@ -157,20 +177,21 @@ namespace csharp_comicviewer
 			else return false;
 		}
 
-		/*
-		 * Resize an image while keeping aspect ratio
-		 * imgToResize - the image to resize
-		 * size - the new size of the image (note will take smallest value in order to keep aspect example: w:10 h:5  it will use the height)
-		 * overideHight - resized the image so it will fit with the height
-		 * overideWidth - resized the image so it will fit with the width
-		 */
-		public Image resizeImage(Image imgToResize, Size size, Boolean overideHight,Boolean overideWidth)
+        /// <summary>
+        /// Resize an image while keeping aspect ratio
+        /// </summary>
+        /// <param name="Image">The image to resize</param>
+        /// <param name="size">The new size of the image (note: will take smallest value in order to keep aspect example: w:10 h:5  it will use the height)</param>
+        /// <param name="overideHight">Resized the image so it will fit with the height</param>
+        /// <param name="overideWidth">Resized the image so it will fit with the width</param>
+        /// <returns></returns>
+		public Image ResizeImage(Image Image, Size size, Boolean overideHight,Boolean overideWidth)
 		{
 			int Primary_Monitor_Width = SystemInformation.PrimaryMonitorSize.Width;
 			int Primary_Monitor_Height = SystemInformation.PrimaryMonitorSize.Height;
 
-			int sourceWidth = imgToResize.Width;
-			int sourceHeight = imgToResize.Height;
+			int sourceWidth = Image.Width;
+			int sourceHeight = Image.Height;
 
 			float nPercent = 0;
 			float nPercentW = 0;
@@ -212,7 +233,7 @@ namespace csharp_comicviewer
 			Graphics g = Graphics.FromImage((Image)b);
 			g.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
-			g.DrawImage(imgToResize, 0, 0, destWidth, destHeight);
+			g.DrawImage(Image, 0, 0, destWidth, destHeight);
 			g.Dispose();
 
 			return (Image)b;

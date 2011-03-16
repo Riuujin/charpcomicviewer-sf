@@ -28,18 +28,27 @@ using System.Collections;
 
 namespace csharp_comicviewer
 {
+    /// <summary>
+    /// Bookmark manager
+    /// </summary>
     public partial class ManageBookmarks : Form
     {
 
         private Configuration Configuration = new Configuration();
 
-
+        /// <summary>
+        /// Load configuration
+        /// </summary>
+        /// <param name="Configuration"></param>
         public ManageBookmarks(Configuration Configuration)
         {
             InitializeComponent();
             this.Configuration = Configuration;
         }
 
+        /// <summary>
+        /// Load existing bookmarks into display
+        /// </summary>
         private void ManageBookmarks_Load(object sender, EventArgs e)
         {
             CheckBox Checkbox = new CheckBox();
@@ -59,6 +68,9 @@ namespace csharp_comicviewer
             }
         }
 
+        /// <summary>
+        /// Delete checked bookmarks
+        /// </summary>
         private void Delete_btn_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < Configuration.Bookmarks.Count; i++)
@@ -74,6 +86,9 @@ namespace csharp_comicviewer
             this.Close();
         }
 
+        /// <summary>
+        /// Cancel all actions
+        /// </summary>
         private void Cancel_btn_Click(object sender, EventArgs e)
         {
             this.Close();

@@ -22,8 +22,16 @@ using System.Windows.Forms;
 
 namespace csharp_comicviewer
 {
+    /// <summary>
+    /// Show information text in a dialog
+    /// </summary>
 	public partial class InfoText : Form
 	{
+        /// <summary>
+        /// Show the information text
+        /// </summary>
+        /// <param name="FileLocation">Location of the archive containing the text</param>
+        /// <param name="InfoText">The information text</param>
 		public InfoText(String FileLocation,String InfoText)
 		{
 			InitializeComponent();
@@ -37,6 +45,9 @@ namespace csharp_comicviewer
 				this.Close();
 		}
 		
+        /// <summary>
+        /// Close this dialog
+        /// </summary>
 		void Close_btnClick(object sender, EventArgs e)
 		{
 			this.Close();

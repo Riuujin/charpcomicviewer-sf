@@ -32,12 +32,15 @@ using System.Diagnostics;
 
 namespace csharp_comicviewer
 {
+    /// <summary>
+    /// The main display and control part
+    /// </summary>
 	public partial class Display_form : Form
 	{
 		private ComicBook ComicBook;
 		private ImageEdit ImageEdit = new ImageEdit();
 		private Thread MessageThread;
-		private Thread PageCountThread;
+		private Thread PageInformationThread;
 		private String MessageString;
 		private Boolean NextPageBoolean = false;
 		private int NextPageCount = 2;
@@ -54,13 +57,19 @@ namespace csharp_comicviewer
 		private	int ScreenHeight = SystemInformation.PrimaryMonitorSize.Height;
 		private	int ScreenWidth = SystemInformation.PrimaryMonitorSize.Width;
 		
-
+        /// <summary>
+        /// Create the display and immediately load an archive
+        /// </summary>
+        /// <param name="OpeningFile">The location of the archive</param>
 		public Display_form(String OpeningFile)
 		{
 			InitializeComponent();
 			this.OpeningFile = OpeningFile;
 		}
 
+        /// <summary>
+        /// On load of the display, load configuration, create controls
+        /// </summary>
 		private void Display_form_Load(object sender, EventArgs e)
 		{
 			//set mousewheel event (scrolling)
@@ -101,6 +110,9 @@ namespace csharp_comicviewer
 				Resume_item.Enabled = false;
 		}
 
+        /// <summary>
+        /// Set the bookmark menu (updates items)
+        /// </summary>
 		private void SetBookmarkMenu()
 		{
 			Bookmark_menu.DropDownItems.Clear();
@@ -124,6 +136,10 @@ namespace csharp_comicviewer
 			}
 		}
 
+        /// <summary>
+        /// Save configuration
+        /// </summary>
+        /// <returns>succesfull</returns>
 		private Boolean SaveConfiguration()
 		{
 			//xml config save
@@ -149,6 +165,10 @@ namespace csharp_comicviewer
 
 		}
 
+        /// <summary>
+        /// Load configuration
+        /// </summary>
+        /// <returns>succesfull</returns>
 		private Boolean LoadConfiguration()
 		{
 			//xml config load
@@ -177,6 +197,9 @@ namespace csharp_comicviewer
 
 		}
 
+        /// <summary>
+        /// Takes care of the scrolling with the mousewheel
+        /// </summary>
 		private void Mouse_Wheelevent(object sender, MouseEventArgs e)
 		{
 			//scroll down
@@ -264,6 +287,9 @@ namespace csharp_comicviewer
 			}
 		}
 
+        /// <summary>
+        /// Takes care of scrolling with the arrow keys
+        /// </summary>
 		private void ArrowKeyevent(Keys e)
 		{
 			//scroll down
@@ -320,6 +346,9 @@ namespace csharp_comicviewer
 
 		}
 
+        /// <summary>
+        /// Load one or more archives
+        /// </summary>
 		private void LoadArchives(object sender, EventArgs e)
 		{
 
@@ -344,23 +373,27 @@ namespace csharp_comicviewer
 			this.Cursor = Cursors.Default;
 		}
 
+        /// <summary>
+        /// Set the image to show
+        /// </summary>
+        /// <param name="image">The image</param>
 		private void SetImage(Image image)
 		{
 			if (image != null)
 			{
 				if (Configuration.overideHight || Configuration.overideWidth)
-					image = ImageEdit.resizeImage(image, new Size(image.Width, ScreenHeight), Configuration.overideHight, Configuration.overideWidth);
+					image = ImageEdit.ResizeImage(image, new Size(image.Width, ScreenHeight), Configuration.overideHight, Configuration.overideWidth);
                 SetBackColor(image);
                 DisplayedImage.Image = image;
 				SetImageLocation();
-                ShowPageCount();
+                ShowPageInformation();
 			}
 		}
 
-		/*
-		 * Show a message by using a thread, with "message"  as the message
-		 * message - string that will be displayed as the message
-		 */
+        /// <summary>
+        /// Show a message by using a thread, with "message"  as the message
+        /// </summary>
+        /// <param name="message">String that will be displayed as the message</param>
 		private void ShowMessage(String message)
 		{
 			this.MessageString = message;
@@ -378,9 +411,9 @@ namespace csharp_comicviewer
 			}
 		}
 
-		/*
-		 * Shows a message for 1000ms, must be used as thread
-		 */
+        /// <summary>
+        /// Shows a message for 1000ms, must be used as thread
+        /// </summary>
 		private void Message()
 		{
 			try
@@ -409,28 +442,34 @@ namespace csharp_comicviewer
 			}
 		}
 
-		private void ShowPageCount()
+        /// <summary>
+        /// Shows the page information (uses PageInformation())
+        /// </summary>
+		private void ShowPageInformation()
 		{
 			if (ComicBook.GetTotalFiles() != 0)
 			{
 				if (ComicBook.HasFiles())
 				{
-					if (PageCountThread == null)
+					if (PageInformationThread == null)
 					{
-						PageCountThread = new Thread(new ThreadStart(PageCount));
-						PageCountThread.Start();
+						PageInformationThread = new Thread(new ThreadStart(PageInformation));
+						PageInformationThread.Start();
 					}
 					else
 					{
-						PageCountThread.Abort();
-						PageCountThread = new Thread(new ThreadStart(PageCount));
-						PageCountThread.Start();
+						PageInformationThread.Abort();
+						PageInformationThread = new Thread(new ThreadStart(PageInformation));
+						PageInformationThread.Start();
 					}
 				}
 			}
 		}
 
-		private void PageCount()
+        /// <summary>
+        /// Shows the page information for 1000ms, must be used as thread
+        /// </summary>
+		private void PageInformation()
 		{
 			try
 			{
@@ -460,6 +499,9 @@ namespace csharp_comicviewer
 			}
 		}
 
+        /// <summary>
+        /// Go to next page
+        /// </summary>
 		private void NextPage(object sender, EventArgs e)
 		{
 			if (ComicBook.GetTotalFiles() != 0)
@@ -472,6 +514,9 @@ namespace csharp_comicviewer
 			}
 		}
 
+        /// <summary>
+        /// Go to next page
+        /// </summary>
 		private void NextPage()
 		{
 			if (ComicBook.GetTotalFiles() != 0)
@@ -484,6 +529,9 @@ namespace csharp_comicviewer
 			}
 		}
 
+        /// <summary>
+        /// Go to previous page
+        /// </summary>
 		private void PreviousPage(object sender, EventArgs e)
 		{
 			if (ComicBook.GetTotalFiles() != 0)
@@ -500,6 +548,9 @@ namespace csharp_comicviewer
 			}
 		}
 
+        /// <summary>
+        /// Go to previous page
+        /// </summary>
 		private void PreviousPage()
 		{
 			if (ComicBook.GetTotalFiles() != 0)
@@ -516,11 +567,14 @@ namespace csharp_comicviewer
 			}
 		}
 
+        /// <summary>
+        /// Exit C# Comicviewer and save configuration
+        /// </summary>
 		private void ApplicationExit(object sender, EventArgs e)
 		{
-			if (PageCountThread != null)
+			if (PageInformationThread != null)
 			{
-				PageCountThread.Abort();
+				PageInformationThread.Abort();
 			}
 			if (MessageThread != null)
 			{
@@ -531,6 +585,9 @@ namespace csharp_comicviewer
 			Application.Exit();
 		}
 
+        /// <summary>
+        /// Save Resume last file(s) information
+        /// </summary>
 		private void SaveResumeToConfiguration()
 		{
 			if (ComicBook != null && ComicBook.GetTotalFiles() != 0)
@@ -542,6 +599,9 @@ namespace csharp_comicviewer
 			}
 		}
 
+        /// <summary>
+        /// Key press events
+        /// </summary>
 		private void DisplayKeyPress(object sender, KeyPressEventArgs e)
 		{
 			if (char.ToLower((char)e.KeyChar) == char.ToLower((char)Keys.X))
@@ -552,7 +612,7 @@ namespace csharp_comicviewer
 				else
 					ShowMessage("No archive to resume");
 			if (char.ToLower((char)e.KeyChar) == char.ToLower((char)Keys.I))
-				ShowPageCount();
+				ShowPageInformation();
 			if (char.ToLower((char)e.KeyChar) == char.ToLower((char)Keys.L))
 				LoadArchives(sender, e);
 			if (char.ToLower((char)e.KeyChar) == char.ToLower((char)Keys.M))
@@ -573,6 +633,9 @@ namespace csharp_comicviewer
 			}
 		}
 
+        /// <summary>
+        /// Key down events
+        /// </summary>
 		private void DisplayKeyDown(object sender, KeyEventArgs e)
 		{
 
@@ -654,6 +717,9 @@ namespace csharp_comicviewer
 
 		}
 
+        /// <summary>
+        /// Toggle the images options (fit to screen etc.)
+        /// </summary>
 		private void ToggleImageOptions()
 		{
 			//normal to hight
@@ -688,16 +754,19 @@ namespace csharp_comicviewer
 
 		}
 
+        /// <summary>
+        /// Set the location for the displayed image
+        /// </summary>
 		private void SetImageLocation()
 		{
-            DisplayedImage.Location = ImageEdit.CalculateLocationImage(DisplayedImage.Image);
+            DisplayedImage.Location = ImageEdit.GetImageStartLocation(DisplayedImage.Image);
 		}
 
 		private void SetBackColor(Image image)
 		{
 			try
 			{
-				this.BackColor = ImageEdit.setBackColor(image);
+				this.BackColor = ImageEdit.GetBackgroundColor(image);
 			}
 			catch (Exception)
 			{
@@ -705,6 +774,9 @@ namespace csharp_comicviewer
 			}
 		}
 
+        /// <summary>
+        /// Mouse dragging
+        /// </summary>
 		private void DisplayMouseMove(object sender, MouseEventArgs e)
 		{
 			int Speed = 2; //amount by with mouse_x/y - MousePosition.X/Y is divided, determines drag speed
@@ -761,6 +833,9 @@ namespace csharp_comicviewer
 				MouseDrag = false;
 		}
 
+        /// <summary>
+        /// Resume the last file(s)
+        /// </summary>
 		private void ResumeLastFiles(object sender, EventArgs e)
 		{
 			if (Configuration.Resume_Files.Length > 0)
@@ -779,6 +854,9 @@ namespace csharp_comicviewer
 			}
 		}
 
+        /// <summary>
+        /// Add bookmark current file/page
+        /// </summary>
 		private void AddBookmark_item_Click(object sender, EventArgs e)
 		{
 			if (ComicBook.GetTotalFiles() != 0)
@@ -791,6 +869,9 @@ namespace csharp_comicviewer
 			}
 		}
 
+        /// <summary>
+        /// Load bookmark
+        /// </summary>
 		private void LoadBookmark(object sender, EventArgs e)
 		{
 			ArrayList Data = new ArrayList();
@@ -817,19 +898,28 @@ namespace csharp_comicviewer
 			}
 		}
 
+        /// <summary>
+        /// Open manage bookmark dialog
+        /// </summary>
 		private void ManageBookmarks_item_Click(object sender, EventArgs e)
 		{
 			ManageBookmarks mb = new ManageBookmarks(Configuration);
 			mb.ShowDialog();
 			SetBookmarkMenu();
 		}
-        
+
+        /// <summary>
+        /// Open About Dialog
+        /// </summary>
         void About_itemClick(object sender, EventArgs e)
         {
         	About_Form About = new About_Form();
         	About.ShowDialog();
         }
 
+        /// <summary>
+        /// Open previous file on disk
+        /// </summary>
         private void PreviousFile_Click(object sender, EventArgs e)
         {
             if (ComicBook.GetTotalFiles() != 0)
@@ -861,6 +951,9 @@ namespace csharp_comicviewer
             }
         }
 
+        /// <summary>
+        /// Open next file on disk
+        /// </summary>
         private void NextFile_Click(object sender, EventArgs e)
         {
             if (ComicBook.GetTotalFiles() != 0)

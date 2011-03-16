@@ -27,12 +27,18 @@ using System.Collections.Generic;
 
 namespace csharp_comicviewer
 {
+    /// <summary>
+    /// Load archives using SevenZipSharp
+    /// </summary>
 	class LoadArchive
 	{
 		ArrayList SupportedImageFormats = new ArrayList();
 		CustomStackTrace CustomStackTrace = new CustomStackTrace();
 		private InfoText InfoText;
 
+        /// <summary>
+        /// Load the dll required
+        /// </summary>
 		public LoadArchive()
 		{
 			//Get the location of the 7z dll (location .EXE is in)
@@ -46,9 +52,9 @@ namespace csharp_comicviewer
 			setSupported_image_formats();
 		}
 
-		/* 
-		 * Images types suported
-		 */
+		/// <summary>
+        /// Set supported images types
+		/// </summary>
 		private void setSupported_image_formats()
 		{
 			SupportedImageFormats.Add(".jpg");
@@ -59,9 +65,11 @@ namespace csharp_comicviewer
 			SupportedImageFormats.Add(".PNG");
 		}
 
-		/*
-		 * Creates a ComicBook from an array of archives.
-		 */
+		/// <summary>
+        /// Creates a ComicBook from an array of archive paths
+		/// </summary>
+		/// <param name="Archive">Array of archive paths</param>
+		/// <returns>ComicBook</returns>
 		public ComicBook CreateComicBook(String[] Archive)
 		{
 			Array.Sort(Archive);

@@ -24,10 +24,18 @@ using System.IO;
 
 namespace csharp_comicviewer
 {
+    /// <summary>
+    /// Find and locate next and previous usable files(archives) on disk
+    /// </summary>
     class FileNextPrevious
     {
         CustomStackTrace CustomStackTrace = new CustomStackTrace();
 
+        /// <summary>
+        /// Get next file in known file list
+        /// </summary>
+        /// <param name="CurrentFiles">Known file paths</param>
+        /// <returns>The next file path</returns>
         public String[] GetNextFile(String[] CurrentFiles)
         {
             string[] Files = CurrentFiles;
@@ -56,6 +64,11 @@ namespace csharp_comicviewer
             return returnarray;
         }
 
+        /// <summary>
+        /// Get previous file in known file list
+        /// </summary>
+        /// <param name="CurrentFiles">Known file path</param>
+        /// <returns>The previous file path</returns>
         public String[] GetPreviousFile(String[] CurrentFiles)
         {
             string[] Files = CurrentFiles;
@@ -84,6 +97,11 @@ namespace csharp_comicviewer
             return returnarray;
         }
 
+        /// <summary>
+        /// Get the next directory path to search in
+        /// </summary>
+        /// <param name="currentdir">The current directory path</param>
+        /// <returns>The next directory path</returns>
         private String nextDir(String currentdir)
         {
             Boolean next = false;
@@ -108,6 +126,11 @@ namespace csharp_comicviewer
             return null;
         }
 
+        /// <summary>
+        /// Get the next usable file location on disk
+        /// </summary>
+        /// <param name="currentfile">Current file path</param>
+        /// <returns>The next file path</returns>
         private String nextFile(String currentfile)
         {
             String dir = Directory.GetParent(currentfile).FullName;
@@ -153,6 +176,11 @@ namespace csharp_comicviewer
             return null;
         }
 
+        /// <summary>
+        /// Get the previous directory path to search in
+        /// </summary>
+        /// <param name="currentdir">The current directory path</param>
+        /// <returns>The previous directory path</returns>
         private String previousDir(String currentdir)
         {
             try
@@ -176,6 +204,11 @@ namespace csharp_comicviewer
             return null;
         }
 
+        /// <summary>
+        /// Get the previous usable file location on disk
+        /// </summary>
+        /// <param name="currentfile">Current file path</param>
+        /// <returns>The previous file path</returns>
         private String previousFile(String currentfile)
         {
             String dir = Directory.GetParent(currentfile).FullName;
@@ -218,6 +251,12 @@ namespace csharp_comicviewer
             return null;
         }
 
+        /// <summary>
+        /// Get first or last file in a directory
+        /// </summary>
+        /// <param name="dir">Directory path</param>
+        /// <param name="First">Return first file?</param>
+        /// <returns>The file path</returns>
         private String firstOrLastFileInDir(String dir,Boolean First)
         {
             try
