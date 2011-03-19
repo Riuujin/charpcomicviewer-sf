@@ -107,14 +107,14 @@
             // 
             this.Resume_item.Name = "Resume_item";
             this.Resume_item.Size = new System.Drawing.Size(224, 22);
-            this.Resume_item.Text = "Resume last file (R)";
+            this.Resume_item.Text = "Resume last file(s) (R)";
             this.Resume_item.Click += new System.EventHandler(this.ResumeLastFiles);
             // 
             // Load_item
             // 
             this.Load_item.Name = "Load_item";
             this.Load_item.Size = new System.Drawing.Size(224, 22);
-            this.Load_item.Text = "Load File (L)";
+            this.Load_item.Text = "Load File(s) (L)";
             this.Load_item.Click += new System.EventHandler(this.LoadArchives);
             // 
             // NextPage_item
