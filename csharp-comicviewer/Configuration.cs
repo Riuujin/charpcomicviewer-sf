@@ -30,11 +30,29 @@ namespace csharp_comicviewer
     [Serializable]
     public class Configuration
     {
+        /// <summary>
+        /// Version of C# Comicviewer (currently unused)
+        /// </summary>
         public String Version = "";
+        /// <summary>
+        /// Location of the files to resume
+        /// </summary>
         public String[] Resume_Files;
-        public int[] Resume_Start_At = new int[2]; //[file number,page number]
-        public ArrayList Bookmarks =  new ArrayList();// inside are Arraylist with [0] = String[] files, [1] = int current file, [2] = int current page of file
+        /// <summary>
+        /// [file number,page number] of the start location in the files to resume
+        /// </summary>
+        public int[] Resume_Start_At = new int[2];
+        /// <summary>
+        /// The stored bookmarks inside Arraylist with [0] = String[] files, [1] = int current file, [2] = int current page of file
+        /// </summary>
+        public ArrayList Bookmarks =  new ArrayList();
+        /// <summary>
+        /// Should height be overridden
+        /// </summary>
         public Boolean overideHight = false;
+        /// <summary>
+        /// Should width be overridden
+        /// </summary>
         public Boolean overideWidth = false;
     }
 }

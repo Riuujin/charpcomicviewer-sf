@@ -184,7 +184,7 @@ namespace csharp_comicviewer
         /// </summary>
         /// <param name="Location">Location of the ComicFile</param>
         /// <param name="Images">Images inside the ComicFile</param>
-        /// <param name="InfoTxt">Information text if any in the ComicFile</param>
+        /// <param name="InfoText">Information text if any in the ComicFile</param>
         public void CreateComicFile(String Location, List<byte[]> Images, String InfoText)
         {
             ComicFile File = new ComicFile(Location, Images, InfoText);

@@ -115,7 +115,6 @@ namespace csharp_comicviewer
                                 StreamReader sr = new StreamReader(ms);
                                 InfoTxt = sr.ReadToEnd();
                                 ms.Close();
-                                InfoText = new InfoText(Archive[y], InfoTxt);
   								NextFile = true;
 							}
 							if(NextFile)
@@ -132,12 +131,16 @@ namespace csharp_comicviewer
 					if (ImagesAsBytes.Count > 0)
 					{
 						if (InfoTxt.Length > 0 )
+                        {
 							ComicBook.CreateComicFile(File, ImagesAsBytes, InfoTxt);
+                            InfoText = new InfoText(Archive[y], InfoTxt);
+                        }
 						else
 							ComicBook.CreateComicFile(File, ImagesAsBytes, null);
 					}
 					ImagesAsBytes.Clear();
 				}
+
 				//return the ComicBook on succes
 				return ComicBook;
 			}
