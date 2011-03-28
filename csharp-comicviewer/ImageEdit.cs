@@ -31,6 +31,26 @@ namespace csharp_comicviewer
 	{
 		private Point LocationImage = new Point(0, 0);
 		private Color BackColor;
+        private int ScreenHeight = 0;
+        private int ScreenWidth = 0;
+
+        /// <summary>
+        /// Set the screen height
+        /// </summary>
+        /// <param name="Height">The screen height</param>
+        public void SetScreenHeight(int Height)
+        {
+            ScreenHeight = Height;
+        }
+
+        /// <summary>
+        /// Set the screen width
+        /// </summary>
+        /// <param name="Width">The screen width</param>
+        public void SetScreenWidth(int Width)
+        {
+            ScreenWidth = Width;
+        }
 
         /// <summary>
         /// Get start location of an image
@@ -39,8 +59,8 @@ namespace csharp_comicviewer
         /// <returns>Start location</returns>
 		public Point GetImageStartLocation(Image image)
 		{
-			int Primary_Monitor_Width = SystemInformation.PrimaryMonitorSize.Width;
-			int Primary_Monitor_Height = SystemInformation.PrimaryMonitorSize.Height;
+            int Primary_Monitor_Width = ScreenWidth;
+            int Primary_Monitor_Height = ScreenHeight;
 
 			if (!IsImageWidtherOrEquelThenScreen(image) && !IsImageHigherOrEquelThenScreen(image))
 			{
@@ -160,7 +180,7 @@ namespace csharp_comicviewer
         /// <returns>True if widther, false if not</returns>
 		public Boolean IsImageWidtherOrEquelThenScreen(Image image)
 		{
-			if (image.Width >= SystemInformation.PrimaryMonitorSize.Width)
+			if (image.Width >= ScreenWidth)
 				return true;
 			else return false;
 		}
@@ -172,7 +192,7 @@ namespace csharp_comicviewer
         /// <returns>True if higher, false if not</returns>
 		public Boolean IsImageHigherOrEquelThenScreen(Image image)
 		{
-			if (image.Height >= SystemInformation.PrimaryMonitorSize.Height)
+			if (image.Height >= ScreenHeight)
 				return true;
 			else return false;
 		}
@@ -187,8 +207,8 @@ namespace csharp_comicviewer
         /// <returns></returns>
 		public Image ResizeImage(Image Image, Size size, Boolean overideHight,Boolean overideWidth)
 		{
-			int Primary_Monitor_Width = SystemInformation.PrimaryMonitorSize.Width;
-			int Primary_Monitor_Height = SystemInformation.PrimaryMonitorSize.Height;
+			int Primary_Monitor_Width = ScreenWidth;
+            int Primary_Monitor_Height = ScreenHeight;
 
 			int sourceWidth = Image.Width;
 			int sourceHeight = Image.Height;

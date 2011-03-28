@@ -205,6 +205,7 @@
             this.Text = "C# Comicviewer";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Display_form_Load);
+            this.ResizeEnd += new System.EventHandler(this.Display_form_ResizeEnd);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DisplayKeyDown);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DisplayKeyPress);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DisplayMouseMove);

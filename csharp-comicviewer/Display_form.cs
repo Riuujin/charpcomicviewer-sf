@@ -52,10 +52,10 @@ namespace csharp_comicviewer
 		private String OpeningFile;
 		private CustomStackTrace CustomStackTrace = new CustomStackTrace();
 		private InfoText InfoText;
-		private int scrollValueVertical = (int)(SystemInformation.PrimaryMonitorSize.Height * 0.05);
-		private	int scrollValueHorizontal = (int)(SystemInformation.PrimaryMonitorSize.Width * 0.05);
-		private	int ScreenHeight = SystemInformation.PrimaryMonitorSize.Height;
-		private	int ScreenWidth = SystemInformation.PrimaryMonitorSize.Width;
+        private int scrollValueVertical = 0;
+        private int scrollValueHorizontal = 0;
+        private int ScreenHeight = 0;//SystemInformation.PrimaryMonitorSize.Height;
+		private	int ScreenWidth = 0;//SystemInformation.PrimaryMonitorSize.Width;
 		
         /// <summary>
         /// Create the display and immediately load an archive
@@ -108,6 +108,13 @@ namespace csharp_comicviewer
 			}
 			else
 				Resume_item.Enabled = false;
+
+            ScreenHeight = this.Height;
+            ScreenWidth = this.Width;
+            scrollValueHorizontal = (int)(ScreenHeight * 0.05);
+            scrollValueVertical = (int)(ScreenWidth * 0.05);
+            ImageEdit.SetScreenHeight(ScreenHeight);
+            ImageEdit.SetScreenWidth(ScreenWidth);
 		}
 
         /// <summary>
@@ -631,6 +638,14 @@ namespace csharp_comicviewer
 				else
 					ShowMessage("No archive loaded");
 			}
+
+            if (char.ToLower((char)e.KeyChar) == char.ToLower((char)Keys.W))
+            {
+                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
+                this.ControlBox = true;
+                this.WindowState = FormWindowState.Maximized;
+                Display_form_ResizeEnd(null, null);
+            }
 		}
 
         /// <summary>
@@ -985,6 +1000,20 @@ namespace csharp_comicviewer
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Make sure current size is correct
+        /// </summary>
+        private void Display_form_ResizeEnd(object sender, EventArgs e)
+        {
+            ScreenHeight = this.Height;
+            ScreenWidth = this.Width;
+            scrollValueHorizontal = (int)(ScreenHeight * 0.05);
+            scrollValueVertical = (int)(ScreenWidth * 0.05);
+            ImageEdit.SetScreenHeight(ScreenHeight);
+            ImageEdit.SetScreenWidth(ScreenWidth);
+            SetImage(DisplayedImage.Image);
         }
 	}
 }
