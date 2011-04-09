@@ -79,6 +79,19 @@ namespace csharp_comicviewer
 			LoadConfiguration();
 			SetBookmarkMenu();
 
+            //set window mode
+            if (Configuration.windowed)
+            {
+                Configuration.windowed = true;
+                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
+                this.ControlBox = true;
+                this.WindowState = FormWindowState.Maximized;
+                Display_form_ResizeEnd(null, null);
+                MenuBar.Visible = true;
+
+            }
+
+            //open file (when opening assosicated by double click)
 			if (OpeningFile != null)
 			{
 				Cursor = Cursors.WaitCursor;
@@ -109,7 +122,10 @@ namespace csharp_comicviewer
 			else
 				Resume_item.Enabled = false;
 
-            ScreenHeight = this.Height;
+            if (!Configuration.windowed)
+                ScreenHeight = this.Height;
+            else
+                ScreenHeight = this.Height - 38;
             ScreenWidth = this.Width;
             scrollValueHorizontal = (int)(ScreenHeight * 0.05);
             scrollValueVertical = (int)(ScreenWidth * 0.05);
@@ -126,7 +142,13 @@ namespace csharp_comicviewer
 			Bookmark_menu.DropDownItems.Add(AddBookmark_item);
 			Bookmark_menu.DropDownItems.Add(ManageBookmarks_item);
 			Bookmark_menu.DropDownItems.Add(Bookmark_Separator);
-			if (Configuration != null)
+            
+            Bookmark_menu_bar.DropDownItems.Clear();
+            Bookmark_menu_bar.DropDownItems.Add(AddBookmark_item_bar);
+            Bookmark_menu_bar.DropDownItems.Add(ManageBookmarks_item_bar);
+            Bookmark_menu_bar.DropDownItems.Add(Bookmark_Separator_bar);
+			
+            if (Configuration != null)
 			{
 				if (Configuration.Bookmarks.Count > 0)
 				{
@@ -138,6 +160,10 @@ namespace csharp_comicviewer
 						ToolStripMenuItem Bookmark = new ToolStripMenuItem(Files[(int)Data[1]]);
 						Bookmark.Click += new EventHandler(LoadBookmark);
 						Bookmark_menu.DropDownItems.Add(Bookmark);
+
+                        ToolStripMenuItem Bookmark_bar = new ToolStripMenuItem(Files[(int)Data[1]]);
+                        Bookmark_bar.Click += new EventHandler(LoadBookmark);
+                        Bookmark_menu_bar.DropDownItems.Add(Bookmark_bar);
 					}
 				}
 			}
@@ -249,14 +275,18 @@ namespace csharp_comicviewer
 			//scroll up
 			else if (e.Delta > 0 && DisplayedImage.Image != null)
 			{
+                int TopOfImageStart = 0;
+                if (Configuration.windowed)
+                    TopOfImageStart = 24;
+
 				if (ImageEdit.IsImageHigherOrEquelThenScreen(DisplayedImage.Image))
 				{
-					if(DisplayedImage.Top < 0 - scrollValueVertical)
+                    if (DisplayedImage.Top < TopOfImageStart - scrollValueVertical)
 						DisplayedImage.Top += scrollValueVertical;
-					else if((DisplayedImage.Top >= 0 - scrollValueVertical) &&
-					        !(DisplayedImage.Top == 0))
-						DisplayedImage.Top = 0;
-					else if(DisplayedImage.Top == 0 && !ImageEdit.IsImageWidtherOrEquelThenScreen(DisplayedImage.Image))
+                    else if ((DisplayedImage.Top >= TopOfImageStart - scrollValueVertical) &&
+                            !(DisplayedImage.Top == TopOfImageStart))
+                        DisplayedImage.Top = TopOfImageStart;
+                    else if (DisplayedImage.Top == TopOfImageStart && !ImageEdit.IsImageWidtherOrEquelThenScreen(DisplayedImage.Image))
 					{
 						PreviousPageBoolean = true;
 						PreviousPageCount--;
@@ -390,7 +420,7 @@ namespace csharp_comicviewer
 			{
 				if (Configuration.overideHight || Configuration.overideWidth)
 					image = ImageEdit.ResizeImage(image, new Size(image.Width, ScreenHeight), Configuration.overideHight, Configuration.overideWidth);
-                SetBackColor(image);
+                //SetBackColor(image);
                 DisplayedImage.Image = image;
 				SetImageLocation();
                 ShowPageInformation();
@@ -641,10 +671,24 @@ namespace csharp_comicviewer
 
             if (char.ToLower((char)e.KeyChar) == char.ToLower((char)Keys.W))
             {
-                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
-                this.ControlBox = true;
-                this.WindowState = FormWindowState.Maximized;
-                Display_form_ResizeEnd(null, null);
+                if (!Configuration.windowed)
+                {
+                    Configuration.windowed = true;
+                    this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
+                    this.ControlBox = true;
+                    this.WindowState = FormWindowState.Maximized;
+                    Display_form_ResizeEnd(null, null);
+                    MenuBar.Visible = true;                    
+                }
+                else
+                {
+                    Configuration.windowed = false;
+                    MenuBar.Visible = false;
+                    this.ControlBox = false;
+                    this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+                    this.WindowState = FormWindowState.Maximized;
+                    Display_form_ResizeEnd(null, null);
+                }
             }
 		}
 
@@ -775,6 +819,8 @@ namespace csharp_comicviewer
 		private void SetImageLocation()
 		{
             DisplayedImage.Location = ImageEdit.GetImageStartLocation(DisplayedImage.Image);
+            if (Configuration.windowed)
+                DisplayedImage.Location = new Point(DisplayedImage.Location.X, DisplayedImage.Location.Y + 24);
 		}
 
 		private void SetBackColor(Image image)
@@ -889,6 +935,7 @@ namespace csharp_comicviewer
         /// </summary>
 		private void LoadBookmark(object sender, EventArgs e)
 		{
+            //right click menu
 			ArrayList Data = new ArrayList();
 			for (int i = 0; i < Bookmark_menu.DropDownItems.Count; i++)
 			{
@@ -911,6 +958,29 @@ namespace csharp_comicviewer
 					}
 				}
 			}
+
+            //the bar
+            for (int i = 0; i < Bookmark_menu.DropDownItems.Count; i++)
+            {
+                if ((ToolStripMenuItem)sender == Bookmark_menu_bar.DropDownItems[i])
+                {
+                    Data = (ArrayList)Configuration.Bookmarks[i - 3];
+                    String[] Files = (String[])Data[0];
+
+                    try
+                    {
+                        Cursor = Cursors.WaitCursor;
+                        LoadArchive Archives = new LoadArchive();
+                        ComicBook = Archives.CreateComicBook(Files);
+                        SetImage(ComicBook.GetPage((int)Data[1], (int)Data[2]));
+                        this.Cursor = Cursors.Default;
+                    }
+                    catch (Exception)
+                    {
+                        this.Cursor = Cursors.Default;
+                    }
+                }
+            }
 		}
 
         /// <summary>
@@ -1007,7 +1077,10 @@ namespace csharp_comicviewer
         /// </summary>
         private void Display_form_ResizeEnd(object sender, EventArgs e)
         {
-            ScreenHeight = this.Height;
+            if (!Configuration.windowed)
+                ScreenHeight = this.Height;
+            else
+                ScreenHeight = this.Height - 38;
             ScreenWidth = this.Width;
             scrollValueHorizontal = (int)(ScreenHeight * 0.05);
             scrollValueVertical = (int)(ScreenWidth * 0.05);
@@ -1015,5 +1088,11 @@ namespace csharp_comicviewer
             ImageEdit.SetScreenWidth(ScreenWidth);
             SetImage(DisplayedImage.Image);
         }
+
+        private void Display_form_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            ApplicationExit(sender, e);
+        }
+
 	}
 }

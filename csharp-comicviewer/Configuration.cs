@@ -54,5 +54,9 @@ namespace csharp_comicviewer
         /// Should width be overridden
         /// </summary>
         public Boolean overideWidth = false;
+        /// <summary>
+        /// Windowed mode
+        /// </summary>
+        public Boolean windowed = false;
     }
 }

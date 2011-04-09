@@ -30,7 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Display_form));
-            this.DisplayedImage = new System.Windows.Forms.PictureBox();
             this.Message_lbl = new System.Windows.Forms.Label();
             this.Page_lbl = new System.Windows.Forms.Label();
             this.RightClick_menu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -46,20 +45,26 @@
             this.Bookmark_Separator = new System.Windows.Forms.ToolStripSeparator();
             this.About_item = new System.Windows.Forms.ToolStripMenuItem();
             this.Exit_item = new System.Windows.Forms.ToolStripMenuItem();
-            ((System.ComponentModel.ISupportInitialize)(this.DisplayedImage)).BeginInit();
+            this.MenuBar = new System.Windows.Forms.MenuStrip();
+            this.File_bar = new System.Windows.Forms.ToolStripMenuItem();
+            this.Resume_item_bar = new System.Windows.Forms.ToolStripMenuItem();
+            this.Load_item_bar = new System.Windows.Forms.ToolStripMenuItem();
+            this.NextFile_item_bar = new System.Windows.Forms.ToolStripMenuItem();
+            this.PreviousFile_item_bar = new System.Windows.Forms.ToolStripMenuItem();
+            this.Exit_item_bar = new System.Windows.Forms.ToolStripMenuItem();
+            this.PageControl_bar = new System.Windows.Forms.ToolStripMenuItem();
+            this.NextPage_item_bar = new System.Windows.Forms.ToolStripMenuItem();
+            this.PreviousPage_item_bar = new System.Windows.Forms.ToolStripMenuItem();
+            this.Bookmark_menu_bar = new System.Windows.Forms.ToolStripMenuItem();
+            this.AddBookmark_item_bar = new System.Windows.Forms.ToolStripMenuItem();
+            this.ManageBookmarks_item_bar = new System.Windows.Forms.ToolStripMenuItem();
+            this.Bookmark_Separator_bar = new System.Windows.Forms.ToolStripSeparator();
+            this.About_item_bar = new System.Windows.Forms.ToolStripMenuItem();
+            this.DisplayedImage = new System.Windows.Forms.PictureBox();
             this.RightClick_menu.SuspendLayout();
+            this.MenuBar.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DisplayedImage)).BeginInit();
             this.SuspendLayout();
-            // 
-            // DisplayedImage
-            // 
-            this.DisplayedImage.Location = new System.Drawing.Point(0, 0);
-            this.DisplayedImage.Margin = new System.Windows.Forms.Padding(0);
-            this.DisplayedImage.Name = "DisplayedImage";
-            this.DisplayedImage.Size = new System.Drawing.Size(103, 61);
-            this.DisplayedImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.DisplayedImage.TabIndex = 1;
-            this.DisplayedImage.TabStop = false;
-            this.DisplayedImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DisplayMouseMove);
             // 
             // Message_lbl
             // 
@@ -188,6 +193,135 @@
             this.Exit_item.Text = "Exit (X)";
             this.Exit_item.Click += new System.EventHandler(this.ApplicationExit);
             // 
+            // MenuBar
+            // 
+            this.MenuBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.File_bar,
+            this.PageControl_bar,
+            this.Bookmark_menu_bar,
+            this.About_item_bar});
+            this.MenuBar.Location = new System.Drawing.Point(0, 0);
+            this.MenuBar.Name = "MenuBar";
+            this.MenuBar.Size = new System.Drawing.Size(865, 24);
+            this.MenuBar.TabIndex = 6;
+            this.MenuBar.Text = "MenuBar";
+            this.MenuBar.Visible = false;
+            // 
+            // File_bar
+            // 
+            this.File_bar.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.Resume_item_bar,
+            this.Load_item_bar,
+            this.NextFile_item_bar,
+            this.PreviousFile_item_bar,
+            this.Exit_item_bar});
+            this.File_bar.Name = "File_bar";
+            this.File_bar.Size = new System.Drawing.Size(37, 20);
+            this.File_bar.Text = "File";
+            // 
+            // Resume_item_bar
+            // 
+            this.Resume_item_bar.Name = "Resume_item_bar";
+            this.Resume_item_bar.Size = new System.Drawing.Size(224, 22);
+            this.Resume_item_bar.Text = "Resume last file(s) (R)";
+            this.Resume_item_bar.Click += new System.EventHandler(this.ResumeLastFiles);
+            // 
+            // Load_item_bar
+            // 
+            this.Load_item_bar.Name = "Load_item_bar";
+            this.Load_item_bar.Size = new System.Drawing.Size(224, 22);
+            this.Load_item_bar.Text = "Load File(s) (L)";
+            this.Load_item_bar.Click += new System.EventHandler(this.LoadArchives);
+            // 
+            // NextFile_item_bar
+            // 
+            this.NextFile_item_bar.Name = "NextFile_item_bar";
+            this.NextFile_item_bar.Size = new System.Drawing.Size(224, 22);
+            this.NextFile_item_bar.Text = "Next File (Alt + Page Down)";
+            this.NextFile_item_bar.Click += new System.EventHandler(this.NextFile_Click);
+            // 
+            // PreviousFile_item_bar
+            // 
+            this.PreviousFile_item_bar.Name = "PreviousFile_item_bar";
+            this.PreviousFile_item_bar.Size = new System.Drawing.Size(224, 22);
+            this.PreviousFile_item_bar.Text = "Previous File (Alt + Page Up)";
+            this.PreviousFile_item_bar.Click += new System.EventHandler(this.PreviousFile_Click);
+            // 
+            // Exit_item_bar
+            // 
+            this.Exit_item_bar.Name = "Exit_item_bar";
+            this.Exit_item_bar.Size = new System.Drawing.Size(224, 22);
+            this.Exit_item_bar.Text = "Exit (X)";
+            this.Exit_item_bar.Click += new System.EventHandler(this.ApplicationExit);
+            // 
+            // PageControl_bar
+            // 
+            this.PageControl_bar.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.NextPage_item_bar,
+            this.PreviousPage_item_bar});
+            this.PageControl_bar.Name = "PageControl_bar";
+            this.PageControl_bar.Size = new System.Drawing.Size(86, 20);
+            this.PageControl_bar.Text = "Page control";
+            // 
+            // NextPage_item_bar
+            // 
+            this.NextPage_item_bar.Name = "NextPage_item_bar";
+            this.NextPage_item_bar.Size = new System.Drawing.Size(203, 22);
+            this.NextPage_item_bar.Text = "Next Page (Page Down)";
+            // 
+            // PreviousPage_item_bar
+            // 
+            this.PreviousPage_item_bar.Name = "PreviousPage_item_bar";
+            this.PreviousPage_item_bar.Size = new System.Drawing.Size(203, 22);
+            this.PreviousPage_item_bar.Text = "Previous Page (Page Up)";
+            // 
+            // Bookmark_menu_bar
+            // 
+            this.Bookmark_menu_bar.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.AddBookmark_item_bar,
+            this.ManageBookmarks_item_bar,
+            this.Bookmark_Separator_bar});
+            this.Bookmark_menu_bar.Name = "Bookmark_menu_bar";
+            this.Bookmark_menu_bar.Size = new System.Drawing.Size(78, 20);
+            this.Bookmark_menu_bar.Text = "Bookmarks";
+            // 
+            // AddBookmark_item_bar
+            // 
+            this.AddBookmark_item_bar.Name = "AddBookmark_item_bar";
+            this.AddBookmark_item_bar.Size = new System.Drawing.Size(179, 22);
+            this.AddBookmark_item_bar.Text = "Add bookmark";
+            this.AddBookmark_item_bar.Click += new System.EventHandler(this.AddBookmark_item_Click);
+            // 
+            // ManageBookmarks_item_bar
+            // 
+            this.ManageBookmarks_item_bar.Name = "ManageBookmarks_item_bar";
+            this.ManageBookmarks_item_bar.Size = new System.Drawing.Size(179, 22);
+            this.ManageBookmarks_item_bar.Text = "Manage bookmarks";
+            this.ManageBookmarks_item_bar.Click += new System.EventHandler(this.ManageBookmarks_item_Click);
+            // 
+            // Bookmark_Separator_bar
+            // 
+            this.Bookmark_Separator_bar.Name = "Bookmark_Separator_bar";
+            this.Bookmark_Separator_bar.Size = new System.Drawing.Size(176, 6);
+            // 
+            // About_item_bar
+            // 
+            this.About_item_bar.Name = "About_item_bar";
+            this.About_item_bar.Size = new System.Drawing.Size(52, 20);
+            this.About_item_bar.Text = "About";
+            this.About_item_bar.Click += new System.EventHandler(this.About_itemClick);
+            // 
+            // DisplayedImage
+            // 
+            this.DisplayedImage.Location = new System.Drawing.Point(0, 0);
+            this.DisplayedImage.Margin = new System.Windows.Forms.Padding(0);
+            this.DisplayedImage.Name = "DisplayedImage";
+            this.DisplayedImage.Size = new System.Drawing.Size(103, 61);
+            this.DisplayedImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.DisplayedImage.TabIndex = 1;
+            this.DisplayedImage.TabStop = false;
+            this.DisplayedImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DisplayMouseMove);
+            // 
             // Display_form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -195,22 +329,27 @@
             this.ClientSize = new System.Drawing.Size(865, 564);
             this.ContextMenuStrip = this.RightClick_menu;
             this.ControlBox = false;
+            this.Controls.Add(this.MenuBar);
             this.Controls.Add(this.Page_lbl);
             this.Controls.Add(this.Message_lbl);
             this.Controls.Add(this.DisplayedImage);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.MenuBar;
             this.Name = "Display_form";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "C# Comicviewer";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Display_form_FormClosing);
             this.Load += new System.EventHandler(this.Display_form_Load);
             this.ResizeEnd += new System.EventHandler(this.Display_form_ResizeEnd);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DisplayKeyDown);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DisplayKeyPress);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DisplayMouseMove);
-            ((System.ComponentModel.ISupportInitialize)(this.DisplayedImage)).EndInit();
             this.RightClick_menu.ResumeLayout(false);
+            this.MenuBar.ResumeLayout(false);
+            this.MenuBar.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DisplayedImage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -219,7 +358,6 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox DisplayedImage;
         private System.Windows.Forms.Label Message_lbl;
         private System.Windows.Forms.Label Page_lbl;
         private System.Windows.Forms.ContextMenuStrip RightClick_menu;
@@ -234,6 +372,22 @@
         private System.Windows.Forms.ToolStripMenuItem ManageBookmarks_item;
         private System.Windows.Forms.ToolStripMenuItem PreviousFile_item;
         private System.Windows.Forms.ToolStripMenuItem NextFile_item;
+        private System.Windows.Forms.MenuStrip MenuBar;
+        private System.Windows.Forms.ToolStripMenuItem File_bar;
+        private System.Windows.Forms.ToolStripMenuItem Resume_item_bar;
+        private System.Windows.Forms.ToolStripMenuItem Load_item_bar;
+        private System.Windows.Forms.ToolStripMenuItem NextFile_item_bar;
+        private System.Windows.Forms.ToolStripMenuItem PreviousFile_item_bar;
+        private System.Windows.Forms.ToolStripMenuItem Exit_item_bar;
+        private System.Windows.Forms.ToolStripMenuItem PageControl_bar;
+        private System.Windows.Forms.ToolStripMenuItem NextPage_item_bar;
+        private System.Windows.Forms.ToolStripMenuItem PreviousPage_item_bar;
+        private System.Windows.Forms.ToolStripMenuItem Bookmark_menu_bar;
+        private System.Windows.Forms.ToolStripMenuItem AddBookmark_item_bar;
+        private System.Windows.Forms.ToolStripMenuItem ManageBookmarks_item_bar;
+        private System.Windows.Forms.ToolStripSeparator Bookmark_Separator_bar;
+        private System.Windows.Forms.ToolStripMenuItem About_item_bar;
+        private System.Windows.Forms.PictureBox DisplayedImage;
     }
 }
 
