@@ -118,20 +118,7 @@ namespace csharp_comicviewer
 
             }
             else //if fullscreen
-                SetWinFullScreen(this.Handle);
-
-            //open file (when opening assosicated by double click)
-			if (OpeningFile != null)
-			{
-				Cursor = Cursors.WaitCursor;
-				Application.DoEvents();
-				LoadArchive Archives = new LoadArchive();
-				string[] Files = new string[1];
-				Files[0] = OpeningFile;
-				ComicBook = Archives.CreateComicBook(Files);
-				SetImage(ComicBook.GetPage(0, 0));
-				Cursor = Cursors.Default;
-			}
+                SetWinFullScreen(this.Handle);           
 
 			//gray out resume last file if the files dont't exist
 			Boolean AllResumeExists = true;
@@ -160,6 +147,19 @@ namespace csharp_comicviewer
             scrollValueVertical = (int)(ScreenWidth * 0.05);
             ImageEdit.SetScreenHeight(ScreenHeight);
             ImageEdit.SetScreenWidth(ScreenWidth);
+
+            //open file (when opening assosicated by double click)
+            if (OpeningFile != null)
+            {
+                Cursor = Cursors.WaitCursor;
+                Application.DoEvents();
+                LoadArchive Archives = new LoadArchive();
+                string[] Files = new string[1];
+                Files[0] = OpeningFile;
+                ComicBook = Archives.CreateComicBook(Files);
+                SetImage(ComicBook.GetPage(0, 0));
+                Cursor = Cursors.Default;
+            }
 		}
 
         /// <summary>

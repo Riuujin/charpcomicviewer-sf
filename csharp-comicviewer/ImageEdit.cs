@@ -70,7 +70,7 @@ namespace csharp_comicviewer
 			else if (IsImageWidtherOrEquelThenScreen(image) && IsImageHigherOrEquelThenScreen(image))
 			{
 				//image is bigger then the hight and the width of the screen
-                LocationImage = new Point(0, 0 + 24);
+                LocationImage = new Point(0, 0);
 			}
 			else if (!IsImageWidtherOrEquelThenScreen(image) && IsImageHigherOrEquelThenScreen(image))
 			{

@@ -7,7 +7,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{8C88D80A-F9F9-4DEF-8510-DA9E438E729A}
 AppName=C# Comicviewer
-AppVersion=V1.2
+AppVersion=V1.2.1
 AppPublisherURL=http://sourceforge.net/projects/csharpcomicview
 AppSupportURL=http://sourceforge.net/projects/csharpcomicview/support
 AppUpdatesURL=http://sourceforge.net/projects/csharpcomicview
