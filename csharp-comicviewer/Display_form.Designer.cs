@@ -62,6 +62,7 @@
             this.Bookmark_Separator_bar = new System.Windows.Forms.ToolStripSeparator();
             this.About_item_bar = new System.Windows.Forms.ToolStripMenuItem();
             this.DisplayedImage = new System.Windows.Forms.PictureBox();
+            this.InformationText_item_bar = new System.Windows.Forms.ToolStripMenuItem();
             this.RightClick_menu.SuspendLayout();
             this.MenuBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DisplayedImage)).BeginInit();
@@ -200,7 +201,8 @@
             this.File_bar,
             this.PageControl_bar,
             this.Bookmark_menu_bar,
-            this.About_item_bar});
+            this.About_item_bar,
+            this.InformationText_item_bar});
             this.MenuBar.Location = new System.Drawing.Point(0, 0);
             this.MenuBar.Name = "MenuBar";
             this.MenuBar.Size = new System.Drawing.Size(865, 24);
@@ -315,6 +317,7 @@
             // 
             // About_item_bar
             // 
+            this.About_item_bar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.About_item_bar.Name = "About_item_bar";
             this.About_item_bar.Size = new System.Drawing.Size(52, 20);
             this.About_item_bar.Text = "About";
@@ -330,6 +333,13 @@
             this.DisplayedImage.TabIndex = 1;
             this.DisplayedImage.TabStop = false;
             this.DisplayedImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DisplayMouseMove);
+            // 
+            // InformationText_item_bar
+            // 
+            this.InformationText_item_bar.Name = "InformationText_item_bar";
+            this.InformationText_item_bar.Size = new System.Drawing.Size(124, 20);
+            this.InformationText_item_bar.Text = "Information text (N)";
+            this.InformationText_item_bar.Click += new System.EventHandler(this.InformationText_item_bar_Click);
             // 
             // Display_form
             // 
@@ -398,6 +408,7 @@
         private System.Windows.Forms.ToolStripMenuItem About_item_bar;
         private System.Windows.Forms.PictureBox DisplayedImage;
         private System.Windows.Forms.ToolStripMenuItem ShowPageInformation_item_bar;
+        private System.Windows.Forms.ToolStripMenuItem InformationText_item_bar;
     }
 }
 

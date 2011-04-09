@@ -698,7 +698,7 @@ namespace csharp_comicviewer
                 if (ComicBook != null && ComicBook.GetTotalFiles() != 0)
 				{
 					if(String.IsNullOrEmpty(ComicBook.GetInfoText(ComicBook.GetCurrentFile())))
-						ShowMessage("No info text");
+                        ShowMessage("No information text");
 					else
 						InfoText = new InfoText(ComicBook.GetFileLocation(ComicBook.GetCurrentFile()),ComicBook.GetInfoText(ComicBook.GetCurrentFile()));
 				}
@@ -1135,6 +1135,19 @@ namespace csharp_comicviewer
         private void ShowPageInformation_item_bar_Click(object sender, EventArgs e)
         {
             ShowPageInformation();
+        }
+
+        private void InformationText_item_bar_Click(object sender, EventArgs e)
+        {
+            if (ComicBook != null && ComicBook.GetTotalFiles() != 0)
+            {
+                if (String.IsNullOrEmpty(ComicBook.GetInfoText(ComicBook.GetCurrentFile())))
+                    ShowMessage("No information text");
+                else
+                    InfoText = new InfoText(ComicBook.GetFileLocation(ComicBook.GetCurrentFile()), ComicBook.GetInfoText(ComicBook.GetCurrentFile()));
+            }
+            else
+                ShowMessage("No archive loaded");
         }
 
 
