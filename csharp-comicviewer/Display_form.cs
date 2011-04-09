@@ -29,6 +29,7 @@ using System.IO;
 using System.Xml.Serialization;
 using System.Collections;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace csharp_comicviewer
 {
@@ -56,7 +57,33 @@ namespace csharp_comicviewer
         private int scrollValueHorizontal = 0;
         private int ScreenHeight = 0;//SystemInformation.PrimaryMonitorSize.Height;
 		private	int ScreenWidth = 0;//SystemInformation.PrimaryMonitorSize.Width;
-		
+
+
+        /// <summary>
+        /// Windows dll function needed for hiding taskbar in fullscreen
+        /// </summary>
+        [DllImport("user32.dll", EntryPoint = "GetSystemMetrics")]
+        public static extern int GetSystemMetrics(int which);
+        /// <summary>
+        /// Windows dll function needed for hiding taskbar in fullscreen
+        /// </summary>
+        [DllImport("user32.dll")]
+        public static extern void SetWindowPos(IntPtr hwnd, IntPtr hwndInsertAfter,int X, int Y, int width, int height, uint flags);
+        //variables needed for fullscreen
+        private const int SM_CXSCREEN = 0;
+        private const int SM_CYSCREEN = 1;
+        private static IntPtr HWND_TOP = IntPtr.Zero;
+        private const int SWP_SHOWWINDOW = 64; // 0x0040
+
+        /// <summary>
+        /// Set a window to fullscreen
+        /// </summary>
+        /// <param name="handle">The handle of the form</param>
+        public static void SetWinFullScreen(IntPtr handle)
+        {
+            SetWindowPos(handle, HWND_TOP, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), SWP_SHOWWINDOW);
+        }
+        
         /// <summary>
         /// Create the display and immediately load an archive
         /// </summary>
@@ -64,14 +91,14 @@ namespace csharp_comicviewer
 		public Display_form(String OpeningFile)
 		{
 			InitializeComponent();
-			this.OpeningFile = OpeningFile;
+			this.OpeningFile = OpeningFile;            
 		}
 
         /// <summary>
         /// On load of the display, load configuration, create controls
         /// </summary>
 		private void Display_form_Load(object sender, EventArgs e)
-		{
+		{            
 			//set mousewheel event (scrolling)
 			this.MouseWheel += new MouseEventHandler(Mouse_Wheelevent);
 			
@@ -90,6 +117,8 @@ namespace csharp_comicviewer
                 MenuBar.Visible = true;
 
             }
+            else //if fullscreen
+                SetWinFullScreen(this.Handle);
 
             //open file (when opening assosicated by double click)
 			if (OpeningFile != null)
@@ -420,7 +449,7 @@ namespace csharp_comicviewer
 			{
 				if (Configuration.overideHight || Configuration.overideWidth)
 					image = ImageEdit.ResizeImage(image, new Size(image.Width, ScreenHeight), Configuration.overideHight, Configuration.overideWidth);
-                //SetBackColor(image);
+                SetBackColor(image);
                 DisplayedImage.Image = image;
 				SetImageLocation();
                 ShowPageInformation();
@@ -484,23 +513,28 @@ namespace csharp_comicviewer
         /// </summary>
 		private void ShowPageInformation()
 		{
-			if (ComicBook.GetTotalFiles() != 0)
-			{
-				if (ComicBook.HasFiles())
-				{
-					if (PageInformationThread == null)
-					{
-						PageInformationThread = new Thread(new ThreadStart(PageInformation));
-						PageInformationThread.Start();
-					}
-					else
-					{
-						PageInformationThread.Abort();
-						PageInformationThread = new Thread(new ThreadStart(PageInformation));
-						PageInformationThread.Start();
-					}
-				}
-			}
+            if (ComicBook != null)
+            {
+                if (ComicBook.GetTotalFiles() != 0)
+                {
+                    if (ComicBook.HasFiles())
+                    {
+                        if (PageInformationThread == null)
+                        {
+                            PageInformationThread = new Thread(new ThreadStart(PageInformation));
+                            PageInformationThread.Start();
+                        }
+                        else
+                        {
+                            PageInformationThread.Abort();
+                            PageInformationThread = new Thread(new ThreadStart(PageInformation));
+                            PageInformationThread.Start();
+                        }
+                    }
+                }
+            }
+            else
+                ShowMessage("No archive loaded");
 		}
 
         /// <summary>
@@ -517,7 +551,10 @@ namespace csharp_comicviewer
 				this.Invoke((MethodInvoker)delegate
 				            {
 				            	Page_lbl.Text = pagestring;
-				            	Page_lbl.SetBounds(width - Page_lbl.Width, height - Page_lbl.Height, Page_lbl.Width, Page_lbl.Height);
+				            	if(!Configuration.windowed)
+                                    Page_lbl.SetBounds(ScreenWidth - Page_lbl.Width, ScreenHeight - Page_lbl.Height, Page_lbl.Width, Page_lbl.Height);
+                                else 
+                                    Page_lbl.SetBounds(ScreenWidth - Page_lbl.Width - 15, ScreenHeight - Page_lbl.Height, Page_lbl.Width, Page_lbl.Height);
 				            	Page_lbl.Visible = true;
 				            });
 				Thread.Sleep(5000);
@@ -687,7 +724,8 @@ namespace csharp_comicviewer
                     this.ControlBox = false;
                     this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
                     this.WindowState = FormWindowState.Maximized;
-                    Display_form_ResizeEnd(null, null);
+                    SetWinFullScreen(this.Handle);
+                    Display_form_ResizeEnd(null, null);                    
                 }
             }
 		}
@@ -1093,6 +1131,12 @@ namespace csharp_comicviewer
         {
             ApplicationExit(sender, e);
         }
+
+        private void ShowPageInformation_item_bar_Click(object sender, EventArgs e)
+        {
+            ShowPageInformation();
+        }
+
 
 	}
 }

@@ -55,6 +55,7 @@
             this.PageControl_bar = new System.Windows.Forms.ToolStripMenuItem();
             this.NextPage_item_bar = new System.Windows.Forms.ToolStripMenuItem();
             this.PreviousPage_item_bar = new System.Windows.Forms.ToolStripMenuItem();
+            this.ShowPageInformation_item_bar = new System.Windows.Forms.ToolStripMenuItem();
             this.Bookmark_menu_bar = new System.Windows.Forms.ToolStripMenuItem();
             this.AddBookmark_item_bar = new System.Windows.Forms.ToolStripMenuItem();
             this.ManageBookmarks_item_bar = new System.Windows.Forms.ToolStripMenuItem();
@@ -258,7 +259,8 @@
             // 
             this.PageControl_bar.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.NextPage_item_bar,
-            this.PreviousPage_item_bar});
+            this.PreviousPage_item_bar,
+            this.ShowPageInformation_item_bar});
             this.PageControl_bar.Name = "PageControl_bar";
             this.PageControl_bar.Size = new System.Drawing.Size(86, 20);
             this.PageControl_bar.Text = "Page control";
@@ -266,14 +268,21 @@
             // NextPage_item_bar
             // 
             this.NextPage_item_bar.Name = "NextPage_item_bar";
-            this.NextPage_item_bar.Size = new System.Drawing.Size(203, 22);
+            this.NextPage_item_bar.Size = new System.Drawing.Size(212, 22);
             this.NextPage_item_bar.Text = "Next Page (Page Down)";
             // 
             // PreviousPage_item_bar
             // 
             this.PreviousPage_item_bar.Name = "PreviousPage_item_bar";
-            this.PreviousPage_item_bar.Size = new System.Drawing.Size(203, 22);
+            this.PreviousPage_item_bar.Size = new System.Drawing.Size(212, 22);
             this.PreviousPage_item_bar.Text = "Previous Page (Page Up)";
+            // 
+            // ShowPageInformation_item_bar
+            // 
+            this.ShowPageInformation_item_bar.Name = "ShowPageInformation_item_bar";
+            this.ShowPageInformation_item_bar.Size = new System.Drawing.Size(212, 22);
+            this.ShowPageInformation_item_bar.Text = "Show Page Information (I)";
+            this.ShowPageInformation_item_bar.Click += new System.EventHandler(this.ShowPageInformation_item_bar_Click);
             // 
             // Bookmark_menu_bar
             // 
@@ -388,6 +397,7 @@
         private System.Windows.Forms.ToolStripSeparator Bookmark_Separator_bar;
         private System.Windows.Forms.ToolStripMenuItem About_item_bar;
         private System.Windows.Forms.PictureBox DisplayedImage;
+        private System.Windows.Forms.ToolStripMenuItem ShowPageInformation_item_bar;
     }
 }
 
