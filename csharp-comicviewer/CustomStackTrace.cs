@@ -28,34 +28,34 @@ namespace csharp_comicviewer
     /// </summary>
     class CustomStackTrace
     {
-        /// <summary>
-        /// Create a custom stacktrace and show a pop-up message
-        /// </summary>
-        public void CreateStackTrace()
-        {
-            String name = "StackTrace_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm") + ".txt";
-            TextWriter tw = new StreamWriter(name);
-            // Create a StackTrace that captures filename,
-            // line number and column information.
-            StackTrace st = new StackTrace(true);
-            string stackIndent = "";
-            for (int i = 0; i < st.FrameCount; i++)
-            {
-                // Note that at this level, there are four
-                // stack frames, one for each method invocation.
-                StackFrame sf = st.GetFrame(i);
-                tw.WriteLine();
-                tw.WriteLine(stackIndent + " Method: {0}",
-                    sf.GetMethod());
-                tw.WriteLine(stackIndent + " File: {0}",
-                    sf.GetFileName());
-                tw.WriteLine(stackIndent + " Line Number: {0}",
-                    sf.GetFileLineNumber());
-                stackIndent += "  ";
-            }
-            tw.Dispose();
-            MessageBox.Show(String.Format("An error has occured. A stack trace has been saved in the installation directory with the name: \"{0}\" \r\nYou can, if you want, upload the file by making a new item in this projects bug tracker (found on the website).", name));
-        }
+        ///// <summary>
+        ///// Create a custom stacktrace and show a pop-up message
+        ///// </summary>
+        //public void CreateStackTrace()
+        //{
+        //    String name = "StackTrace_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm") + ".txt";
+        //    TextWriter tw = new StreamWriter(name);
+        //    // Create a StackTrace that captures filename,
+        //    // line number and column information.
+        //    StackTrace st = new StackTrace(true);
+        //    string stackIndent = "";
+        //    for (int i = 0; i < st.FrameCount; i++)
+        //    {
+        //        // Note that at this level, there are four
+        //        // stack frames, one for each method invocation.
+        //        StackFrame sf = st.GetFrame(i);
+        //        tw.WriteLine();
+        //        tw.WriteLine(stackIndent + " Method: {0}",
+        //            sf.GetMethod());
+        //        tw.WriteLine(stackIndent + " File: {0}",
+        //            sf.GetFileName());
+        //        tw.WriteLine(stackIndent + " Line Number: {0}",
+        //            sf.GetFileLineNumber());
+        //        stackIndent += "  ";
+        //    }
+        //    tw.Dispose();
+        //    MessageBox.Show(String.Format("An error has occured. A stack trace has been saved in the installation directory with the name: \"{0}\" \r\nYou can, if you want, upload the file by making a new item in this projects bug tracker (found on the website).", name));
+        //}
 
         /// <summary>
         /// Create a custom stacktrace and show a pop-up message

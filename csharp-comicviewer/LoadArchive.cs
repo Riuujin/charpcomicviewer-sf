@@ -18,12 +18,11 @@
  */
 using System;
 using System.Collections;
-using System.Drawing;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using SevenZip;
-using System.Collections.Generic;
 
 namespace csharp_comicviewer
 {
@@ -32,9 +31,10 @@ namespace csharp_comicviewer
     /// </summary>
 	class LoadArchive
 	{
-		ArrayList SupportedImageFormats = new ArrayList();
-		CustomStackTrace CustomStackTrace = new CustomStackTrace();
+		private ArrayList SupportedImageFormats = new ArrayList();
+		private CustomStackTrace CustomStackTrace = new CustomStackTrace();
 		private InfoText InfoText;
+        private String ErrorMessage; 
 
         /// <summary>
         /// Load the dll required
@@ -68,26 +68,35 @@ namespace csharp_comicviewer
 		/// <summary>
         /// Creates a ComicBook from an array of archive paths
 		/// </summary>
-		/// <param name="Archive">Array of archive paths</param>
+		/// <param name="Archives">Array of archive paths</param>
 		/// <returns>ComicBook</returns>
-		public ComicBook CreateComicBook(String[] Archive)
+		public ComicBook CreateComicBook(String[] Archives)
 		{
-			Array.Sort(Archive);
+			Array.Sort(Archives);
 			ComicBook ComicBook = new ComicBook();
 			String InfoTxt = "";
-			String File;
+			String CurrentFile;
 			List<byte[]> ImagesAsBytes = new List<byte[]>();
 			MemoryStream ms = new MemoryStream();
 			SevenZipExtractor Extractor;
 			Boolean NextFile = false;
 
+            foreach(String Archive in Archives)
+            {
+                if(!File.Exists(Archive))
+                {
+                    setErrorMessage("One or more archives where not found");
+                    return null;
+                }
+            }
+
 			try
 			{
-				for (int y = 0; y < Archive.Length; y++)
+				for (int y = 0; y < Archives.Length; y++)
 				{
 					//open archive
-					File = Archive[y];
-					Extractor = new SevenZipExtractor(File);
+					CurrentFile = Archives[y];
+					Extractor = new SevenZipExtractor(CurrentFile);
 					String[] FileNames = Extractor.ArchiveFileNames.ToArray();
 					Array.Sort(FileNames);
 
@@ -132,11 +141,11 @@ namespace csharp_comicviewer
 					{
 						if (InfoTxt.Length > 0 )
                         {
-							ComicBook.CreateComicFile(File, ImagesAsBytes, InfoTxt);
-                            InfoText = new InfoText(Archive[y], InfoTxt);
+							ComicBook.CreateComicFile(CurrentFile, ImagesAsBytes, InfoTxt);
+                            InfoText = new InfoText(Archives[y], InfoTxt);
                         }
 						else
-							ComicBook.CreateComicFile(File, ImagesAsBytes, null);
+							ComicBook.CreateComicFile(CurrentFile, ImagesAsBytes, null);
 					}
 					ImagesAsBytes.Clear();
 				}
@@ -147,9 +156,27 @@ namespace csharp_comicviewer
 			catch (Exception e)
 			{
 				//show error and return nothing
-				CustomStackTrace.CreateStackTrace();
+				CustomStackTrace.CreateStackTrace(e.StackTrace);
 				return null;
 			}
 		}
+
+        /// <summary>
+        /// Sets an error message that can be requested
+        /// </summary>
+        /// <param name="message">The message</param>
+        private void setErrorMessage(String message)
+        {
+            ErrorMessage = message;
+        }
+        
+        /// <summary>
+        /// Get the error message if there is one
+        /// </summary>
+        /// <returns>The message as String</returns>
+        public String getErrorMessage()
+        {
+            return ErrorMessage;
+        }
 	}
 }

@@ -61,8 +61,8 @@
             this.ManageBookmarks_item_bar = new System.Windows.Forms.ToolStripMenuItem();
             this.Bookmark_Separator_bar = new System.Windows.Forms.ToolStripSeparator();
             this.About_item_bar = new System.Windows.Forms.ToolStripMenuItem();
-            this.DisplayedImage = new System.Windows.Forms.PictureBox();
             this.InformationText_item_bar = new System.Windows.Forms.ToolStripMenuItem();
+            this.DisplayedImage = new System.Windows.Forms.PictureBox();
             this.RightClick_menu.SuspendLayout();
             this.MenuBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DisplayedImage)).BeginInit();
@@ -323,6 +323,13 @@
             this.About_item_bar.Text = "About";
             this.About_item_bar.Click += new System.EventHandler(this.About_itemClick);
             // 
+            // InformationText_item_bar
+            // 
+            this.InformationText_item_bar.Name = "InformationText_item_bar";
+            this.InformationText_item_bar.Size = new System.Drawing.Size(124, 20);
+            this.InformationText_item_bar.Text = "Information text (N)";
+            this.InformationText_item_bar.Click += new System.EventHandler(this.InformationText_item_bar_Click);
+            // 
             // DisplayedImage
             // 
             this.DisplayedImage.Location = new System.Drawing.Point(0, 0);
@@ -333,13 +340,6 @@
             this.DisplayedImage.TabIndex = 1;
             this.DisplayedImage.TabStop = false;
             this.DisplayedImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DisplayMouseMove);
-            // 
-            // InformationText_item_bar
-            // 
-            this.InformationText_item_bar.Name = "InformationText_item_bar";
-            this.InformationText_item_bar.Size = new System.Drawing.Size(124, 20);
-            this.InformationText_item_bar.Text = "Information text (N)";
-            this.InformationText_item_bar.Click += new System.EventHandler(this.InformationText_item_bar_Click);
             // 
             // Display_form
             // 
@@ -361,10 +361,11 @@
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Display_form_FormClosing);
             this.Load += new System.EventHandler(this.Display_form_Load);
-            this.ResizeEnd += new System.EventHandler(this.Display_form_ResizeEnd);
+            this.ResizeEnd += new System.EventHandler(this.ResizeFix);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DisplayKeyDown);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DisplayKeyPress);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DisplayMouseMove);
+            this.Resize += new System.EventHandler(this.ResizeFix);
             this.RightClick_menu.ResumeLayout(false);
             this.MenuBar.ResumeLayout(false);
             this.MenuBar.PerformLayout();

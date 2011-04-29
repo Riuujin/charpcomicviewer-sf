@@ -113,7 +113,7 @@ namespace csharp_comicviewer
                 this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
                 this.ControlBox = true;
                 this.WindowState = FormWindowState.Maximized;
-                Display_form_ResizeEnd(null, null);
+                ResizeFix(null, null);
                 MenuBar.Visible = true;
 
             }
@@ -221,7 +221,7 @@ namespace csharp_comicviewer
 			catch (Exception ex)
 			{
 				MessageBox.Show("xml config save failed:" + ex.Message);
-				CustomStackTrace.CreateStackTrace();
+				CustomStackTrace.CreateStackTrace(ex.StackTrace);
 				return false;
 			}
 
@@ -253,7 +253,7 @@ namespace csharp_comicviewer
 			catch (Exception ex)
 			{
 				MessageBox.Show("xml config load failed:" + ex.Message);
-				CustomStackTrace.CreateStackTrace();
+				CustomStackTrace.CreateStackTrace(ex.StackTrace);
 				return false;
 			}
 
@@ -478,7 +478,7 @@ namespace csharp_comicviewer
 		}
 
         /// <summary>
-        /// Shows a message for 1000ms, must be used as thread
+        /// Shows a message for 2000ms, must be used as thread
         /// </summary>
 		private void Message()
 		{
@@ -492,7 +492,7 @@ namespace csharp_comicviewer
 				            	Message_lbl.Width = this.Width;
 				            	Message_lbl.Visible = true;
 				            });
-				Thread.Sleep(1000);
+				Thread.Sleep(2000);
 				this.Invoke((MethodInvoker)delegate
 				            {
 				            	Message_lbl.Visible = false;
@@ -503,7 +503,7 @@ namespace csharp_comicviewer
 				if (!ex.Message.Contains("aborted"))
 				{
 					MessageBox.Show(ex.Message);
-					CustomStackTrace.CreateStackTrace();
+                    CustomStackTrace.CreateStackTrace(ex.StackTrace);
 				}
 			}
 		}
@@ -538,7 +538,7 @@ namespace csharp_comicviewer
 		}
 
         /// <summary>
-        /// Shows the page information for 1000ms, must be used as thread
+        /// Shows the page information for 5000ms, must be used as thread
         /// </summary>
 		private void PageInformation()
 		{
@@ -568,7 +568,7 @@ namespace csharp_comicviewer
 				if (!ex.Message.Contains("aborted"))
 				{
 					MessageBox.Show(ex.Message);
-					CustomStackTrace.CreateStackTrace();
+                    CustomStackTrace.CreateStackTrace(ex.StackTrace);
 				}
 			}
 		}
@@ -714,7 +714,7 @@ namespace csharp_comicviewer
                     this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
                     this.ControlBox = true;
                     this.WindowState = FormWindowState.Maximized;
-                    Display_form_ResizeEnd(null, null);
+                    ResizeFix(null, null);
                     MenuBar.Visible = true;                    
                 }
                 else
@@ -725,7 +725,7 @@ namespace csharp_comicviewer
                     this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
                     this.WindowState = FormWindowState.Maximized;
                     SetWinFullScreen(this.Handle);
-                    Display_form_ResizeEnd(null, null);                    
+                    ResizeFix(null, null);                    
                 }
             }
 		}
@@ -982,12 +982,17 @@ namespace csharp_comicviewer
 					Data = (ArrayList)Configuration.Bookmarks[i - 3];
 					String[] Files = (String[])Data[0];
 
-					try
+                    try
 					{
 						Cursor = Cursors.WaitCursor;
 						LoadArchive Archives = new LoadArchive();
 						ComicBook = Archives.CreateComicBook(Files);
-						SetImage(ComicBook.GetPage((int)Data[1], (int)Data[2]));
+                        if (ComicBook == null)
+                            ShowMessage(Archives.getErrorMessage());
+                        else
+                        {
+                            SetImage(ComicBook.GetPage((int)Data[1], (int)Data[2]));
+                        }
 						this.Cursor = Cursors.Default;
 					}
 					catch (Exception)
@@ -1113,7 +1118,7 @@ namespace csharp_comicviewer
         /// <summary>
         /// Make sure current size is correct
         /// </summary>
-        private void Display_form_ResizeEnd(object sender, EventArgs e)
+        private void ResizeFix(object sender, EventArgs e)
         {
             if (!Configuration.windowed)
                 ScreenHeight = this.Height;
@@ -1127,16 +1132,25 @@ namespace csharp_comicviewer
             SetImage(DisplayedImage.Image);
         }
 
+        /// <summary>
+        /// Form closing event
+        /// </summary>
         private void Display_form_FormClosing(object sender, FormClosingEventArgs e)
         {
             ApplicationExit(sender, e);
         }
 
+        /// <summary>
+        /// Show page information bar button
+        /// </summary>
         private void ShowPageInformation_item_bar_Click(object sender, EventArgs e)
         {
             ShowPageInformation();
         }
 
+        /// <summary>
+        /// Show information text bar button
+        /// </summary>
         private void InformationText_item_bar_Click(object sender, EventArgs e)
         {
             if (ComicBook != null && ComicBook.GetTotalFiles() != 0)
