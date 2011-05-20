@@ -432,7 +432,11 @@ namespace csharp_comicviewer
 			{
 				ComicBook = Archives.CreateComicBook(Files);
                 if (ComicBook.GetTotalFiles() != 0)
+                {
                     SetImage(ComicBook.GetPage(0, 0));
+                    if (!String.IsNullOrEmpty(Archives.getErrorMessage()))
+                        ShowMessage(Archives.getErrorMessage());
+                }
                 else
                     ShowMessage("No supported files found in archive");
 			}
@@ -945,7 +949,11 @@ namespace csharp_comicviewer
 					LoadArchive Archives = new LoadArchive();
 					ComicBook = Archives.CreateComicBook(Configuration.Resume_Files);
                     if (ComicBook.GetTotalFiles() != 0)
-					    SetImage(ComicBook.GetPage(Configuration.Resume_Start_At[0], Configuration.Resume_Start_At[1]));
+                    {
+                        SetImage(ComicBook.GetPage(Configuration.Resume_Start_At[0], Configuration.Resume_Start_At[1]));
+                        if (!String.IsNullOrEmpty(Archives.getErrorMessage()))
+                            ShowMessage(Archives.getErrorMessage());
+                    }
                     else
                         ShowMessage("No supported files found in archive");
 					this.Cursor = Cursors.Default;
@@ -991,6 +999,8 @@ namespace csharp_comicviewer
                             ShowMessage(Archives.getErrorMessage());
                         else
                         {
+                            if (!String.IsNullOrEmpty(Archives.getErrorMessage()))
+                                ShowMessage(Archives.getErrorMessage());
                             SetImage(ComicBook.GetPage((int)Data[1], (int)Data[2]));
                         }
 						this.Cursor = Cursors.Default;
@@ -1013,10 +1023,17 @@ namespace csharp_comicviewer
                     try
                     {
                         Cursor = Cursors.WaitCursor;
-                        LoadArchive Archives = new LoadArchive();
-                        ComicBook = Archives.CreateComicBook(Files);
-                        SetImage(ComicBook.GetPage((int)Data[1], (int)Data[2]));
-                        this.Cursor = Cursors.Default;
+						LoadArchive Archives = new LoadArchive();
+						ComicBook = Archives.CreateComicBook(Files);
+                        if (ComicBook == null)
+                            ShowMessage(Archives.getErrorMessage());
+                        else
+                        {
+                            if (!String.IsNullOrEmpty(Archives.getErrorMessage()))
+                                ShowMessage(Archives.getErrorMessage());
+                            SetImage(ComicBook.GetPage((int)Data[1], (int)Data[2]));
+                        }
+						this.Cursor = Cursors.Default;
                     }
                     catch (Exception)
                     {
