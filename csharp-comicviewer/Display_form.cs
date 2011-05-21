@@ -158,6 +158,8 @@ namespace csharp_comicviewer
                 Files[0] = OpeningFile;
                 ComicBook = Archives.CreateComicBook(Files);
                 SetImage(ComicBook.GetPage(0, 0));
+                if (!String.IsNullOrEmpty(Archives.getErrorMessage()))
+                    ShowMessage(Archives.getErrorMessage());
                 Cursor = Cursors.Default;
             }
 		}
