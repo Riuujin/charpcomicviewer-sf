@@ -60,7 +60,7 @@ namespace csharp_comicviewer
         private void Display_Form_Load(object sender, EventArgs e)
         {
             //set mousewheel event (scrolling)
-            this.MouseWheel += new MouseEventHandler(Mouse_Wheelevent);
+            this.MouseWheel += new MouseEventHandler(DisplayMouseWheel);
 
             //Load config
             LoadConfiguration();
@@ -206,7 +206,7 @@ namespace csharp_comicviewer
         /// <summary>
         /// Takes care of the scrolling with the mousewheel
         /// </summary>
-        private void Mouse_Wheelevent(object sender, MouseEventArgs e)
+        private void DisplayMouseWheel(object sender, MouseEventArgs e)
         {
             //scroll down
             if (e.Delta < 0 && DisplayedImage.Image != null)
@@ -418,7 +418,7 @@ namespace csharp_comicviewer
         /// <summary>
         /// Key press events
         /// </summary>
-        private void KeyPress(object sender, KeyPressEventArgs e)
+        private void DisplayKeyPress(object sender, KeyPressEventArgs e)
         {
             if (char.ToLower((char)e.KeyChar) == char.ToLower((char)Keys.X))
                 ApplicationExit(sender, e);
@@ -475,7 +475,7 @@ namespace csharp_comicviewer
         /// <summary>
         /// Key down events
         /// </summary>
-        private void KeyDown(object sender, KeyEventArgs e)
+        private void DisplayKeyDown(object sender, KeyEventArgs e)
         {
 
             if (e.KeyCode == Keys.Home && e.Modifiers != Keys.Alt) //first page of all

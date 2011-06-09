@@ -362,8 +362,8 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Display_Form_FormClosing);
             this.Load += new System.EventHandler(this.Display_Form_Load);
             this.ResizeEnd += new System.EventHandler(this.ResizeFix);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyDown);
-            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.KeyPress);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DisplayKeyDown);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DisplayKeyPress);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Dragging);
             this.Resize += new System.EventHandler(this.ResizeFix);
             this.RightClick_menu.ResumeLayout(false);
