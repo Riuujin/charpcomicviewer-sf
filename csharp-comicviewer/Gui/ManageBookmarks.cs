@@ -28,13 +28,14 @@ using System.Collections;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
+using csharp_comicviewer.Other;
 
 namespace csharp_comicviewer
 {
     /// <summary>
     /// Bookmark manager
     /// </summary>
-    public partial class ManageBookmarks : Form
+    public partial class ManageBookmarks_Form : Form
     {
 
         private Configuration Configuration = new Configuration();
@@ -44,7 +45,7 @@ namespace csharp_comicviewer
         /// Load configuration
         /// </summary>
         /// <param name="Configuration"></param>
-        public ManageBookmarks(Configuration Configuration)
+        public ManageBookmarks_Form(Configuration Configuration)
         {
             InitializeComponent();
             this.Configuration = Configuration;
@@ -91,13 +92,13 @@ namespace csharp_comicviewer
             {
                 if (Configuration.Bookmarks.Count > 0)
                 {
-                    ArrayList Data;
+                    Bookmark Data;
                     Bookmarks_chckdLstBx.Items.Clear();
                     for (int i = 0; i < Configuration.Bookmarks.Count; i++)
                     {
-                        Data = (ArrayList)Configuration.Bookmarks[i];
-                        String[] Files = (String[])Data[0];
-                        Bookmarks_chckdLstBx.Items.Add(Files[(int)Data[1]]);
+                        Data = Configuration.Bookmarks[i];
+                        String[] Files = Data.Files;
+                        Bookmarks_chckdLstBx.Items.Add(Files[Data.FileNumber]);
                     }
                 }
             }
@@ -115,7 +116,7 @@ namespace csharp_comicviewer
                 {
                     Configuration.Bookmarks.RemoveAt(i);
                     Bookmarks_chckdLstBx.Items.RemoveAt(i);
-                    i = 0;
+                    i = -1;
                 }
             }
             ManageBookmarks_Load(sender, e);

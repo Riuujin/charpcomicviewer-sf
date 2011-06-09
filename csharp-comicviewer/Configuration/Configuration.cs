@@ -17,10 +17,9 @@
   along with csharp comicviewer.  If not, see <http://www.gnu.org/licenses/>.
 */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Collections;
+using csharp_comicviewer.Other;
+using System.Collections.Generic;
 
 namespace csharp_comicviewer
 {
@@ -35,17 +34,13 @@ namespace csharp_comicviewer
         /// </summary>
         public String Version = "";
         /// <summary>
-        /// Location of the files to resume
+        /// Resume data
         /// </summary>
-        public String[] Resume_Files;
+        public Bookmark Resume;
         /// <summary>
-        /// [file number,page number] of the start location in the files to resume
+        /// The stored bookmarks
         /// </summary>
-        public int[] Resume_Start_At = new int[2];
-        /// <summary>
-        /// The stored bookmarks inside Arraylist with [0] = String[] files, [1] = int current file, [2] = int current page of file
-        /// </summary>
-        public ArrayList Bookmarks =  new ArrayList();
+        public List<Bookmark> Bookmarks;
         /// <summary>
         /// Should height be overridden
         /// </summary>
@@ -57,6 +52,6 @@ namespace csharp_comicviewer
         /// <summary>
         /// Windowed mode
         /// </summary>
-        public Boolean windowed = false;
+        public Boolean windowed = false;        
     }
 }

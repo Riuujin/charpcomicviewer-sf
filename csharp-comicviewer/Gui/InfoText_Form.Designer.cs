@@ -8,7 +8,7 @@
  */
 namespace csharp_comicviewer
 {
-	partial class InfoText
+	partial class InfoText_Form
 	{
 		/// <summary>
 		/// Designer variable used to keep track of non-visual components.
@@ -36,7 +36,7 @@ namespace csharp_comicviewer
 		/// </summary>
 		private void InitializeComponent()
 		{
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InfoText));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InfoText_Form));
             this.InfoText_RchTxtBx = new System.Windows.Forms.RichTextBox();
             this.Close_btn = new System.Windows.Forms.Button();
             this.SuspendLayout();

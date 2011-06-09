@@ -1,6 +1,6 @@
 ﻿namespace csharp_comicviewer
 {
-    partial class ManageBookmarks
+    partial class ManageBookmarks_Form
     {
         /// <summary>
         /// Required designer variable.

@@ -29,17 +29,16 @@ namespace csharp_comicviewer
     /// <summary>
     /// Load archives using SevenZipSharp
     /// </summary>
-    class LoadArchive
+    class LoadArchives
     {
         private ArrayList SupportedImageFormats = new ArrayList();
         private CustomStackTrace CustomStackTrace = new CustomStackTrace();
-        private InfoText InfoText;
-        private String ErrorMessage;
+        private InfoText_Form InfoText;
 
         /// <summary>
         /// Load the dll required
         /// </summary>
-        public LoadArchive()
+        public LoadArchives()
         {
             //Get the location of the 7z dll (location .EXE is in)
             String executableName = Application.ExecutablePath;
@@ -70,8 +69,10 @@ namespace csharp_comicviewer
         /// </summary>
         /// <param name="Archives">Array of archive paths</param>
         /// <returns>ComicBook</returns>
-        public ComicBook CreateComicBook(String[] Archives)
+        public LoadReturnValue CreateComicBook(String[] Archives)
         {
+            LoadReturnValue ReturnValue = new LoadReturnValue();
+            
             Array.Sort(Archives);
             ComicBook ComicBook = new ComicBook();
             String InfoTxt = "";
@@ -85,8 +86,8 @@ namespace csharp_comicviewer
             {
                 if (!File.Exists(Archive))
                 {
-                    setErrorMessage("One or more archives where not found");
-                    return null;
+                    ReturnValue.Error = "One or more archives where not found";
+                    return ReturnValue;
                 }
             }
 
@@ -118,7 +119,7 @@ namespace csharp_comicviewer
                                 catch (Exception)
                                 {
                                     ms.Close();
-                                    setErrorMessage("One or more files are corrupted, and where skipped");
+                                    ReturnValue.Error = "One or more files are corrupted, and where skipped";
                                 }
                                 ms.Close();
                                 NextFile = true;
@@ -137,7 +138,7 @@ namespace csharp_comicviewer
                                 catch (Exception)
                                 {
                                     ms.Close();
-                                    setErrorMessage("One or more files are corrupted, and where skipped");
+                                    ReturnValue.Error = "One or more files are corrupted, and where skipped";
                                 }
                                 ms.Close();
                                 NextFile = true;
@@ -158,7 +159,7 @@ namespace csharp_comicviewer
                         if (InfoTxt.Length > 0)
                         {
                             ComicBook.CreateComicFile(CurrentFile, ImagesAsBytes, InfoTxt);
-                            InfoText = new InfoText(Archives[y], InfoTxt);
+                            InfoText = new InfoText_Form(Archives[y], InfoTxt);
                         }
                         else
                             ComicBook.CreateComicFile(CurrentFile, ImagesAsBytes, null);
@@ -166,8 +167,16 @@ namespace csharp_comicviewer
                     ImagesAsBytes.Clear();
                 }
 
+                if (ComicBook.HasFiles())
+                {
+                    ReturnValue.ComicBook = ComicBook;
+                    ReturnValue.HasFile = true;
+                }
+                else
+                    ReturnValue.HasFile = false;
+
                 //return the ComicBook on succes
-                return ComicBook;
+                return ReturnValue;
             }
             catch (Exception e)
             {
@@ -175,24 +184,6 @@ namespace csharp_comicviewer
                 CustomStackTrace.CreateStackTrace(e.StackTrace);
                 return null;
             }
-        }
-
-        /// <summary>
-        /// Sets an error message that can be requested
-        /// </summary>
-        /// <param name="message">The message</param>
-        private void setErrorMessage(String message)
-        {
-            ErrorMessage = message;
-        }
-
-        /// <summary>
-        /// Get the error message if there is one
-        /// </summary>
-        /// <returns>The message as String</returns>
-        public String getErrorMessage()
-        {
-            return ErrorMessage;
         }
     }
 }

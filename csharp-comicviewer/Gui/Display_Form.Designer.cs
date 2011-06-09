@@ -1,6 +1,6 @@
 ﻿namespace csharp_comicviewer
 {
-    partial class Display_form
+    partial class Display_Form
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Display_form));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Display_Form));
             this.Message_lbl = new System.Windows.Forms.Label();
             this.Page_lbl = new System.Windows.Forms.Label();
             this.RightClick_menu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -115,14 +115,14 @@
             this.Resume_item.Name = "Resume_item";
             this.Resume_item.Size = new System.Drawing.Size(224, 22);
             this.Resume_item.Text = "Resume last file(s) (R)";
-            this.Resume_item.Click += new System.EventHandler(this.ResumeLastFiles);
+            this.Resume_item.Click += new System.EventHandler(this.ResumeLastFiles_Click);
             // 
             // Load_item
             // 
             this.Load_item.Name = "Load_item";
             this.Load_item.Size = new System.Drawing.Size(224, 22);
             this.Load_item.Text = "Load File(s) (L)";
-            this.Load_item.Click += new System.EventHandler(this.LoadArchives);
+            this.Load_item.Click += new System.EventHandler(this.LoadArchives_Click);
             // 
             // NextPage_item
             // 
@@ -227,14 +227,14 @@
             this.Resume_item_bar.Name = "Resume_item_bar";
             this.Resume_item_bar.Size = new System.Drawing.Size(224, 22);
             this.Resume_item_bar.Text = "Resume last file(s) (R)";
-            this.Resume_item_bar.Click += new System.EventHandler(this.ResumeLastFiles);
+            this.Resume_item_bar.Click += new System.EventHandler(this.ResumeLastFiles_Click);
             // 
             // Load_item_bar
             // 
             this.Load_item_bar.Name = "Load_item_bar";
             this.Load_item_bar.Size = new System.Drawing.Size(224, 22);
             this.Load_item_bar.Text = "Load File(s) (L)";
-            this.Load_item_bar.Click += new System.EventHandler(this.LoadArchives);
+            this.Load_item_bar.Click += new System.EventHandler(this.LoadArchives_Click);
             // 
             // NextFile_item_bar
             // 
@@ -339,7 +339,7 @@
             this.DisplayedImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.DisplayedImage.TabIndex = 1;
             this.DisplayedImage.TabStop = false;
-            this.DisplayedImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DisplayMouseMove);
+            this.DisplayedImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Dragging);
             // 
             // Display_form
             // 
@@ -359,12 +359,12 @@
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "C# Comicviewer";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Display_form_FormClosing);
-            this.Load += new System.EventHandler(this.Display_form_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Display_Form_FormClosing);
+            this.Load += new System.EventHandler(this.Display_Form_Load);
             this.ResizeEnd += new System.EventHandler(this.ResizeFix);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DisplayKeyDown);
-            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DisplayKeyPress);
-            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DisplayMouseMove);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyDown);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.KeyPress);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Dragging);
             this.Resize += new System.EventHandler(this.ResizeFix);
             this.RightClick_menu.ResumeLayout(false);
             this.MenuBar.ResumeLayout(false);

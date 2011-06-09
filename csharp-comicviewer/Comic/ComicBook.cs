@@ -17,10 +17,9 @@
   along with csharp comicviewer.  If not, see <http://www.gnu.org/licenses/>.
 */
 using System;
-using System.Collections;
-using System.Drawing;
-using System.IO;
 using System.Collections.Generic;
+using System.Drawing;
+using csharp_comicviewer.Other;
 
 namespace csharp_comicviewer
 {
@@ -86,15 +85,15 @@ namespace csharp_comicviewer
         /// <returns>The current of  total pages of the ComicBook</returns>
         public int GetCurrentPageOfTotal()
         {
-        	if(GetCurrentFile() != 0)
-        	{
-        		CurrentPageOfTotal = CurrentPageOfFile;
-        		for (int i = 0; i < GetCurrentFile(); i++)
-        		{
-        			CurrentPageOfTotal += Files[i].GetTotalPages();
-        		}
-        	}
-            else 
+            if (GetCurrentFile() != 0)
+            {
+                CurrentPageOfTotal = CurrentPageOfFile;
+                for (int i = 0; i < GetCurrentFile(); i++)
+                {
+                    CurrentPageOfTotal += Files[i].GetTotalPages();
+                }
+            }
+            else
                 CurrentPageOfTotal = CurrentPageOfFile;
             return CurrentPageOfTotal;
         }
@@ -147,8 +146,8 @@ namespace csharp_comicviewer
                 else
                     return null;
             }
-               else
-                    return null;
+            else
+                return null;
         }
 
         /// <summary>
@@ -164,18 +163,16 @@ namespace csharp_comicviewer
         /// <summary>
         /// Get the information needed to save the ComicBook as bookmark or resume
         /// </summary>
-        /// <returns>ArrayList with the information, [0] = ComicFile locations, [1] = current ComicFile, [2] = current page of ComicFile</returns>
-        public ArrayList GetComicBookSaveInformation()
+        /// <returns>Bookmark</returns>
+        public Bookmark GetComicBookSaveInformation()
         {
-            ArrayList Data = new ArrayList();
+            Bookmark Data;
             String[] FileLocations = new String[Files.Count];
             for (int i = 0; i < Files.Count; i++)
             {
                 FileLocations[i] = Files[i].GetLocation();
             }
-            Data.Add(FileLocations); //[0]
-            Data.Add(CurrentFile); //[1]
-            Data.Add(CurrentPageOfFile); //[2]
+            Data = new Bookmark(FileLocations,CurrentFile,CurrentPageOfFile);
             return Data;
         }
 
@@ -207,7 +204,7 @@ namespace csharp_comicviewer
                 Page = GetPage(CurrentFile + 1, 0);
 
             }
-            if(Page != null)
+            if (Page != null)
                 CurrentPageOfTotal++;
             return Page;
         }
@@ -225,7 +222,7 @@ namespace csharp_comicviewer
             }
             else if (CurrentFile > 0)
             {
-                Page = GetPage(CurrentFile - 1, GetTotalPagesOfFile(CurrentFile - 1) -1);
+                Page = GetPage(CurrentFile - 1, GetTotalPagesOfFile(CurrentFile - 1) - 1);
 
             }
             if (Page != null)
@@ -251,8 +248,7 @@ namespace csharp_comicviewer
         /// <returns>The file location of the ComicFile</returns>
         public String GetFileLocation(int FileNumber)
         {
-        	return Files[FileNumber].GetLocation();
+            return Files[FileNumber].GetLocation();
         }
-
     }
 }

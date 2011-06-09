@@ -18,11 +18,7 @@
 */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Collections;
 using System.Drawing;
-using System.Windows.Forms;
 using System.IO;
 
 namespace csharp_comicviewer
@@ -78,9 +74,9 @@ namespace csharp_comicviewer
         {
             using (MemoryStream ms = new MemoryStream(ImagesAsBytes[PageNumber], 0, ImagesAsBytes[PageNumber].Length))
             {
-                return Image.FromStream(ms,true);
+                return Image.FromStream(ms, true);
             }
-            
+
         }
 
         /// <summary>

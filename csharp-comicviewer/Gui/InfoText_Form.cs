@@ -25,14 +25,14 @@ namespace csharp_comicviewer
     /// <summary>
     /// Show information text in a dialog
     /// </summary>
-	public partial class InfoText : Form
+	public partial class InfoText_Form : Form
 	{
         /// <summary>
         /// Show the information text
         /// </summary>
         /// <param name="FileLocation">Location of the archive containing the text</param>
         /// <param name="InfoText">The information text</param>
-		public InfoText(String FileLocation,String InfoText)
+		public InfoText_Form(String FileLocation,String InfoText)
 		{
 			InitializeComponent();
 			this.Text= "Info text from: \"" + FileLocation + "\"";

@@ -15,28 +15,37 @@
 
   You should have received a copy of the GNU General Public License
   along with csharp comicviewer.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
+using System.Text;
 
 namespace csharp_comicviewer
 {
-    static class Program
+    class LoadReturnValue
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main(string[] args)
+        private ComicBook _ComicBook;
+        private String _Error;
+        private Boolean _HasFile;
+
+
+        public ComicBook ComicBook
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            if (args.Length > 0)
-                Application.Run(new Display_Form(args[0]));
-            else
-                Application.Run(new Display_Form(null));
+            get { return _ComicBook; }
+            set { _ComicBook = value; }
+        }
+
+        public Boolean HasFile
+        {
+            get { return _HasFile; }
+            set { _HasFile = value; }
+        }
+
+        public String Error
+        {
+            get { return _Error; }
+            set { _Error = value; }
         }
     }
 }
