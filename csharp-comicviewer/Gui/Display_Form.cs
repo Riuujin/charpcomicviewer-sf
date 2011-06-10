@@ -1074,20 +1074,7 @@ namespace csharp_comicviewer
                 }
 
                 Cursor = Cursors.WaitCursor;
-                LoadArchives Archives = new LoadArchives();
-                LoadReturnValue ArchivesReturnValue = Archives.CreateComicBook(Files);
-
-                if (ArchivesReturnValue.HasFile)
-                {
-                    ComicBook = ArchivesReturnValue.ComicBook;
-                    DisplayImage(ComicBook.GetPage(0, 0));
-                    if (!String.IsNullOrEmpty(ArchivesReturnValue.Error))
-                        ShowMessage(ArchivesReturnValue.Error);
-                }
-                else if (!String.IsNullOrEmpty(ArchivesReturnValue.Error))
-                    ShowMessage(ArchivesReturnValue.Error);
-                else
-                    ShowMessage("No supported files found in archive");
+                LoadArchive(Files);
             }
             catch { }
             Cursor = Cursors.Default;
@@ -1112,27 +1099,14 @@ namespace csharp_comicviewer
                 }
 
                 Cursor = Cursors.WaitCursor;
-                LoadArchives Archives = new LoadArchives();
-                LoadReturnValue ArchivesReturnValue = Archives.CreateComicBook(Files);
-
-                if (ArchivesReturnValue.HasFile)
-                {
-                    ComicBook = ArchivesReturnValue.ComicBook;
-                    DisplayImage(ComicBook.GetPage(0, 0));
-                    if (!String.IsNullOrEmpty(ArchivesReturnValue.Error))
-                        ShowMessage(ArchivesReturnValue.Error);
-                }
-                else if (!String.IsNullOrEmpty(ArchivesReturnValue.Error))
-                    ShowMessage(ArchivesReturnValue.Error);
-                else
-                    ShowMessage("No supported files found in archive");
+                LoadArchive(Files);
             }
             catch { }
             Cursor = Cursors.Default;
         }
 
         /// <summary>
-        /// Load archive(s) and display first page
+        /// Load archive(s) and display a page of choice
         /// </summary>
         /// <param name="Files">Array with archive locations</param>
         /// <param name="FileNumber">File in array to start at</param>
@@ -1150,26 +1124,34 @@ namespace csharp_comicviewer
                     }
                 }
                 Cursor = Cursors.WaitCursor;
-                LoadArchives Archives = new LoadArchives();
-                LoadReturnValue ArchivesReturnValue = Archives.CreateComicBook(Files);
-
-                if (ArchivesReturnValue.HasFile)
-                {
-                    ComicBook = ArchivesReturnValue.ComicBook;
-                    DisplayImage(ComicBook.GetPage(FileNumber, PageNumber));
-                    if (!String.IsNullOrEmpty(ArchivesReturnValue.Error))
-                        ShowMessage(ArchivesReturnValue.Error);
-                }
-                else if (!String.IsNullOrEmpty(ArchivesReturnValue.Error))
-                    ShowMessage(ArchivesReturnValue.Error);
-                else
-                    ShowMessage("No supported files found in archive");
-
+                LoadArchive(Files);
             }
             catch { }
             Cursor = Cursors.Default;
         }
 
+        /// <summary>
+        /// Load the archives
+        /// </summary>
+        /// <param name="Files">Archive location</param>
+        private void LoadArchive(String[] Files)
+        {
+            LoadArchives Archives = new LoadArchives();
+            LoadReturnValue ArchivesReturnValue = Archives.CreateComicBook(Files);
+
+            if (ArchivesReturnValue.HasFile)
+            {
+                ComicBook = ArchivesReturnValue.ComicBook;
+                DisplayImage(ComicBook.GetPage(0, 0));
+                if (!String.IsNullOrEmpty(ArchivesReturnValue.Error))
+                    ShowMessage(ArchivesReturnValue.Error);
+            }
+            else if (!String.IsNullOrEmpty(ArchivesReturnValue.Error))
+                ShowMessage(ArchivesReturnValue.Error);
+            else
+                ShowMessage("No supported files found in archive");
+        }
+        
         /// <summary>
         /// Display an image on the form
         /// </summary>
