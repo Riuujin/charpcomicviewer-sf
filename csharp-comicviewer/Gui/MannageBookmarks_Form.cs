@@ -1,22 +1,4 @@
-﻿/*
-  Copyright 2011 Rutger Spruyt
-  
-  This file is part of C# Comicviewer.
-
-  csharp comicviewer is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
-  (at your option) any later version.
-
-  csharp comicviewer is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with csharp comicviewer.  If not, see <http://www.gnu.org/licenses/>.
-*/
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -24,28 +6,27 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using System.Collections;
+using csharp_comicviewer.Other;
+using System.Runtime.Serialization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Runtime.Serialization;
-using csharp_comicviewer.Other;
 
-namespace csharp_comicviewer
+namespace csharp_comicviewer.Gui
 {
     /// <summary>
-    /// Bookmark manager
+    /// Manage the bookmarks
     /// </summary>
-    public partial class ManageBookmarks_Form : Form
+    public partial class MannageBookmarks_Form : Form
     {
-
         private Configuration Configuration = new Configuration();
         private Configuration ConfigurationBackup = new Configuration();
+        private List<Bookmark> Bookmarks = new List<Bookmark>();
 
         /// <summary>
-        /// Load configuration
+        /// create a manage bookmarks form
         /// </summary>
-        /// <param name="Configuration"></param>
-        public ManageBookmarks_Form(Configuration Configuration)
+        /// <param name="Configuration">The configuration from wich bookmarks are loaded</param>
+        public MannageBookmarks_Form(Configuration Configuration)
         {
             InitializeComponent();
             this.Configuration = Configuration;
@@ -87,19 +68,16 @@ namespace csharp_comicviewer
         /// </summary>
         private void ManageBookmarks_Load(object sender, EventArgs e)
         {
-            CheckBox Checkbox = new CheckBox();
+            Boomarks_dataGridView.Rows.Clear();
             if (Configuration != null)
             {
-                if (Configuration.Bookmarks.Count > 0)
+                foreach (Bookmark bookmark in Configuration.Bookmarks)
                 {
-                    Bookmark Data;
-                    Bookmarks_chckdLstBx.Items.Clear();
-                    for (int i = 0; i < Configuration.Bookmarks.Count; i++)
-                    {
-                        Data = Configuration.Bookmarks[i];
-                        String[] Files = Data.Files;
-                        Bookmarks_chckdLstBx.Items.Add(Files[Data.FileNumber]);
-                    }
+                    int row = Boomarks_dataGridView.Rows.Add();
+                    Boomarks_dataGridView.Rows[row].Cells[0].Value = false;
+                    Boomarks_dataGridView.Rows[row].Cells[1].Value = bookmark.GetCurrentFileName();
+                    Boomarks_dataGridView.Rows[row].Cells[2].Value = bookmark.PageNumber;
+                    Boomarks_dataGridView.Rows[row].Cells[3].Value = bookmark.Files[bookmark.FileNumber];
                 }
             }
         }
@@ -109,16 +87,16 @@ namespace csharp_comicviewer
         /// </summary>
         private void Delete_btn_Click(object sender, EventArgs e)
         {
+            Bookmarks.Clear();
             for (int i = 0; i < Configuration.Bookmarks.Count; i++)
             {
-
-                if (Bookmarks_chckdLstBx.GetItemChecked(i))
+                if (Boolean.Parse(Boomarks_dataGridView.Rows[i].Cells[0].Value.ToString()) == false)
                 {
-                    Configuration.Bookmarks.RemoveAt(i);
-                    Bookmarks_chckdLstBx.Items.RemoveAt(i);
-                    i = -1;
+                    Bookmarks.Add(Configuration.Bookmarks[i]);
                 }
             }
+            Configuration.Bookmarks.Clear();
+            Configuration.Bookmarks = Bookmarks;
             ManageBookmarks_Load(sender, e);
         }
 
@@ -147,6 +125,5 @@ namespace csharp_comicviewer
         {
             return Configuration;
         }
-
     }
 }

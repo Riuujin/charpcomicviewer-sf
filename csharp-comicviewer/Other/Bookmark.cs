@@ -90,7 +90,14 @@ namespace csharp_comicviewer.Other
         {
             String FilePath = _Files[_CurrentFile];
             String[] FilePathSplit = FilePath.Split('\\');
-            return FilePathSplit[FilePathSplit.Length - 1];
+            String FileNameWithExtension = FilePathSplit[FilePathSplit.Length - 1];
+            FilePathSplit = FileNameWithExtension.Split('.');
+            String Filename = "";
+            for (int i = 0; i < FilePathSplit.Length - 1; i++)
+            {
+                Filename += FilePathSplit[i];
+            }
+            return Filename;
         }
     }
 }

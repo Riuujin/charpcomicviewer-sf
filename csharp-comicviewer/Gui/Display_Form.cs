@@ -31,6 +31,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using csharp_comicviewer.Other;
+using csharp_comicviewer.Gui;
 
 namespace csharp_comicviewer
 {
@@ -697,11 +698,13 @@ namespace csharp_comicviewer
                     {
                         Bookmark Data = Configuration.Bookmarks[i];
                         String[] Files = Data.Files;
-                        ToolStripMenuItem Bookmark = new ToolStripMenuItem(Files[Data.FileNumber]);
+                        ToolStripMenuItem Bookmark = new ToolStripMenuItem(Data.GetCurrentFileName());
+                        Bookmark.ToolTipText = Files[Data.FileNumber];
                         Bookmark.Click += new EventHandler(LoadBookmark_Click);
                         Bookmark_menu.DropDownItems.Add(Bookmark);
 
-                        ToolStripMenuItem Bookmark_bar = new ToolStripMenuItem(Files[Data.FileNumber]);
+                        ToolStripMenuItem Bookmark_bar = new ToolStripMenuItem(Data.GetCurrentFileName());
+                        Bookmark_bar.ToolTipText = Files[Data.FileNumber];
                         Bookmark_bar.Click += new EventHandler(LoadBookmark_Click);
                         Bookmark_menu_bar.DropDownItems.Add(Bookmark_bar);
                     }
@@ -757,7 +760,7 @@ namespace csharp_comicviewer
         /// </summary>
         private void ManageBookmarks_item_Click(object sender, EventArgs e)
         {
-            ManageBookmarks_Form mb = new ManageBookmarks_Form(Configuration);
+            MannageBookmarks_Form mb = new MannageBookmarks_Form(Configuration);
             mb.ShowDialog();
             Configuration = mb.GetConfiguration();
             SetBookmarkMenu();
@@ -1057,7 +1060,10 @@ namespace csharp_comicviewer
                     OpenFileDialog.Filter = "Supported formats (*.cbr;*.cbz;*.zip;*.rar)|*.cbr;*.cbz;*.zip;*.rar|All files (*.*)|*.*";
                     OpenFileDialog.Multiselect = true;
                     OpenFileDialog.ShowDialog();
+                    if (OpenFileDialog.FileNames.Length <= 0)
+                        throw new Exception();
                     Files = OpenFileDialog.FileNames;
+
                 }
                 else
                 {
@@ -1074,7 +1080,7 @@ namespace csharp_comicviewer
                 }
 
                 Cursor = Cursors.WaitCursor;
-                LoadArchive(Files);
+                LoadArchive(Files,0,0);
             }
             catch { }
             Cursor = Cursors.Default;
@@ -1099,7 +1105,7 @@ namespace csharp_comicviewer
                 }
 
                 Cursor = Cursors.WaitCursor;
-                LoadArchive(Files);
+                LoadArchive(Files,0,0);
             }
             catch { }
             Cursor = Cursors.Default;
@@ -1124,7 +1130,7 @@ namespace csharp_comicviewer
                     }
                 }
                 Cursor = Cursors.WaitCursor;
-                LoadArchive(Files);
+                LoadArchive(Files,FileNumber,PageNumber);
             }
             catch { }
             Cursor = Cursors.Default;
@@ -1134,7 +1140,9 @@ namespace csharp_comicviewer
         /// Load the archives
         /// </summary>
         /// <param name="Files">Archive location</param>
-        private void LoadArchive(String[] Files)
+        /// <param name="FileNumber">File in array to start at</param>
+        /// <param name="PageNumber">Page on wich to start from selected file</param>
+        private void LoadArchive(String[] Files, int FileNumber, int PageNumber)
         {
             LoadArchives Archives = new LoadArchives();
             LoadReturnValue ArchivesReturnValue = Archives.CreateComicBook(Files);
@@ -1142,7 +1150,7 @@ namespace csharp_comicviewer
             if (ArchivesReturnValue.HasFile)
             {
                 ComicBook = ArchivesReturnValue.ComicBook;
-                DisplayImage(ComicBook.GetPage(0, 0));
+                DisplayImage(ComicBook.GetPage(FileNumber, PageNumber));
                 if (!String.IsNullOrEmpty(ArchivesReturnValue.Error))
                     ShowMessage(ArchivesReturnValue.Error);
             }
@@ -1151,7 +1159,7 @@ namespace csharp_comicviewer
             else
                 ShowMessage("No supported files found in archive");
         }
-        
+
         /// <summary>
         /// Display an image on the form
         /// </summary>
