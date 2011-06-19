@@ -459,11 +459,13 @@ namespace csharp_comicviewer
                     this.WindowState = FormWindowState.Maximized;
                     ResizeFix(null, null);
                     MenuBar.Visible = true;
+                    MenuBar.Enabled = true;
                 }
                 else
                 {
                     Configuration.windowed = false;
                     MenuBar.Visible = false;
+                    MenuBar.Enabled = false;
                     this.ControlBox = false;
                     this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
                     this.WindowState = FormWindowState.Maximized;
@@ -719,7 +721,7 @@ namespace csharp_comicviewer
         {
             if (ComicBook != null)
             {
-                Configuration.Bookmarks.Add(ComicBook.GetComicBookSaveInformation());
+                Configuration.Bookmarks.Add(ComicBook.GetBookmark());
 
                 ShowMessage("Bookmark added");
                 SetBookmarkMenu();
@@ -840,7 +842,7 @@ namespace csharp_comicviewer
         {
             if (ComicBook != null && ComicBook.GetTotalFiles() != 0)
             {
-                Bookmark Data = ComicBook.GetComicBookSaveInformation();
+                Bookmark Data = ComicBook.GetBookmark();
                 Configuration.Resume = Data;
             }
         }
@@ -1057,6 +1059,11 @@ namespace csharp_comicviewer
                 if (AskOpenFileDialog)
                 {
                     OpenFileDialog OpenFileDialog = new OpenFileDialog();
+                    if (ComicBook != null)
+                    {
+                        Bookmark bookmark = ComicBook.GetBookmark();
+                        OpenFileDialog.InitialDirectory = bookmark.GetCurrentDirectoryLocation();
+                    }
                     OpenFileDialog.Filter = "Supported formats (*.cbr;*.cbz;*.zip;*.rar)|*.cbr;*.cbz;*.zip;*.rar|All files (*.*)|*.*";
                     OpenFileDialog.Multiselect = true;
                     OpenFileDialog.ShowDialog();

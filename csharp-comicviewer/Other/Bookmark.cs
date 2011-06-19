@@ -99,5 +99,21 @@ namespace csharp_comicviewer.Other
             }
             return Filename;
         }
+
+        /// <summary>
+        /// Get the directory location of the CurrentFile
+        /// </summary>
+        /// <returns>directory location of the current file</returns>
+        public String GetCurrentDirectoryLocation()
+        {
+            String FilePath = _Files[_CurrentFile];
+            String[] FilePathSplit = FilePath.Split('\\');
+            String Directory = "";
+            for (int i = 0; i < FilePathSplit.Length - 1; i++)
+            {
+                Directory += FilePathSplit[i] + "\\";
+            }
+            return Directory;
+        }
     }
 }

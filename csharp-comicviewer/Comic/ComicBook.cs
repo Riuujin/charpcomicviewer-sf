@@ -164,7 +164,7 @@ namespace csharp_comicviewer
         /// Get the information needed to save the ComicBook as bookmark or resume
         /// </summary>
         /// <returns>Bookmark</returns>
-        public Bookmark GetComicBookSaveInformation()
+        public Bookmark GetBookmark()
         {
             Bookmark Data;
             String[] FileLocations = new String[Files.Count];

@@ -160,6 +160,7 @@ namespace csharp_comicviewer
                         {
                             ComicBook.CreateComicFile(CurrentFile, ImagesAsBytes, InfoTxt);
                             InfoText = new InfoText_Form(Archives[y], InfoTxt);
+                            InfoTxt = "";
                         }
                         else
                             ComicBook.CreateComicFile(CurrentFile, ImagesAsBytes, null);
