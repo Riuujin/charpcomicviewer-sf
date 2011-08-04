@@ -214,6 +214,7 @@ namespace csharp_comicviewer
         private DateTime LastMouseMove = DateTime.Now;
         private Boolean MouseIsHidden = false;
         private Boolean RightMouseMenuOpened = false;
+        private Point MousePosition = new Point(0, 0);
 
         private void RightClick_menu_Opened(object sender, EventArgs e)
         {
@@ -361,18 +362,6 @@ namespace csharp_comicviewer
             }
         }
 
-        private void OnMouseMove_MenuBar(object sender, MouseEventArgs e)
-        {
-            LastMouseMove = DateTime.Now;
-
-            if (MouseIsHidden)
-            {
-                Cursor.Show();
-                MouseIsHidden = false;
-            }
-        }
-
-
         /// <summary>
         /// Mouse dragging
         /// </summary>
@@ -380,10 +369,11 @@ namespace csharp_comicviewer
         {
             LastMouseMove = DateTime.Now;
 
-            if (MouseIsHidden)
+            if (MouseIsHidden && (e.Location != MousePosition))
             {
                 Cursor.Show();
                 MouseIsHidden = false;
+                MousePosition = e.Location;
             }
 
             int Speed = 2; //amount by with mouse_x/y - MousePosition.X/Y is divided, determines drag speed
