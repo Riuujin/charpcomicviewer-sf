@@ -108,7 +108,9 @@
             this.About_item,
             this.Exit_item});
             this.RightClick_menu.Name = "contextMenuStrip1";
-            this.RightClick_menu.Size = new System.Drawing.Size(225, 202);
+            this.RightClick_menu.Size = new System.Drawing.Size(225, 224);
+            this.RightClick_menu.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.RightClick_menu_Closed);
+            this.RightClick_menu.Opened += new System.EventHandler(this.RightClick_menu_Opened);
             // 
             // Resume_item
             // 
@@ -210,7 +212,6 @@
             this.MenuBar.Text = "MenuBar";
             this.MenuBar.Visible = false;
             this.MenuBar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseButton);
-            this.MenuBar.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OnMouseMove_MenuBar);
             // 
             // File_bar
             // 
@@ -224,7 +225,6 @@
             this.File_bar.Size = new System.Drawing.Size(37, 20);
             this.File_bar.Text = "File";
             this.File_bar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseButton);
-            this.File_bar.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OnMouseMove_MenuBar);
             // 
             // Resume_item_bar
             // 
@@ -271,7 +271,6 @@
             this.PageControl_bar.Size = new System.Drawing.Size(86, 20);
             this.PageControl_bar.Text = "Page control";
             this.PageControl_bar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseButton);
-            this.PageControl_bar.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OnMouseMove_MenuBar);
             // 
             // NextPage_item_bar
             // 
@@ -302,7 +301,6 @@
             this.Bookmark_menu_bar.Size = new System.Drawing.Size(78, 20);
             this.Bookmark_menu_bar.Text = "Bookmarks";
             this.Bookmark_menu_bar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseButton);
-            this.Bookmark_menu_bar.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OnMouseMove_MenuBar);
             // 
             // AddBookmark_item_bar
             // 
@@ -331,7 +329,6 @@
             this.About_item_bar.Text = "About";
             this.About_item_bar.Click += new System.EventHandler(this.About_itemClick);
             this.About_item_bar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseButton);
-            this.About_item_bar.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OnMouseMove_MenuBar);
             // 
             // InformationText_item_bar
             // 
@@ -340,7 +337,6 @@
             this.InformationText_item_bar.Text = "Information text (N)";
             this.InformationText_item_bar.Click += new System.EventHandler(this.InformationText_item_bar_Click);
             this.InformationText_item_bar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseButton);
-            this.InformationText_item_bar.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OnMouseMove_MenuBar);
             // 
             // DisplayedImage
             // 

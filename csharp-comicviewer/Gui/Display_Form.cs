@@ -213,16 +213,42 @@ namespace csharp_comicviewer
         private TimeSpan TimeoutToHide = TimeSpan.FromSeconds(2);
         private DateTime LastMouseMove = DateTime.Now;
         private Boolean MouseIsHidden = false;
+        private Boolean RightMouseMenuOpened = false;
+
+        private void RightClick_menu_Opened(object sender, EventArgs e)
+        {
+            RightMouseMenuOpened = true;
+        }
+
+        private void RightClick_menu_Closed(object sender, ToolStripDropDownClosedEventArgs e)
+        {
+
+            RightMouseMenuOpened = false;
+        }
+
 
         private void MouseIdleChecker(object sender, EventArgs e)
         {
             TimeSpan elaped = DateTime.Now - LastMouseMove;
             if (elaped >= TimeoutToHide && !MouseIsHidden)
             {
-                if (this == ActiveForm)
+                if (this == ActiveForm
+                    && !File_bar.Selected && !File_bar.Pressed
+                    && !PageControl_bar.Selected && !PageControl_bar.Pressed
+                    && !Bookmark_menu_bar.Selected && !Bookmark_menu_bar.Pressed
+                    && !InformationText_item_bar.Selected && !About_item_bar.Selected
+                    && !RightMouseMenuOpened)
                 {
                     Cursor.Hide();
                     MouseIsHidden = true;
+                }
+                else if (File_bar.Selected || File_bar.Pressed
+                    || PageControl_bar.Selected || PageControl_bar.Pressed
+                    || Bookmark_menu_bar.Selected || Bookmark_menu_bar.Pressed
+                    || InformationText_item_bar.Selected || About_item_bar.Selected
+                    || RightMouseMenuOpened)
+                {
+                    LastMouseMove = DateTime.Now;
                 }
             }
         }
@@ -491,7 +517,7 @@ namespace csharp_comicviewer
                 f.StartPosition = FormStartPosition.Manual;
                 f.Show();
 
-              
+
 
             }
             if (char.ToLower((char)e.KeyChar) == char.ToLower((char)Keys.X))
