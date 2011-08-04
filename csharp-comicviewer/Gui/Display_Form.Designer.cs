@@ -339,6 +339,7 @@
             this.DisplayedImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.DisplayedImage.TabIndex = 1;
             this.DisplayedImage.TabStop = false;
+            this.DisplayedImage.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseButton);
             this.DisplayedImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OnMouseMove);
             // 
             // Display_Form
@@ -364,6 +365,7 @@
             this.ResizeEnd += new System.EventHandler(this.ResizeFix);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DisplayKeyDown);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DisplayKeyPress);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseButton);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OnMouseMove);
             this.Resize += new System.EventHandler(this.ResizeFix);
             this.RightClick_menu.ResumeLayout(false);

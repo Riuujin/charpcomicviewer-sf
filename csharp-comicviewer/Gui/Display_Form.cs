@@ -224,6 +224,16 @@ namespace csharp_comicviewer
             }
         }
 
+        private void OnMouseButton(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right)
+            {
+                LastMouseMove = DateTime.Now;
+                Cursor.Show();
+                MouseIsHidden = false;
+            }
+        }
+
         /// <summary>
         /// Takes care of the scrolling with the mousewheel
         /// </summary>
@@ -449,6 +459,23 @@ namespace csharp_comicviewer
         /// </summary>
         private void DisplayKeyPress(object sender, KeyPressEventArgs e)
         {
+            if (char.ToLower((char)e.KeyChar) == char.ToLower((char)Keys.D))
+            {
+                SecondaryDisplay_Form f = new SecondaryDisplay_Form();
+
+                Screen[] sc;
+                sc = Screen.AllScreens;
+                
+                f.FormBorderStyle = FormBorderStyle.None;
+                f.Left = sc[0].Bounds.Width;
+                f.Top = sc[0].Bounds.Height;
+                f.StartPosition = FormStartPosition.Manual;
+                f.Show();
+
+                Cursor.Show();
+                MouseIsHidden = false;
+
+            }
             if (char.ToLower((char)e.KeyChar) == char.ToLower((char)Keys.X))
                 ApplicationExit(sender, e);
             if (char.ToLower((char)e.KeyChar) == char.ToLower((char)Keys.R))
@@ -459,7 +486,12 @@ namespace csharp_comicviewer
             if (char.ToLower((char)e.KeyChar) == char.ToLower((char)Keys.I))
                 ShowPageInformation();
             if (char.ToLower((char)e.KeyChar) == char.ToLower((char)Keys.L))
+            {
+                LastMouseMove = DateTime.Now;
+                Cursor.Show();
+                MouseIsHidden = false;
                 LoadArchives_Click(sender, e);
+            }
             if (char.ToLower((char)e.KeyChar) == char.ToLower((char)Keys.M))
                 this.WindowState = FormWindowState.Minimized;
             if (char.ToLower((char)e.KeyChar) == char.ToLower((char)Keys.T))
@@ -1259,6 +1291,8 @@ namespace csharp_comicviewer
         }
 
         #endregion
+
+
 
 
     }
