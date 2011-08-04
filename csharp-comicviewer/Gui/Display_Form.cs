@@ -43,6 +43,7 @@ namespace csharp_comicviewer
         private ComicBook ComicBook;
         private String OpeningFile;
         private CustomStackTrace CustomStackTrace = new CustomStackTrace();
+        private System.Windows.Forms.Timer MouseIdleTimer;
 
         #region Display_Form & Application
         /// <summary>
@@ -62,6 +63,12 @@ namespace csharp_comicviewer
         {
             //set mousewheel event (scrolling)
             this.MouseWheel += new MouseEventHandler(DisplayMouseWheel);
+
+            //set mouse idle timer
+            MouseIdleTimer = new System.Windows.Forms.Timer();
+            MouseIdleTimer.Interval = 1000;
+            MouseIdleTimer.Tick += new EventHandler(MouseIdleChecker);
+            MouseIdleTimer.Start();
 
             //Load config
             LoadConfiguration();
@@ -203,6 +210,19 @@ namespace csharp_comicviewer
         private Double MouseX, MouseY = 0.0;
         private Boolean MouseDrag = false;
         private InfoText_Form InfoText;
+        private TimeSpan TimeoutToHide = TimeSpan.FromSeconds(2);
+        private DateTime LastMouseMove = DateTime.Now;
+        private Boolean MouseIsHidden = false;
+
+        private void MouseIdleChecker(object sender, EventArgs e)
+        {
+            TimeSpan elaped = DateTime.Now - LastMouseMove;
+            if (elaped >= TimeoutToHide && !MouseIsHidden)
+            {
+                Cursor.Hide();
+                MouseIsHidden = true;
+            }
+        }
 
         /// <summary>
         /// Takes care of the scrolling with the mousewheel
@@ -301,8 +321,16 @@ namespace csharp_comicviewer
         /// <summary>
         /// Mouse dragging
         /// </summary>
-        private void Dragging(object sender, MouseEventArgs e)
+        private void OnMouseMove(object sender, MouseEventArgs e)
         {
+            LastMouseMove = DateTime.Now;
+
+            if (MouseIsHidden)
+            {
+                Cursor.Show();
+                MouseIsHidden = false;
+            }
+
             int Speed = 2; //amount by with mouse_x/y - MousePosition.X/Y is divided, determines drag speed
             //am i dragging the mouse with left button pressed
             if (e.Button == MouseButtons.Left)
@@ -1231,5 +1259,7 @@ namespace csharp_comicviewer
         }
 
         #endregion
+
+
     }
 }

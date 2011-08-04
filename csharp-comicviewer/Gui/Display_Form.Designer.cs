@@ -339,9 +339,9 @@
             this.DisplayedImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.DisplayedImage.TabIndex = 1;
             this.DisplayedImage.TabStop = false;
-            this.DisplayedImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Dragging);
+            this.DisplayedImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OnMouseMove);
             // 
-            // Display_form
+            // Display_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -355,7 +355,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.MenuBar;
-            this.Name = "Display_form";
+            this.Name = "Display_Form";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "C# Comicviewer";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
@@ -364,7 +364,7 @@
             this.ResizeEnd += new System.EventHandler(this.ResizeFix);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DisplayKeyDown);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DisplayKeyPress);
-            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Dragging);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OnMouseMove);
             this.Resize += new System.EventHandler(this.ResizeFix);
             this.RightClick_menu.ResumeLayout(false);
             this.MenuBar.ResumeLayout(false);
