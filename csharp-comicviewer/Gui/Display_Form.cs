@@ -220,6 +220,7 @@ namespace csharp_comicviewer
             if (elaped >= TimeoutToHide && !MouseIsHidden)
             {
                 Cursor.Hide();
+                
                 MouseIsHidden = true;
             }
         }
@@ -229,8 +230,12 @@ namespace csharp_comicviewer
             if (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right)
             {
                 LastMouseMove = DateTime.Now;
-                Cursor.Show();
-                MouseIsHidden = false;
+
+                if (MouseIsHidden)
+                {
+                    Cursor.Show();
+                    MouseIsHidden = false;
+                }
             }
         }
 
@@ -465,15 +470,14 @@ namespace csharp_comicviewer
 
                 Screen[] sc;
                 sc = Screen.AllScreens;
-                
+
                 f.FormBorderStyle = FormBorderStyle.None;
                 f.Left = sc[0].Bounds.Width;
                 f.Top = sc[0].Bounds.Height;
                 f.StartPosition = FormStartPosition.Manual;
                 f.Show();
 
-                Cursor.Show();
-                MouseIsHidden = false;
+              
 
             }
             if (char.ToLower((char)e.KeyChar) == char.ToLower((char)Keys.X))
@@ -488,8 +492,12 @@ namespace csharp_comicviewer
             if (char.ToLower((char)e.KeyChar) == char.ToLower((char)Keys.L))
             {
                 LastMouseMove = DateTime.Now;
-                Cursor.Show();
-                MouseIsHidden = false;
+
+                if (MouseIsHidden)
+                {
+                    Cursor.Show();
+                    MouseIsHidden = false;
+                }
                 LoadArchives_Click(sender, e);
             }
             if (char.ToLower((char)e.KeyChar) == char.ToLower((char)Keys.M))
@@ -1147,7 +1155,7 @@ namespace csharp_comicviewer
                 }
 
                 Cursor = Cursors.WaitCursor;
-                LoadArchive(Files,0,0);
+                LoadArchive(Files, 0, 0);
             }
             catch { }
             Cursor = Cursors.Default;
@@ -1172,7 +1180,7 @@ namespace csharp_comicviewer
                 }
 
                 Cursor = Cursors.WaitCursor;
-                LoadArchive(Files,0,0);
+                LoadArchive(Files, 0, 0);
             }
             catch { }
             Cursor = Cursors.Default;
@@ -1197,7 +1205,7 @@ namespace csharp_comicviewer
                     }
                 }
                 Cursor = Cursors.WaitCursor;
-                LoadArchive(Files,FileNumber,PageNumber);
+                LoadArchive(Files, FileNumber, PageNumber);
             }
             catch { }
             Cursor = Cursors.Default;
