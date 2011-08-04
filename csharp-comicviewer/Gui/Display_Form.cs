@@ -219,9 +219,11 @@ namespace csharp_comicviewer
             TimeSpan elaped = DateTime.Now - LastMouseMove;
             if (elaped >= TimeoutToHide && !MouseIsHidden)
             {
-                Cursor.Hide();
-                
-                MouseIsHidden = true;
+                if (this == ActiveForm)
+                {
+                    Cursor.Hide();
+                    MouseIsHidden = true;
+                }
             }
         }
 
@@ -332,6 +334,18 @@ namespace csharp_comicviewer
                 PreviousPageCount = 2;
             }
         }
+
+        private void OnMouseMove_MenuBar(object sender, MouseEventArgs e)
+        {
+            LastMouseMove = DateTime.Now;
+
+            if (MouseIsHidden)
+            {
+                Cursor.Show();
+                MouseIsHidden = false;
+            }
+        }
+
 
         /// <summary>
         /// Mouse dragging
@@ -675,6 +689,13 @@ namespace csharp_comicviewer
         /// </summary>
         void About_itemClick(object sender, EventArgs e)
         {
+            LastMouseMove = DateTime.Now;
+
+            if (MouseIsHidden)
+            {
+                Cursor.Show();
+                MouseIsHidden = false;
+            }
             About_Form About = new About_Form();
             About.ShowDialog();
         }
@@ -1299,9 +1320,6 @@ namespace csharp_comicviewer
         }
 
         #endregion
-
-
-
 
     }
 }
