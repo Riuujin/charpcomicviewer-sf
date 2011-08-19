@@ -373,8 +373,9 @@ namespace csharp_comicviewer
             {
                 Cursor.Show();
                 MouseIsHidden = false;
-                MousePosition = e.Location;
             }
+
+            MousePosition = e.Location;
 
             int Speed = 2; //amount by with mouse_x/y - MousePosition.X/Y is divided, determines drag speed
             //am i dragging the mouse with left button pressed
