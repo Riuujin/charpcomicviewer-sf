@@ -27,31 +27,31 @@ namespace csharp_comicviewer
     /// Configuration that is saved to an xml file
     /// </summary>
     [Serializable]
-    public class Configuration
+    public class configuration
     {
         /// <summary>
         /// Version of C# Comicviewer (currently unused)
         /// </summary>
-        public String Version = "";
+        public string version = "";
         /// <summary>
         /// Resume data
         /// </summary>
-        public Bookmark Resume;
+        public bookmark resume;
         /// <summary>
         /// The stored bookmarks
         /// </summary>
-        public List<Bookmark> Bookmarks;
+        public List<bookmark> bookmarks;
         /// <summary>
         /// Should height be overridden
         /// </summary>
-        public Boolean overideHight = false;
+        public bool overideHight = false;
         /// <summary>
         /// Should width be overridden
         /// </summary>
-        public Boolean overideWidth = false;
+        public bool overideWidth = false;
         /// <summary>
         /// Windowed mode
         /// </summary>
-        public Boolean windowed = false;        
+        public bool windowed = false;        
     }
 }

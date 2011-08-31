@@ -23,29 +23,39 @@ using System.Text;
 
 namespace csharp_comicviewer
 {
-    class LoadReturnValue
-    {
-        private ComicBook _ComicBook;
-        private String _Error;
-        private Boolean _HasFile;
-
-
-        public ComicBook ComicBook
+	/// <summary>
+	/// The return information of a load action <see cref="LoadArchives"/>
+	/// </summary>
+    class loadReturnValue
+    {  
+    	/// <summary>
+    	/// Sets or Gets the ComicBook
+    	/// </summary>
+        public comicBook comicBook
         {
-            get { return _ComicBook; }
-            set { _ComicBook = value; }
+            get;
+            set;
         }
 
-        public Boolean HasFile
+        
+        /// <summary>
+        /// Indicates wheter ComicBook has one or more files
+        /// </summary>
+        /// <value>If value <c>true</c> then ComicBook has one or more files, else value is <c>false</c></value>
+        public bool hasFile
         {
-            get { return _HasFile; }
-            set { _HasFile = value; }
+            get;
+            set;
         }
 
-        public String Error
+        /// <summary>
+        /// Error message that occured during load action
+        /// </summary>
+        /// <value>The error message</value>
+        public string error
         {
-            get { return _Error; }
-            set { _Error = value; }
+            get;
+            set;
         }
     }
 }
