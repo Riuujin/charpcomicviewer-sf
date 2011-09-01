@@ -71,13 +71,13 @@ namespace csharp_comicviewer.Gui
             Boomarks_dataGridView.Rows.Clear();
             if (Configuration != null)
             {
-                foreach (Bookmark bookmark in Configuration.Bookmarks)
+                foreach (Bookmark Bookmark in Configuration.Bookmarks)
                 {
                     int row = Boomarks_dataGridView.Rows.Add();
                     Boomarks_dataGridView.Rows[row].Cells[0].Value = false;
-                    Boomarks_dataGridView.Rows[row].Cells[1].Value = bookmark.GetCurrentFileName();
-                    Boomarks_dataGridView.Rows[row].Cells[2].Value = bookmark.PageNumber;
-                    Boomarks_dataGridView.Rows[row].Cells[3].Value = bookmark.Files[bookmark.FileNumber];
+                    Boomarks_dataGridView.Rows[row].Cells[1].Value = Bookmark.GetCurrentFileName();
+                    Boomarks_dataGridView.Rows[row].Cells[2].Value = Bookmark.PageNumber;
+                    Boomarks_dataGridView.Rows[row].Cells[3].Value = Bookmark.Files[Bookmark.FileNumber];
                 }
             }
         }
@@ -87,7 +87,7 @@ namespace csharp_comicviewer.Gui
         /// </summary>
         private void Delete_btn_Click(object sender, EventArgs e)
         {
-            Bookmarks.Clear();
+            this.Bookmarks.Clear();
             for (int i = 0; i < Configuration.Bookmarks.Count; i++)
             {
                 if (Boolean.Parse(Boomarks_dataGridView.Rows[i].Cells[0].Value.ToString()) == false)
@@ -96,7 +96,11 @@ namespace csharp_comicviewer.Gui
                 }
             }
             Configuration.Bookmarks.Clear();
-            Configuration.Bookmarks = Bookmarks;
+            foreach (Bookmark bookmark in Bookmarks) 
+            {
+            	Configuration.Bookmarks.Add(bookmark);
+            }
+            
             ManageBookmarks_Load(sender, e);
         }
 
