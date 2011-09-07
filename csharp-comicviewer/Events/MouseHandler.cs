@@ -16,21 +16,22 @@
   You should have received a copy of the GNU General Public License
   along with csharp comicviewer.  If not, see <http://www.gnu.org/licenses/>.
  */
-using System;
-using System.Windows.Forms;
-using System.Drawing;
-using csharp_comicviewer.Comic;
-
-namespace csharp_comicviewer
+namespace Csharp_comicviewer
 {
+	using System;
+	using System.Windows.Forms;
+	using System.Drawing;
+	using Csharp_comicviewer.Comic;
+	
 	/// <summary>
 	/// Description of MouseEvent.
 	/// </summary>
 	public class MouseHandler
 	{
-		public MouseHandler(Display_Form PrimaryDisplay)
+		public MouseHandler(Display_Form PrimaryDisplay,ComicBook ComicBook)
 		{
 			this.PrimaryDisplay = PrimaryDisplay;
+			this.ComicBook = ComicBook;
 			SecondaryDisplay = null;
 			MouseIsHidden = false;
 			TimeoutToHide = TimeSpan.FromSeconds(2);
@@ -103,20 +104,39 @@ namespace csharp_comicviewer
 			set;
 		}
 		
+
+		
 		private void NextPage(Display_Form SenderDisplay)
 		{
 			if(SenderDisplay == PrimaryDisplay)
 			{
-				PrimaryDisplay.NextPage();
 				if(SecondaryDisplay != null)
 				{
-					SecondaryDisplay.NextPage();
+					if(PrimaryDisplay.GoToNextPage && SecondaryDisplay.GoToNextPage)
+					{
+						PrimaryDisplay.NextPage();
+						SecondaryDisplay.NextPage();
+						PrimaryDisplay.GoToNextPage = false;
+						PrimaryDisplay.NextPageCount = 2;
+						SenderDisplay.GoToNextPage = false;
+						SenderDisplay.NextPageCount = 2;
+					}
+				}
+				else
+				{
+					PrimaryDisplay.NextPage();
+					PrimaryDisplay.GoToNextPage = false;
+					PrimaryDisplay.NextPageCount = 2;
 				}
 			}
 			else
 			{
 				SecondaryDisplay.NextPage();
 				PrimaryDisplay.NextPage();
+				PrimaryDisplay.GoToNextPage = false;
+				PrimaryDisplay.NextPageCount = 2;
+				SenderDisplay.GoToNextPage = false;
+				SenderDisplay.NextPageCount = 2;
 			}
 		}
 		
@@ -124,16 +144,34 @@ namespace csharp_comicviewer
 		{
 			if(SenderDisplay == PrimaryDisplay)
 			{
-				PrimaryDisplay.PreviousPage();
 				if(SecondaryDisplay != null)
 				{
-					SecondaryDisplay.PreviousPage();
+					if(PrimaryDisplay.GoToNextPage && SecondaryDisplay.GoToNextPage)
+					{
+						PrimaryDisplay.PreviousPage();
+						SecondaryDisplay.PreviousPage();
+						PrimaryDisplay.GoToPreviousPage = false;
+						PrimaryDisplay.PreviousPageCount = 2;
+						SenderDisplay.GoToPreviousPage = false;
+						SenderDisplay.PreviousPageCount = 2;
+					}
+				}
+				else
+				{
+					PrimaryDisplay.PreviousPage();
+					PrimaryDisplay.GoToPreviousPage = false;
+					PrimaryDisplay.PreviousPageCount = 2;
+
 				}
 			}
 			else
 			{
 				SecondaryDisplay.PreviousPage();
 				PrimaryDisplay.PreviousPage();
+				PrimaryDisplay.GoToPreviousPage = false;
+				PrimaryDisplay.PreviousPageCount = 2;
+				SenderDisplay.GoToPreviousPage = false;
+				SenderDisplay.PreviousPageCount = 2;
 			}
 		}
 		
@@ -316,98 +354,98 @@ namespace csharp_comicviewer
 				Display.DisplayedImage.Top = Top.Value;
 			}
 		}
-		
 
-//		private void DisplayMouseWheel(object sender, MouseEventArgs e)
-//		{
-//			//scroll down
-//			if (e.Delta < 0 && DisplayedImage.Image != null)
-//			{
-//				PreviousPageCount = 2;
-//				if (e.Delta < 0 && DisplayedImage.Image != null)
-//				{
-//					if (ImageEdit.IsImageHigherOrEquelThenScreen(DisplayedImage.Image))
-//					{
-//						if (-DisplayedImage.Top < (DisplayedImage.Size.Height - ScreenHeight) - scrollValueVertical)
-//							DisplayedImage.Top -= scrollValueVertical;
-//						else if ((-DisplayedImage.Top >= (DisplayedImage.Size.Height - ScreenHeight) - scrollValueVertical) &&
-//						         !(DisplayedImage.Top == -(DisplayedImage.Size.Height - ScreenHeight)))
-//							DisplayedImage.Top = -(DisplayedImage.Size.Height - ScreenHeight);
-//						else if (DisplayedImage.Top == -(DisplayedImage.Size.Height - ScreenHeight) && !ImageEdit.IsImageWidtherOrEquelThenScreen(DisplayedImage.Image))
-//						{
-//							NextPageBoolean = true;
-//							NextPageCount--;
-//						}
-//
-//						else if (DisplayedImage.Left != -(DisplayedImage.Size.Width - ScreenWidth) && ImageEdit.IsImageWidtherOrEquelThenScreen(DisplayedImage.Image))
-//						{
-//							if (-DisplayedImage.Left < (DisplayedImage.Size.Width - ScreenWidth) - scrollValueHorizontal)
-//								DisplayedImage.Left -= scrollValueHorizontal;
-//							else if ((-DisplayedImage.Left >= (DisplayedImage.Size.Width - ScreenWidth) - scrollValueHorizontal) &&
-//							         !(DisplayedImage.Left == -(DisplayedImage.Size.Width - ScreenWidth)))
-//								DisplayedImage.Left = -(DisplayedImage.Size.Width - ScreenWidth);
-//						}
-//						else if (DisplayedImage.Left == -(DisplayedImage.Size.Width - ScreenWidth))
-//						{
-//							NextPageBoolean = true;
-//							NextPageCount--;
-//						}
-//					}
-//					else
-//						NextPage();
-//				}
-//			}
-//			//scroll up
-//			else if (e.Delta > 0 && DisplayedImage.Image != null)
-//			{
-//				int TopOfImageStart = 0;
-//				if (Configuration.windowed)
-//					TopOfImageStart = 24;
-//
-//				if (ImageEdit.IsImageHigherOrEquelThenScreen(DisplayedImage.Image))
-//				{
-//					if (DisplayedImage.Top < TopOfImageStart - scrollValueVertical)
-//						DisplayedImage.Top += scrollValueVertical;
-//					else if ((DisplayedImage.Top >= TopOfImageStart - scrollValueVertical) &&
-//					         !(DisplayedImage.Top == TopOfImageStart))
-//						DisplayedImage.Top = TopOfImageStart;
-//					else if (DisplayedImage.Top == TopOfImageStart && !ImageEdit.IsImageWidtherOrEquelThenScreen(DisplayedImage.Image))
-//					{
-//						PreviousPageBoolean = true;
-//						PreviousPageCount--;
-//					}
-//
-//					else if (DisplayedImage.Left != 0 && ImageEdit.IsImageWidtherOrEquelThenScreen(DisplayedImage.Image))
-//					{
-//						if (DisplayedImage.Left < 0 - scrollValueHorizontal)
-//							DisplayedImage.Left += scrollValueHorizontal;
-//						else if ((-DisplayedImage.Left > 0 - scrollValueHorizontal) &&
-//						         !(DisplayedImage.Left == 0))
-//							DisplayedImage.Left = 0;
-//					}
-//					else if (DisplayedImage.Left == 0)
-//					{
-//						PreviousPageBoolean = true;
-//						PreviousPageCount--;
-//					}
-//				}
-//				else
-//					PreviousPage();
-//			}
-//
-//			if (NextPageBoolean && NextPageCount <= 0)
-//			{
-//				NextPage();
-//				NextPageBoolean = false;
-//				NextPageCount = 2;
-//			}
-//			else if (PreviousPageBoolean && PreviousPageCount <= 0)
-//			{
-//				PreviousPage();
-//				PreviousPageBoolean = false;
-//				PreviousPageCount = 2;
-//			}
-//		}
+
+		public void MouseWheel(Display_Form SenderDisplay, MouseEventArgs e)
+		{ 
+			//scroll down
+			if (e.Delta < 0 && SenderDisplay.DisplayedImage.Image != null)
+			{
+				SenderDisplay.PreviousPageCount = 2;
+				if (e.Delta < 0 && SenderDisplay.DisplayedImage.Image != null)
+				{
+					if (SenderDisplay.ImageEdit.IsImageHigherOrEquelThenScreen(SenderDisplay.DisplayedImage.Image))
+					{
+						if (-SenderDisplay.DisplayedImage.Top < (SenderDisplay.DisplayedImage.Size.Height - SenderDisplay.ScreenHeight) - SenderDisplay.scrollValueVertical)
+							SenderDisplay.DisplayedImage.Top -= SenderDisplay.scrollValueVertical;
+						else if ((-SenderDisplay.DisplayedImage.Top >= (SenderDisplay.DisplayedImage.Size.Height - SenderDisplay.ScreenHeight) - SenderDisplay.scrollValueVertical) &&
+						         !(SenderDisplay.DisplayedImage.Top == -(SenderDisplay.DisplayedImage.Size.Height - SenderDisplay.ScreenHeight)))
+							SenderDisplay.DisplayedImage.Top = -(SenderDisplay.DisplayedImage.Size.Height - SenderDisplay.ScreenHeight);
+						else if (SenderDisplay.DisplayedImage.Top == -(SenderDisplay.DisplayedImage.Size.Height - SenderDisplay.ScreenHeight) && !SenderDisplay.ImageEdit.IsImageWidtherOrEquelThenScreen(SenderDisplay.DisplayedImage.Image))
+						{
+							SenderDisplay.GoToNextPage = true;
+							SenderDisplay.NextPageCount--;
+						}
+
+						else if (SenderDisplay.DisplayedImage.Left != -(SenderDisplay.DisplayedImage.Size.Width - SenderDisplay.ScreenWidth) && SenderDisplay.ImageEdit.IsImageWidtherOrEquelThenScreen(SenderDisplay.DisplayedImage.Image))
+						{
+							if (-SenderDisplay.DisplayedImage.Left < (SenderDisplay.DisplayedImage.Size.Width - SenderDisplay.ScreenWidth) - SenderDisplay.scrollValueHorizontal)
+								SenderDisplay.DisplayedImage.Left -= SenderDisplay.scrollValueHorizontal;
+							else if ((-SenderDisplay.DisplayedImage.Left >= (SenderDisplay.DisplayedImage.Size.Width - SenderDisplay.ScreenWidth) - SenderDisplay.scrollValueHorizontal) &&
+							         !(SenderDisplay.DisplayedImage.Left == -(SenderDisplay.DisplayedImage.Size.Width - SenderDisplay.ScreenWidth)))
+								SenderDisplay.DisplayedImage.Left = -(SenderDisplay.DisplayedImage.Size.Width - SenderDisplay.ScreenWidth);
+						}
+						else if (SenderDisplay.DisplayedImage.Left == -(SenderDisplay.DisplayedImage.Size.Width - SenderDisplay.ScreenWidth))
+						{
+							SenderDisplay.GoToNextPage = true;
+							SenderDisplay.NextPageCount--;
+						}
+					}
+					else
+					{
+						NextPage(SenderDisplay);
+					}
+				}
+			}
+			//scroll up
+			else if (e.Delta > 0 && SenderDisplay.DisplayedImage.Image != null)
+			{
+				int TopOfImageStart = 0;
+				if (SenderDisplay.Configuration.windowed)
+					TopOfImageStart = 24;
+
+				if (SenderDisplay.ImageEdit.IsImageHigherOrEquelThenScreen(SenderDisplay.DisplayedImage.Image))
+				{
+					if (SenderDisplay.DisplayedImage.Top < TopOfImageStart - SenderDisplay.scrollValueVertical)
+						SenderDisplay.DisplayedImage.Top += SenderDisplay.scrollValueVertical;
+					else if ((SenderDisplay.DisplayedImage.Top >= TopOfImageStart - SenderDisplay.scrollValueVertical) &&
+					         !(SenderDisplay.DisplayedImage.Top == TopOfImageStart))
+						SenderDisplay.DisplayedImage.Top = TopOfImageStart;
+					else if (SenderDisplay.DisplayedImage.Top == TopOfImageStart && !SenderDisplay.ImageEdit.IsImageWidtherOrEquelThenScreen(SenderDisplay.DisplayedImage.Image))
+					{
+						SenderDisplay.GoToPreviousPage = true;
+						SenderDisplay.PreviousPageCount--;
+					}
+
+					else if (SenderDisplay.DisplayedImage.Left != 0 && SenderDisplay.ImageEdit.IsImageWidtherOrEquelThenScreen(SenderDisplay.DisplayedImage.Image))
+					{
+						if (SenderDisplay.DisplayedImage.Left < 0 - SenderDisplay.scrollValueHorizontal)
+							SenderDisplay.DisplayedImage.Left += SenderDisplay.scrollValueHorizontal;
+						else if ((-SenderDisplay.DisplayedImage.Left > 0 - SenderDisplay.scrollValueHorizontal) &&
+						         !(SenderDisplay.DisplayedImage.Left == 0))
+							SenderDisplay.DisplayedImage.Left = 0;
+					}
+					else if (SenderDisplay.DisplayedImage.Left == 0)
+					{
+						SenderDisplay.GoToPreviousPage = true;
+						SenderDisplay.PreviousPageCount--;
+					}
+				}
+				else
+				{
+					PreviousPage(SenderDisplay);
+				}
+			}
+
+			if (SenderDisplay.GoToNextPage && SenderDisplay.NextPageCount <= 0)
+			{
+				NextPage(SenderDisplay);
+			}
+			else if (SenderDisplay.GoToPreviousPage && SenderDisplay.PreviousPageCount <= 0)
+			{
+				PreviousPage(SenderDisplay);
+			}
+		}
 
 		
 	}
