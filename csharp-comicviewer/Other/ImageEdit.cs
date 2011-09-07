@@ -27,13 +27,13 @@ namespace csharp_comicviewer
     /// <summary>
     /// Calculate stat location,background color and resize images
     /// </summary>
-	class ImageEdit
+	public class ImageEdit
 	{
 		private Point LocationImage = new Point(0, 0);
 		private Color BackColor;
         private int ScreenHeight = 0;
         private int ScreenWidth = 0;
-
+        
         /// <summary>
         /// Set the screen height
         /// </summary>
