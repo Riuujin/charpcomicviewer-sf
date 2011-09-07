@@ -29,14 +29,18 @@ namespace csharp_comicviewer
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main(string[] args)
+        static void Main(String[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             if (args.Length > 0)
+            {
                 Application.Run(new Display_Form(args[0]));
+            }
             else
+            {
                 Application.Run(new Display_Form(null));
+            }
         }
     }
 }
