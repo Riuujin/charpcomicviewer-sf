@@ -29,7 +29,6 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <SourceAnalysisOverrideSettingsFile>C:\Users\Revvion\AppData\Roaming\ICSharpCode/SharpDevelop4.0\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <NoStdLib>False</NoStdLib>
     <DebugType>Full</DebugType>
@@ -66,6 +65,8 @@
     <BaseAddress>4194304</BaseAddress>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="SevenZipSharp, Version=0.64.3890.29348, Culture=neutral, PublicKeyToken=20de82c62b055c88, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\SevenZipSharp.dll</HintPath>
@@ -77,36 +78,42 @@
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Events\KeyboardHandler.cs" />
     <Compile Include="Events\MouseHandler.cs" />
-    <Compile Include="Gui\About_Form.cs">
+    <None Include="Gui\About_Form.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Gui\About_Form.Designer.cs">
+    </None>
+    <None Include="Gui\About_Form.Designer.cs">
       <DependentUpon>About_Form.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Gui\Display_Form.cs">
+    </None>
+    <None Include="Gui\Display_Form.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Gui\Display_Form.Designer.cs">
+    </None>
+    <None Include="Gui\Display_Form.Designer.cs">
       <DependentUpon>Display_Form.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Gui\InfoText_Form2.Designer.cs">
+    </None>
+    <None Include="Gui\InfoText_Form2.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>InfoText_Form.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Gui\MannageBookmarks_Form.cs">
+    </None>
+    <None Include="Gui\MannageBookmarks_Form.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Gui\MannageBookmarks_Form.Designer.cs">
+    </None>
+    <None Include="Gui\MannageBookmarks_Form.Designer.cs">
       <DependentUpon>MannageBookmarks_Form.cs</DependentUpon>
-    </Compile>
+    </None>
     <Compile Include="File\FileLoader.cs" />
     <Compile Include="File\FileNextPrevious.cs" />
     <Compile Include="Comic\ComicBook.cs" />
@@ -114,15 +121,22 @@
     <Compile Include="Other\Bookmark.cs" />
     <Compile Include="Comic\ComicFile.cs" />
     <Compile Include="Other\ImageEdit.cs" />
-    <Compile Include="Gui\InfoText_Form.cs">
+    <None Include="Gui\InfoText_Form.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Gui\InfoText_Form.Designer.cs">
+    </None>
+    <None Include="Gui\InfoText_Form.Designer.cs">
       <DependentUpon>InfoText_Form.cs</DependentUpon>
-    </Compile>
+    </None>
     <Compile Include="File\ArchiveLoader.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="WPF\Display_Form.xaml.cs">
+      <DependentUpon>Display_Form.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <None Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="WPF\Window1.xaml.cs">
+      <DependentUpon>Window1.xaml</DependentUpon>
+    </None>
     <EmbeddedResource Include="Gui\About_Form.resx">
       <DependentUpon>About_Form.cs</DependentUpon>
     </EmbeddedResource>
@@ -161,7 +175,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="icon.ico" />
+    <Resource Include="icon.ico" />
     <None Include="SevenZipSharp.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -188,10 +202,14 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Events" />
+    <ApplicationDefinition Include="App.xaml" />
+    <None Include="WPF\Window1.xaml" />
+    <Page Include="WPF\Display_Form.xaml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(ProgramFiles)\MSBuild\StyleCop\v4.5\StyleCop.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

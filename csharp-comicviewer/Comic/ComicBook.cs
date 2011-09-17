@@ -1,32 +1,32 @@
-﻿/*
-  Copyright 2011 Rutger Spruyt
-  
-  This file is part of csharp comicviewer.
-
-  csharp comicviewer is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
-  (at your option) any later version.
-
-  csharp comicviewer is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with csharp comicviewer.  If not, see <http://www.gnu.org/licenses/>.
-*/
+﻿//-------------------------------------------------------------------------------------
+//  Copyright 2011 Rutger Spruyt
+//
+//  This file is part of C# Comicviewer.
+//
+//  csharp comicviewer is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  csharp comicviewer is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with csharp comicviewer.  If not, see <http://www.gnu.org/licenses/>.
+//-------------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using csharp_comicviewer.Other;
+using Csharp_comicviewer.Other;
 
-namespace csharp_comicviewer
+namespace Csharp_comicviewer.Comic
 {
     /// <summary>
     /// A Collection of ComicFile's (archives)
     /// </summary>
-    class ComicBook
+    public class ComicBook
     {
         List<ComicFile> Files = new List<ComicFile>();
         int TotalPages;
@@ -64,7 +64,7 @@ namespace csharp_comicviewer
             TotalPages = 0;
             for (int i = 0; i < Files.Count; i++)
             {
-                TotalPages += Files[i].GetTotalPages();
+                TotalPages += Files[i].TotalPages.Value;
             }
         }
 
@@ -90,7 +90,7 @@ namespace csharp_comicviewer
                 CurrentPageOfTotal = CurrentPageOfFile;
                 for (int i = 0; i < GetCurrentFile(); i++)
                 {
-                    CurrentPageOfTotal += Files[i].GetTotalPages();
+                    CurrentPageOfTotal += Files[i].TotalPages.Value;
                 }
             }
             else
@@ -105,7 +105,7 @@ namespace csharp_comicviewer
         /// <returns>The current of  total pages of the ComicFile</returns>
         public int GetTotalPagesOfFile(int FilesIndex)
         {
-            return Files[FilesIndex].GetTotalPages();
+            return Files[FilesIndex].TotalPages.Value;
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace csharp_comicviewer
         /// <param name="FileNumber">Index number of the ComicFile</param>
         /// <param name="PageNumber">Index number of page from the ComicFile</param>
         /// <returns>The requested image</returns>
-        public Image GetPage(int FileNumber, int PageNumber)
+        public byte[] GetPage(int FileNumber, int PageNumber)
         {
             if (GetTotalFiles() > 0)
             {
@@ -140,7 +140,6 @@ namespace csharp_comicviewer
                 {
                     CurrentFile = FileNumber;
                     CurrentPageOfFile = PageNumber;
-                    Console.WriteLine("Filenr " + FileNumber + " Page " + PageNumber);
                     return Files[FileNumber].GetPage(PageNumber);
                 }
                 else
@@ -157,7 +156,7 @@ namespace csharp_comicviewer
         /// <returns>The text</returns>
         public String GetInfoText(int FileNumber)
         {
-            return Files[CurrentFile].GetInfoText();
+            return Files[CurrentFile].InfoText;
         }
 
         /// <summary>
@@ -170,14 +169,14 @@ namespace csharp_comicviewer
             String[] FileLocations = new String[Files.Count];
             for (int i = 0; i < Files.Count; i++)
             {
-                FileLocations[i] = Files[i].GetLocation();
+                FileLocations[i] = Files[i].Location;
             }
-            Data = new Bookmark(FileLocations,CurrentFile,CurrentPageOfFile);
+            Data = new Bookmark(FileLocations, CurrentFile, CurrentPageOfFile);
             return Data;
         }
 
         /// <summary>
-        /// Create a ComicFile
+        /// Create a ComicFile using an archive
         /// </summary>
         /// <param name="Location">Location of the ComicFile</param>
         /// <param name="Images">Images inside the ComicFile</param>
@@ -189,12 +188,24 @@ namespace csharp_comicviewer
         }
 
         /// <summary>
+        /// Create a ComicFile using loose images
+        /// </summary>
+        /// <param name="Location">Locations of the Files</param>
+        /// <param name="Images">The Images</param>
+        /// <param name="InfoText">Information text if any</param>
+        public void CreateComicFile(List<String> Location, List<byte[]> Images, String InfoText)
+        {
+            ComicFile File = new ComicFile(Location[0], Images, InfoText);
+            Files.Add(File);
+        }
+
+        /// <summary>
         /// Get the next page of the ComicBook
         /// </summary>
         /// <returns>The next page of the ComicBook</returns>
-        public Image NextPage()
+        public byte[] NextPage()
         {
-            Image Page = null;
+            byte[] Page = null;
             if (CurrentPageOfFile + 1 < GetTotalPagesOfFile(CurrentFile))
             {
                 Page = GetPage(CurrentFile, CurrentPageOfFile + 1);
@@ -213,9 +224,9 @@ namespace csharp_comicviewer
         /// Get the previous page of the ComicBook
         /// </summary>
         /// <returns>The previous page of the ComicBook</returns>
-        public Image PreviousPage()
+        public byte[] PreviousPage()
         {
-            Image Page = null;
+            byte[] Page = null;
             if (CurrentPageOfFile - 1 >= 0)
             {
                 Page = GetPage(CurrentFile, CurrentPageOfFile - 1);
@@ -234,9 +245,9 @@ namespace csharp_comicviewer
         /// Get the current page of the ComicBook
         /// </summary>
         /// <returns>The current page of the ComicBook</returns>
-        public Image GetCurrentPage()
+        public byte[] GetCurrentPage()
         {
-            Image Page = null;
+            byte[] Page = null;
             Page = GetPage(CurrentFile, CurrentPageOfFile);
             return Page;
         }
@@ -248,7 +259,7 @@ namespace csharp_comicviewer
         /// <returns>The file location of the ComicFile</returns>
         public String GetFileLocation(int FileNumber)
         {
-            return Files[FileNumber].GetLocation();
+            return Files[FileNumber].Location;
         }
     }
 }

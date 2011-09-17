@@ -1,31 +1,30 @@
-﻿/*
-  Copyright 2011 Rutger Spruyt
-  
-  This file is part of C# Comicviewer.
-
-  csharp comicviewer is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
-  (at your option) any later version.
-
-  csharp comicviewer is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with csharp comicviewer.  If not, see <http://www.gnu.org/licenses/>.
- */
+﻿//-------------------------------------------------------------------------------------
+//  Copyright 2011 Rutger Spruyt
+//
+//  This file is part of C# Comicviewer.
+//
+//  csharp comicviewer is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  csharp comicviewer is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with csharp comicviewer.  If not, see <http://www.gnu.org/licenses/>.
+//-------------------------------------------------------------------------------------
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
+using Csharp_comicviewer.Comic;
 using SevenZip;
-using csharp_comicviewer.Comic;
 
-namespace csharp_comicviewer
+namespace Csharp_comicviewer
 {
     /// <summary>
     /// Load archives using SevenZipSharp
@@ -33,7 +32,7 @@ namespace csharp_comicviewer
     class ArchiveLoader
     {
         private ArrayList SupportedImageFormats = new ArrayList();
-        private InfoText_Form InfoText;
+        // private InfoText_Form InfoText;
 
         /// <summary>
         /// Load the dll required
@@ -41,7 +40,7 @@ namespace csharp_comicviewer
         public ArchiveLoader()
         {
             //Get the location of the 7z dll (location .EXE is in)
-            String executableName = Application.ExecutablePath;
+            String executableName = System.Reflection.Assembly.GetExecutingAssembly().Location;
             FileInfo executableFileInfo = new FileInfo(executableName);
             String executableDirectoryName = executableFileInfo.DirectoryName;
 
@@ -69,11 +68,11 @@ namespace csharp_comicviewer
         /// </summary>
         /// <param name="Archives">Array of archive paths</param>
         /// <returns>ComicBook</returns>
-        public bool Load(String[] Archives,out ComicBook Comicbook,out bool HasFile ,out string Error)
+        public bool Load(String[] Archives, out ComicBook Comicbook, out bool HasFile, out string Error)
         {
             Error = null;
             HasFile = false;
-        	Array.Sort(Archives);
+            Array.Sort(Archives);
             Comicbook = new ComicBook();
             String InfoTxt = "";
             String CurrentFile;
@@ -159,7 +158,7 @@ namespace csharp_comicviewer
                         if (InfoTxt.Length > 0)
                         {
                             Comicbook.CreateComicFile(CurrentFile, ImagesAsBytes, InfoTxt);
-                            InfoText = new InfoText_Form(Archives[y], InfoTxt);
+                            //InfoText = new InfoText_Form(Archives[y], InfoTxt);
                             InfoTxt = "";
                         }
                         else

@@ -1,28 +1,28 @@
-﻿/*
-  Copyright 2011 Rutger Spruyt
-  
-  This file is part of C# Comicviewer.
-
-  csharp comicviewer is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
-  (at your option) any later version.
-
-  csharp comicviewer is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with csharp comicviewer.  If not, see <http://www.gnu.org/licenses/>.
- */
+﻿//-------------------------------------------------------------------------------------
+//  Copyright 2011 Rutger Spruyt
+//
+//  This file is part of C# Comicviewer.
+//
+//  csharp comicviewer is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  csharp comicviewer is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with csharp comicviewer.  If not, see <http://www.gnu.org/licenses/>.
+//-------------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace csharp_comicviewer
+namespace Csharp_comicviewer
 {
     /// <summary>
     /// Find and locate next and previous usable files(archives) on disk
@@ -116,7 +116,7 @@ namespace csharp_comicviewer
                         next = true;
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return null;
             }
@@ -184,7 +184,7 @@ namespace csharp_comicviewer
             {
                 String[] Dirs = Directory.GetDirectories(Directory.GetParent(currentdir).ToString());
                 Array.Sort(Dirs);
-                for(int i = 0; i < Dirs.Length;i++)
+                for (int i = 0; i < Dirs.Length; i++)
                 {
                     if (currentdir == Dirs.First())
                         return null;
@@ -236,7 +236,7 @@ namespace csharp_comicviewer
             filePaths.Sort();
 
 
-            for(int i= 0; i< filePaths.Count;i++)
+            for (int i = 0; i < filePaths.Count; i++)
             {
                 if (currentfile == filePaths.First())
                     return null;
@@ -253,7 +253,7 @@ namespace csharp_comicviewer
         /// <param name="dir">Directory path</param>
         /// <param name="First">Return first file?</param>
         /// <returns>The file path</returns>
-        private String firstOrLastFileInDir(String dir,Boolean First)
+        private String firstOrLastFileInDir(String dir, Boolean First)
         {
             try
             {
@@ -285,7 +285,7 @@ namespace csharp_comicviewer
                 {
                     filePaths.Sort();
 
-                    if(First)
+                    if (First)
                         return filePaths.First();
                     else
                         return filePaths.Last();
@@ -298,7 +298,7 @@ namespace csharp_comicviewer
             }
         }
 
-        
+
 
     }
 }

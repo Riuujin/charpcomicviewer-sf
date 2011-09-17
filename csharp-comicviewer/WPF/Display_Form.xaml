@@ -1,4 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2011 Rutger Spruyt
+
+    This file is part of C# Comicviewer.
+
+    csharp comicviewer is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    csharp comicviewer is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with csharp comicviewer.  If not, see<http://www.gnu.org/licenses/> .
+-->
 <Window
     x:Class="Csharp_comicviewer.WPF.Display_Form" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="C# comicviewer"
@@ -11,9 +29,10 @@
     KeyDown="Display_Form_KeyDown"
     PreviewMouseWheel="Display_MouseWheel"
     MouseWheel="Display_MouseWheel"
-    Closing="ApplicationExit">
-    <Grid
-        Name="grid">
+    Closing="ApplicationExit"
+    MouseMove="Display_MouseMove"
+    PreviewKeyDown="Display_Form_PreviewKeyDown" WindowState="Maximized" WindowStyle="None" Icon="/csharp-comicviewer;component/icon.ico">
+    <Grid>
         <Menu
             Name="MenuBar"
             VerticalAlignment="Top"
@@ -102,7 +121,8 @@
             Foreground="White"
             TextAlignment="Center"
             VerticalAlignment="Center"
-            Focusable="False" />
+            Focusable="False" 
+            Panel.ZIndex="50" />
         <ScrollViewer
             VerticalScrollBarVisibility="Hidden"
             HorizontalScrollBarVisibility="Hidden"
@@ -125,7 +145,8 @@
             MinWidth="60"
             Padding="5,2,5,2"
             FocusVisualStyle="{x:Null}"
-            Focusable="False" />
+            Focusable="False" 
+            Panel.ZIndex="50" />
         <Grid.ContextMenu>
             <ContextMenu
                 Name="MenuRightClick">

@@ -16,35 +16,35 @@
 //  You should have received a copy of the GNU General Public License
 //  along with csharp comicviewer.  If not, see <http://www.gnu.org/licenses/>.
 //-------------------------------------------------------------------------------------
+
+using System;
+using System.Windows;
+using System.Data;
+using System.Xml;
+using System.Configuration;
+using Csharp_comicviewer.WPF;
+
 namespace Csharp_comicviewer
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Windows.Forms;
-
-	/// <summary>
-	/// The main entry point for the application.
-	/// </summary>
-	public static class Program
-	{
-		/// <summary>
-		/// The main entry point for the application.
-		/// </summary>
-		/// <param name="args">Contains optional armugemts, to for example open a file on start.</param>
-		[STAThread]
-		public static void Main(string[] args)
-		{
-			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
-			if (args.Length > 0)
-			{
-				Application.Run(new Display_Form(args[0]));
-			}
-			else
-			{
-				Application.Run(new Display_Form(null));
-			}
-		}
-	}
+    /// <summary>
+    /// Interaction logic for App.xaml
+    /// </summary>
+    public partial class App : Application
+    {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            
+            if (e.Args.Length > 0)
+            {
+                var mainWindow = new Csharp_comicviewer.WPF.Display_Form(e.Args[0]);
+                mainWindow.Show();
+            }
+            else
+            {
+                var mainWindow = new Csharp_comicviewer.WPF.Display_Form(null);
+                mainWindow.Show();
+            }
+        }
+    }
 }
