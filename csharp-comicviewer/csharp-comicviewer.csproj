@@ -89,8 +89,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Events\KeyboardHandler.cs" />
-    <Compile Include="Events\MouseHandler.cs" />
     <None Include="Gui\About_Form.cs">
       <SubType>Form</SubType>
     </None>

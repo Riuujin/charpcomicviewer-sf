@@ -29,22 +29,24 @@ namespace Csharp_comicviewer.Comic
     {
         private List<byte[]> ImagesAsBytes = new List<byte[]>();
 
+        public string FileName { get; set; }
 
         private List<String> Locations;
 
         /// <summary>
         /// Create a ComicFile
         /// </summary>
-        /// <param name="Locations">Location of the loose images</param>
-        /// <param name="Images">The images</param>
-        /// <param name="InfoText">Information text</param>
-        public ComicFile(List<String> Locations, List<byte[]> Images, String InfoText)
+        /// <param name="locations">Location of the loose images</param>
+        /// <param name="images">The images</param>
+        /// <param name="infoText">Information text</param>
+        public ComicFile(string fileName, List<String> locations, List<byte[]> images, String infoText)
         {
-            this.Locations = Locations;
-            this.ImagesAsBytes.AddRange(Images);
+            FileName = fileName;
+            Locations = locations;
+            ImagesAsBytes.AddRange(images);
             CountTotalPages();
-            if (InfoText != null)
-                this.InfoText = InfoText;
+            if (infoText != null)
+                InfoText = infoText;
         }
 
         /// <summary>

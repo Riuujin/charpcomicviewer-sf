@@ -26,92 +26,101 @@
     Name="Display"
     FocusVisualStyle="{x:Null}"
     Loaded="Display_Form_Loaded"
-    KeyDown="Display_Form_KeyDown"
-    PreviewMouseWheel="Display_MouseWheel"
-    MouseWheel="Display_MouseWheel"
+    KeyDown="OnKeyDown"
+    PreviewMouseWheel="OnPreviewMouseWheel"
+    MouseWheel="OnMouseWheel"
     Closing="ApplicationExit"
-    MouseMove="Display_MouseMove"
-    PreviewKeyDown="Display_Form_PreviewKeyDown" WindowState="Maximized" WindowStyle="None" Icon="/csharp-comicviewer;component/icon.ico">
+    MouseMove="OnMouseMove"
+    PreviewKeyDown="OnPreviewKeyDown" WindowState="Maximized" WindowStyle="None" Icon="/csharp-comicviewer;component/icon.ico" MouseRightButtonDown="OnRightButtonDown">
     <Grid>
-        <Menu
+        <DockPanel>
+            <Menu
             Name="MenuBar"
-            VerticalAlignment="Top"
-            AllowDrop="False"
-            Panel.ZIndex="50"
-            IsMainMenu="True"
-            Visibility="Hidden"
-            Height="38">
-            <Menu.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <DockPanel
+            VerticalAlignment="Top" Visibility="Collapsed"
+             DockPanel.Dock="Top" >
+                <Menu.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <DockPanel
                         HorizontalAlignment="Stretch" />
-                </ItemsPanelTemplate>
-            </Menu.ItemsPanel>
-            <MenuItem
-                Header="File">
+                    </ItemsPanelTemplate>
+                </Menu.ItemsPanel>
                 <MenuItem
+                Header="File">
+                    <MenuItem
                     Header="Resume last file(s)"
                     InputGestureText="R"
                     Name="ResumeFile_MenuBar"
                     Click="Resume_Click" />
-                <MenuItem
+                    <MenuItem
                     Header="Load file(s)"
                     InputGestureText="L"
                     Name="LoadFile_MenuBar"
                     Click="Load_Click" />
-                <MenuItem
+                    <MenuItem
                     Header="Next file"
                     InputGestureText="Alt + Pg Dn"
                     Name="NextFile_MenuBar"
                     Click="NextFile_Click" />
-                <MenuItem
+                    <MenuItem
                     Header="Previous file"
                     InputGestureText="Alt + Pg Up"
                     Name="PreviousFile_MenuBar"
                     Click="PreviousFile_Click" />
-                <MenuItem
+                    <MenuItem
                     Header="Exit"
                     Name="Exit_MenuBar"
                     InputGestureText="X"
                     Click="Exit_Click" />
-            </MenuItem>
-            <MenuItem
-                Header="Page Control">
+                </MenuItem>
                 <MenuItem
+                Header="Page Control">
+                    <MenuItem
                     Header="Next page"
                     InputGestureText="Pg Dn"
                     Name="NextPage_MenuBar"
                     Click="NextPage_Click" />
-                <MenuItem
+                    <MenuItem
                     Header="Previous page"
                     InputGestureText="Pg Up"
                     Name="PreviousPage_MenuBar"
                     Click="PreviousPage_Click" />
-                <MenuItem
+                    <MenuItem
                     Header="Show page information"
                     InputGestureText="I"
                     Name="ShowPageInformation_MenuBar"
                     Click="ShowPageInformation_Click" />
-            </MenuItem>
-            <MenuItem
+                </MenuItem>
+                <MenuItem
                 Header="Bookmarks"
                 Name="Bookmarks_MenuBar">
-                <MenuItem
+                    <MenuItem
                     Header="Add bookmark"
                     Name="AddBookmark_MenuBar"
                     Click="AddBookmark_Click" />
-                <MenuItem
+                    <MenuItem
                     Header="Manage bookmarks"
                     Name="ManageBookmarks_MenuBar"
                     Click="ManageBookmarks_Click" />
-                <Separator />
-            </MenuItem>
-            <MenuItem
+                    <Separator />
+                </MenuItem>
+                <MenuItem
                 Header="About"
                 HorizontalAlignment="Right"
                 Name="About_MenuBar"
                 Click="About_Click" />
-        </Menu>
+            </Menu>
+            <ScrollViewer
+            VerticalScrollBarVisibility="Hidden"
+            HorizontalScrollBarVisibility="Hidden"
+            Name="ScrollField"
+            FocusVisualStyle="{x:Null}">
+                <Image
+                VerticalAlignment="Top"
+                Name="DisplayedImage"
+                Focusable="False"
+                FocusVisualStyle="{x:Null}" />
+            </ScrollViewer>
+        </DockPanel>
         <TextBlock
             Name="MessageBox"
             Visibility="Hidden"
@@ -123,18 +132,6 @@
             VerticalAlignment="Center"
             Focusable="False" 
             Panel.ZIndex="50" />
-        <ScrollViewer
-            VerticalScrollBarVisibility="Hidden"
-            HorizontalScrollBarVisibility="Hidden"
-            Name="ScrollField"
-            FocusVisualStyle="{x:Null}"
-            Visibility="{Binding}">
-            <Image
-                VerticalAlignment="Top"
-                Name="DisplayedImage"
-                Focusable="False"
-                FocusVisualStyle="{x:Null}" />
-        </ScrollViewer>
         <TextBlock
             Name="PageInfoBox"
             Visibility="Hidden"

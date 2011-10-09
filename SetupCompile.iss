@@ -52,9 +52,9 @@ procedure InitializeWizard();
 begin
   itd_init;
 
-  if ( RegKeyExists(HKLM, 'SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\full')) then begin
+  if (not RegKeyExists(HKLM, 'SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\full')) then begin
     if (MsgBox('C# Comicviewer needs the Microsoft .NET Framework 4.0 to be installed.' + #13#10 + 'Do you want to install this aswell?', mbInformation, MB_YESNO) = IDYES) then begin
-      if ( IsAdminLoggedOn()) then begin
+      if (not IsAdminLoggedOn()) then begin
         MsgBox('Cannot install the Microsoft .NET Framework 4.0, to install this you need to be an Administrator.' + #13#10#13#10 + 'C# Comicviewer setup will continue but skip the Microsoft .NET Framework 4.0 installation.', mbInformation, MB_OK); 
       end else begin
         itd_addfile('http://download.microsoft.com/download/9/5/A/95A9616B-7A37-4AF6-BC36-D6EA96C8DAAE/dotNetFx40_Full_x86_x64.exe',expandconstant('{tmp}\dotNetFx40_Full_x86_x64.exe'));

@@ -44,11 +44,11 @@ namespace Csharp_comicviewer.Configuration
         /// <summary>
         /// Should height be overridden
         /// </summary>
-        public Boolean overideHight = false;
+        public Boolean OverideHeight = false;
         /// <summary>
         /// Should width be overridden
         /// </summary>
-        public Boolean overideWidth = false;
+        public Boolean OverideWidth = false;
         /// <summary>
         /// Windowed mode
         /// </summary>
