@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("C# Comicviewer")]
-[assembly: AssemblyDescription("C# Comicviewer is a comic viewer written in C#. Its uses .Net 4.0, 7-zip (http://7-zip.org/) and SevenZipSharp (http://sevenzipsharp.codeplex.com/).")]
+[assembly: AssemblyDescription("C# Comicviewer is a comic viewer written in C#.\r\nIts uses:\r\n\t\u2022.Net 4.0(http://www.microsoft.com/net) \r\n\t\u20227-zip (http://7-zip.org/) \r\n\t\u2022SevenZipSharp (http://sevenzipsharp.codeplex.com/)")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("C# Comicviewer")]
