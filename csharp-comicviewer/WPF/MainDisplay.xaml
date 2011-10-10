@@ -191,6 +191,10 @@
                     <Separator />
                 </MenuItem>
                 <MenuItem
+                Header="About"
+                Name="About_RightClick"
+                Click="About_Click" />
+                <MenuItem
                     Header="Exit"
                     Name="Exit_RightClick"
                     InputGestureText="X"
