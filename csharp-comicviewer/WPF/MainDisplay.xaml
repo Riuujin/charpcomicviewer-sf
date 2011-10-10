@@ -18,14 +18,14 @@
     along with csharp comicviewer.  If not, see<http://www.gnu.org/licenses/> .
 -->
 <Window
-    x:Class="Csharp_comicviewer.WPF.Display_Form" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="Csharp_comicviewer.WPF.MainDisplay" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="C# comicviewer"
     Background="WhiteSmoke"
     Height="300"
     Width="300"
     Name="Display"
     FocusVisualStyle="{x:Null}"
-    Loaded="Display_Form_Loaded"
+    Loaded="MainDisplay_Loaded"
     KeyDown="OnKeyDown"
     PreviewMouseWheel="OnPreviewMouseWheel"
     MouseWheel="OnMouseWheel"

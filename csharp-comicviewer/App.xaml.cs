@@ -37,12 +37,12 @@ namespace Csharp_comicviewer
             
             if (e.Args.Length > 0)
             {
-                var mainWindow = new Csharp_comicviewer.WPF.Display_Form(e.Args[0]);
+                var mainWindow = new Csharp_comicviewer.WPF.MainDisplay(e.Args[0]);
                 mainWindow.Show();
             }
             else
             {
-                var mainWindow = new Csharp_comicviewer.WPF.Display_Form(null);
+                var mainWindow = new Csharp_comicviewer.WPF.MainDisplay(null);
                 mainWindow.Show();
             }
         }

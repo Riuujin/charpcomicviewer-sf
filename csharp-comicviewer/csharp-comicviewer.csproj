@@ -75,6 +75,7 @@
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -126,15 +127,14 @@
       <DependentUpon>InfoText_Form.cs</DependentUpon>
     </None>
     <Compile Include="File\ArchiveLoader.cs" />
-    <Compile Include="WPF\Display_Form.xaml.cs">
-      <DependentUpon>Display_Form.xaml</DependentUpon>
+    <Compile Include="WPF\About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF\MainDisplay.xaml.cs">
+      <DependentUpon>MainDisplay.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <None Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="WPF\Window1.xaml.cs">
-      <DependentUpon>Window1.xaml</DependentUpon>
-    </None>
     <EmbeddedResource Include="Gui\About_Form.resx">
       <DependentUpon>About_Form.cs</DependentUpon>
     </EmbeddedResource>
@@ -200,11 +200,18 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml" />
-    <None Include="WPF\Window1.xaml" />
-    <Page Include="WPF\Display_Form.xaml" />
+    <Page Include="WPF\About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF\MainDisplay.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="About.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(ProgramFiles)\MSBuild\StyleCop\v4.5\StyleCop.targets" />

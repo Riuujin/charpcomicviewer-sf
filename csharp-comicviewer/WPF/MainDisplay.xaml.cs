@@ -36,15 +36,15 @@ namespace Csharp_comicviewer.WPF
     /// <summary>
     /// Interaction logic for Window2.xaml
     /// </summary>
-    public partial class Display_Form : Window
+    public partial class MainDisplay : Window
     {
-        public Display_Form(string OpeningFile)
+        public MainDisplay(string OpeningFile)
         {
             InitializeComponent();
             this.OpeningFile = OpeningFile;
         }
 
-        private void Display_Form_Loaded(object sender, RoutedEventArgs e)
+        private void MainDisplay_Loaded(object sender, RoutedEventArgs e)
         {
             //Ensure that the window is active on start
             this.Activate();
@@ -109,7 +109,7 @@ namespace Csharp_comicviewer.WPF
             }
         }
 
-        
+
 
         private void ApplicationExit(object sender, EventArgs e)
         {
@@ -312,7 +312,7 @@ namespace Csharp_comicviewer.WPF
                     this.WindowState = System.Windows.WindowState.Minimized;
                     this.WindowState = System.Windows.WindowState.Maximized;
                     MenuBar.Visibility = Visibility.Collapsed;
-                    
+
                 }
                 else
                 {
@@ -472,15 +472,34 @@ namespace Csharp_comicviewer.WPF
 
         private void OnMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            if (e.Delta > 0 && ScrollField.VerticalOffset == 0 && ScrollField.HorizontalOffset == 0)
+            if (e.Delta > 0 && DisplayedImage.Source != null)
             {
-                PreviousPage();
+                if (e.Delta > 0 && ScrollField.VerticalOffset == 0 && ScrollField.HorizontalOffset == 0)
+                {
+                    PreviousPageBoolean = true;
+                    PreviousPageCount--;
+                }
+            }
+            else if (DisplayedImage.Source != null)
+            {
+                if (e.Delta < 0 && ScrollField.VerticalOffset == ScrollField.ScrollableHeight && ScrollField.HorizontalOffset == ScrollField.ScrollableWidth)
+                {
+                    NextPageBoolean = true;
+                    NextPageCount--;
+                }
             }
 
-            if (e.Delta < 0 && ScrollField.VerticalOffset == ScrollField.ScrollableHeight && ScrollField.HorizontalOffset == ScrollField.ScrollableWidth)
+            if (NextPageBoolean && NextPageCount <= 0)
             {
                 NextPage();
-
+                NextPageBoolean = false;
+                NextPageCount = 2;
+            }
+            else if (PreviousPageBoolean && PreviousPageCount <= 0)
+            {
+                PreviousPage();
+                PreviousPageBoolean = false;
+                PreviousPageCount = 2;
             }
         }
 
@@ -639,7 +658,8 @@ namespace Csharp_comicviewer.WPF
 
         private void About_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            About about = new About();
+            about.ShowDialog();
         }
         #endregion
 
@@ -1060,16 +1080,32 @@ namespace Csharp_comicviewer.WPF
             set;
         }
 
+        private int _NextPageCount = 2;
+
         private int NextPageCount
         {
-            get;
-            set;
+            get
+            {
+                return _NextPageCount;
+            }
+            set
+            {
+                _NextPageCount = value;
+            }
         }
+
+        private int _PreviousPageCount = 2;
 
         private int PreviousPageCount
         {
-            get;
-            set;
+            get
+            {
+                return _PreviousPageCount;
+            }
+            set
+            {
+                _PreviousPageCount = value;
+            }
         }
 
         private ImageEdit ImageEdit
@@ -1151,6 +1187,18 @@ namespace Csharp_comicviewer.WPF
         }
 
         private bool MouseDrag
+        {
+            get;
+            set;
+        }
+
+        private bool NextPageBoolean
+        {
+            get;
+            set;
+        }
+
+        private bool PreviousPageBoolean
         {
             get;
             set;
