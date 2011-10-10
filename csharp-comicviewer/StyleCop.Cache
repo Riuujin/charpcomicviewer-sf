@@ -11316,13 +11316,17 @@
       </violation>
     </violations>
   </sourcecode>
+  <project key="-2015822402">
+    <configuration>
+    </configuration>
+  </project>
   <sourcecode name="About.g.cs" parser="StyleCop.CSharp.CsParser">
     <settings>
       <timestamp>09/17/2011 13:58:06</timestamp>
       <milliseconds>284</milliseconds>
     </settings>
-    <timestamp>10/10/2011 23:52:22</timestamp>
-    <milliseconds>318</milliseconds>
+    <timestamp>10/10/2011 23:59:20</timestamp>
+    <milliseconds>155</milliseconds>
     <violations />
   </sourcecode>
   <sourcecode name="App.g.cs" parser="StyleCop.CSharp.CsParser">
@@ -11330,21 +11334,17 @@
       <timestamp>09/17/2011 13:58:06</timestamp>
       <milliseconds>284</milliseconds>
     </settings>
-    <timestamp>10/10/2011 21:06:58</timestamp>
-    <milliseconds>233</milliseconds>
+    <timestamp>10/10/2011 22:20:58</timestamp>
+    <milliseconds>404</milliseconds>
     <violations />
   </sourcecode>
-  <project key="-2015822402">
-    <configuration>
-    </configuration>
-  </project>
   <sourcecode name="MainDisplay.g.cs" parser="StyleCop.CSharp.CsParser">
     <settings>
       <timestamp>09/17/2011 13:58:06</timestamp>
       <milliseconds>284</milliseconds>
     </settings>
-    <timestamp>10/10/2011 23:56:19</timestamp>
-    <milliseconds>651</milliseconds>
+    <timestamp>10/10/2011 23:59:20</timestamp>
+    <milliseconds>202</milliseconds>
     <violations />
   </sourcecode>
 </stylecopresultscache>
