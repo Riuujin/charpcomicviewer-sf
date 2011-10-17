@@ -90,12 +90,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <None Include="Gui\About_Form.cs">
-      <SubType>Form</SubType>
-    </None>
-    <None Include="Gui\About_Form.Designer.cs">
-      <DependentUpon>About_Form.cs</DependentUpon>
-    </None>
     <None Include="Gui\Display_Form.cs">
       <SubType>Form</SubType>
     </None>
@@ -135,9 +129,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Gui\About_Form.resx">
-      <DependentUpon>About_Form.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Gui\Display_Form.resx">
       <DependentUpon>Display_Form.cs</DependentUpon>
     </EmbeddedResource>

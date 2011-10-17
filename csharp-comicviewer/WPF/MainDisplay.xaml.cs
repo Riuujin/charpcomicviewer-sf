@@ -472,20 +472,59 @@ namespace Csharp_comicviewer.WPF
 
         private void OnMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            if (e.Delta > 0 && DisplayedImage.Source != null)
+
+            //scroll down
+            if (e.Delta < 0 && DisplayedImage.Source != null)
             {
-                if (e.Delta > 0 && ScrollField.VerticalOffset == 0 && ScrollField.HorizontalOffset == 0)
+                PreviousPageBoolean = false;
+                PreviousPageCount = 2;
+                if (DisplayedImage.Width > ScrollField.ViewportWidth)
                 {
-                    PreviousPageBoolean = true;
-                    PreviousPageCount--;
+                    //image widther then screen
+                    if (ScrollField.HorizontalOffset == ScrollField.ScrollableWidth)
+                    {
+                        //Can count down for next page
+                        NextPageBoolean = true;
+                        NextPageCount--;
+                    }
+                    else if (ScrollField.VerticalOffset == ScrollField.ScrollableHeight)
+                    {
+                        //scroll horizontal
+                        ScrollField.ScrollToHorizontalOffset(ScrollField.HorizontalOffset + scrollValueHorizontal);
+                    }
                 }
-            }
-            else if (DisplayedImage.Source != null)
-            {
-                if (e.Delta < 0 && ScrollField.VerticalOffset == ScrollField.ScrollableHeight && ScrollField.HorizontalOffset == ScrollField.ScrollableWidth)
+                else if (ScrollField.VerticalOffset == ScrollField.ScrollableHeight)
                 {
+                    //Can count down for next page
                     NextPageBoolean = true;
                     NextPageCount--;
+                }
+            }
+            //scroll up
+            else if (e.Delta > 0 && DisplayedImage.Source != null)
+            {
+                NextPageBoolean = false;
+                NextPageCount = 2;
+                if (DisplayedImage.Width > ScrollField.ViewportWidth)
+                {
+                    //image widther then screen
+                    if (ScrollField.HorizontalOffset == 0)
+                    {
+                        //Can count down for previous page
+                        PreviousPageBoolean = true;
+                        PreviousPageCount--;
+                    }
+                    else if (ScrollField.VerticalOffset == 0)
+                    {
+                        //scroll horizontal
+                        ScrollField.ScrollToHorizontalOffset(ScrollField.HorizontalOffset - scrollValueHorizontal);
+                    }
+                }
+                else if (ScrollField.VerticalOffset == 0)
+                {
+                    //Can count down for previous page
+                    PreviousPageBoolean = true;
+                    PreviousPageCount--;
                 }
             }
 
@@ -560,15 +599,6 @@ namespace Csharp_comicviewer.WPF
                     {
                         ScrollField.ScrollToVerticalOffset(ScrollField.VerticalOffset + (MouseY - CurrentMousePosition.Y) / Speed);
                         MouseDrag = false;
-                    }
-
-                    if (ScrollField.VerticalOffset > ScrollField.ScrollableHeight || ScrollField.VerticalOffset < 0)
-                    {
-                        ScrollField.ScrollToVerticalOffset(ScrollField.ScrollableHeight);
-                    }
-                    if (ScrollField.HorizontalOffset > ScrollField.ScrollableWidth || ScrollField.HorizontalOffset < 0)
-                    {
-                        ScrollField.ScrollToHorizontalOffset(ScrollField.ScrollableWidth);
                     }
                 }
             }
@@ -1053,6 +1083,41 @@ namespace Csharp_comicviewer.WPF
                     }
                 }
             }
+        }
+
+        private void UpdateBookMarkMenus()
+        {
+
+            //Bookmarks_MenuRightClick.DropDownItems.Clear();
+            //Bookmarks_MenuRightClick.DropDownItems.Add(AddBookmark_item);
+            //Bookmarks_MenuRightClick.DropDownItems.Add(ManageBookmarks_item);
+            //Bookmarks_MenuRightClick.DropDownItems.Add(Bookmark_Separator);
+
+            //Bookmark_menu_bar.DropDownItems.Clear();
+            //Bookmark_menu_bar.DropDownItems.Add(AddBookmark_item_bar);
+            //Bookmark_menu_bar.DropDownItems.Add(ManageBookmarks_item_bar);
+            //Bookmark_menu_bar.DropDownItems.Add(Bookmark_Separator_bar);
+
+            //if (Configuration != null)
+            //{
+            //    if (Configuration.Bookmarks.Count > 0)
+            //    {
+            //        for (int i = 0; i < Configuration.Bookmarks.Count; i++)
+            //        {
+            //            Bookmark Data = Configuration.Bookmarks[i];
+            //            String[] Files = Data.Files;
+            //            ToolStripMenuItem Bookmark = new ToolStripMenuItem(Data.GetCurrentFileName());
+            //            Bookmark.ToolTipText = Files[Data.FileNumber];
+            //            Bookmark.Click += new EventHandler(LoadBookmark_Click);
+            //            Bookmark_menu.DropDownItems.Add(Bookmark);
+
+            //            ToolStripMenuItem Bookmark_bar = new ToolStripMenuItem(Data.GetCurrentFileName());
+            //            Bookmark_bar.ToolTipText = Files[Data.FileNumber];
+            //            Bookmark_bar.Click += new EventHandler(LoadBookmark_Click);
+            //            Bookmark_menu_bar.DropDownItems.Add(Bookmark_bar);
+            //        }
+            //    }
+            //}
         }
 
         #region Properties
