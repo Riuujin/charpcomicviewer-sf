@@ -16,45 +16,80 @@
 //  You should have received a copy of the GNU General Public License
 //  along with csharp comicviewer.  If not, see <http://www.gnu.org/licenses/>.
 //-------------------------------------------------------------------------------------
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Csharp_comicviewer.Comic;
-
 namespace Csharp_comicviewer
 {
+    using Csharp_comicviewer.Comic;
+    using System.Collections;
 
     class FileLoader
     {
 
+        public ArrayList SupportedImageExtensions { get; set; }
+
         public FileLoader()
         {
-            ComicBook = null;
-            HasFile = false;
-            Error = null;
-            Archive = true;
+            this.ComicBook = null;
+            this.HasFile = false;
+            this.Error = null;
+            this.Archive = true;
+            SetSupportedImageExtensions();
         }
 
-        public bool Load(string[] Files)
+        public bool Load(string[] files)
         {
+            this.Archive = true;
+            bool ReturnValue = false;
+
+            foreach (string file in files)
+            {
+                for(int i = 0; i< SupportedImageExtensions.Count;i++)
+                {
+                    if (file.ToLower().EndsWith(SupportedImageExtensions[i].ToString()))
+                    {
+                        this.Archive = false;
+                        break;
+                    }
+                    else
+                    {
+                        if (i == SupportedImageExtensions.Count -1 && this.Archive == false)
+                        {
+                            this.HasFile = false;
+                            this.Error = "Please select only archives or only images.";
+                            return ReturnValue;
+                        }
+                    }
+                }
+            }
+
             if (Archive)
             {
                 ComicBook comicbook;
                 bool hasfile;
                 string error;
 
-                ArchiveLoader ArchiveLoader = new ArchiveLoader();
-                bool ReturnValue = ArchiveLoader.Load(Files, out comicbook, out hasfile, out error);
+                ArchiveLoader archiveLoader = new ArchiveLoader(SupportedImageExtensions);
+                ReturnValue = archiveLoader.Load(files, out comicbook, out hasfile, out error);
 
-                ComicBook = comicbook;
-                HasFile = hasfile;
-                Error = error;
+                this.ComicBook = comicbook;
+                this.ComicBook.FilesAreArchives = true;
+                this.HasFile = hasfile;
+                this.Error = error;
                 return ReturnValue;
             }
             else
             {
-                Error = "Not yet implemented!";
-                return false;
+                ComicBook comicbook;
+                bool hasfile;
+                string error;
+
+                ImageLoader imageLoader = new ImageLoader(SupportedImageExtensions);
+                ReturnValue = imageLoader.Load(files, out comicbook, out hasfile, out error);
+
+                this.ComicBook = comicbook;
+                this.ComicBook.FilesAreArchives = false;
+                this.HasFile = hasfile;
+                this.Error = error;
+                return ReturnValue;
             }
         }
 
@@ -98,5 +133,17 @@ namespace Csharp_comicviewer
             get;
             private set;
         }
+
+        /// <summary>
+        /// Set supported images types
+        /// </summary>
+        private void SetSupportedImageExtensions()
+        {
+            SupportedImageExtensions = new ArrayList();
+            SupportedImageExtensions.Add(".jpg");
+            SupportedImageExtensions.Add(".bmp");
+            SupportedImageExtensions.Add(".png");
+        }
+
     }
 }

@@ -1,21 +1,22 @@
-﻿/*
-  Copyright 2011 Rutger Spruyt
-  
-  This file is part of C# Comicviewer.
+﻿//-------------------------------------------------------------------------------------
+//  Copyright 2011 Rutger Spruyt
+//
+//  This file is part of C# Comicviewer.
+//
+//  csharp comicviewer is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  csharp comicviewer is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with csharp comicviewer.  If not, see <http://www.gnu.org/licenses/>.
+//-------------------------------------------------------------------------------------
 
-  csharp comicviewer is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
-  (at your option) any later version.
-
-  csharp comicviewer is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with csharp comicviewer.  If not, see <http://www.gnu.org/licenses/>.
- */
 namespace Csharp_comicviewer.WPF
 {
     using System;
@@ -31,6 +32,7 @@ namespace Csharp_comicviewer.WPF
     using Csharp_comicviewer.Configuration;
     using Csharp_comicviewer.Other;
     using Microsoft.Win32;
+    using System.Collections.Generic;
 
 
     /// <summary>
@@ -61,7 +63,7 @@ namespace Csharp_comicviewer.WPF
 
             //Load config
             LoadConfiguration();
-            SetBookmarkMenu();
+            SetBookmarkMenus();
 
             //set window mode
             if (Configuration.windowed)
@@ -178,7 +180,7 @@ namespace Csharp_comicviewer.WPF
         }
 
         #region Bookmarks
-        private void SetBookmarkMenu()
+        private void SetBookmarkMenus()
         {
             Bookmarks_MenuRightClick.Items.Clear();
             Bookmarks_MenuRightClick.Items.Add(AddBookmark_MenuRightClick);
@@ -196,19 +198,18 @@ namespace Csharp_comicviewer.WPF
                 {
                     if (Configuration.Bookmarks.Count > 0)
                     {
-                        for (int i = 0; i < Configuration.Bookmarks.Count; i++)
+                        foreach(Bookmark bookmark in Configuration.Bookmarks)
                         {
-                            Bookmark Data = Configuration.Bookmarks[i];
-                            String[] Files = Data.Files;
+                            String[] Files = bookmark.Files;
                             MenuItem Bookmark = new MenuItem();
-                            Bookmark.Header = Data.GetCurrentFileName();
-                            Bookmark.ToolTip = Files[Data.FileNumber];
+                            Bookmark.Header = bookmark.CurrentFileName;
+                            Bookmark.ToolTip = Files[bookmark.FileNumber];
                             Bookmark.Click += new RoutedEventHandler(LoadBookmark_Click);
                             Bookmarks_MenuRightClick.Items.Add(Bookmark);
 
                             MenuItem Bookmark_bar = new MenuItem();
-                            Bookmark_bar.Header = Data.GetCurrentFileName();
-                            Bookmark_bar.ToolTip = Files[Data.FileNumber];
+                            Bookmark_bar.Header = bookmark.CurrentFileName;
+                            Bookmark_bar.ToolTip = Files[bookmark.FileNumber];
                             Bookmark_bar.Click += new RoutedEventHandler(LoadBookmark_Click);
                             Bookmarks_MenuBar.Items.Add(Bookmark_bar);
                         }
@@ -331,7 +332,7 @@ namespace Csharp_comicviewer.WPF
                 ImageEdit.SetScreenWidth((int)ScrollField.ViewportWidth);
 
                 if (DisplayedImage.Source != null)
-                    DisplayImage(ComicBook.GetCurrentPage(), "top");
+                    DisplayImage(ComicBook.GetCurrentPage(), ImageLocation.Top);
 
             }
         }
@@ -346,7 +347,7 @@ namespace Csharp_comicviewer.WPF
                     byte[] image = ComicBook.GetPage(0, 0);
                     if (image != null)
                     {
-                        DisplayImage(image, "top");
+                        DisplayImage(image, ImageLocation.Top);
                     }
                 }
             }
@@ -359,7 +360,7 @@ namespace Csharp_comicviewer.WPF
                     byte[] image = ComicBook.GetPage(ComicBook.GetCurrentFile(), 0);
                     if (image != null)
                     {
-                        DisplayImage(image, "top");
+                        DisplayImage(image, ImageLocation.Top);
                     }
                 }
             }
@@ -372,7 +373,7 @@ namespace Csharp_comicviewer.WPF
                     byte[] image = ComicBook.GetPage(ComicBook.GetTotalFiles() - 1, ComicBook.GetTotalPagesOfFile(ComicBook.GetTotalFiles() - 1) - 1);
                     if (image != null)
                     {
-                        DisplayImage(image, "top");
+                        DisplayImage(image, ImageLocation.Top);
                     }
                 }
             }
@@ -385,7 +386,7 @@ namespace Csharp_comicviewer.WPF
                     byte[] image = ComicBook.GetPage(ComicBook.GetCurrentFile(), ComicBook.GetTotalPagesOfFile(ComicBook.GetCurrentFile()) - 1);
                     if (image != null)
                     {
-                        DisplayImage(image, "top");
+                        DisplayImage(image, ImageLocation.Top);
                     }
                 }
             }
@@ -549,8 +550,6 @@ namespace Csharp_comicviewer.WPF
 
         private void OnMouseMove(object sender, MouseEventArgs e)
         {
-            // TODO Make it work
-
             LastMouseMove = DateTime.Now;
 
             if (MouseIsHidden && (Mouse.GetPosition(this) != CurrentMousePosition))
@@ -678,12 +677,18 @@ namespace Csharp_comicviewer.WPF
 
         private void AddBookmark_Click(object sender, RoutedEventArgs e)
         {
-            ShowMessage("Not implemented");
+            if (ComicBook != null)
+            {
+                Configuration.Bookmarks.Add(ComicBook.GetBookmark());
+                SetBookmarkMenus();
+            }
         }
 
         private void ManageBookmarks_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            BookmarkManager bookmarkManager = new BookmarkManager(this);
+            bookmarkManager.ShowDialog();
+            SetBookmarkMenus();
         }
 
         private void About_Click(object sender, RoutedEventArgs e)
@@ -721,7 +726,16 @@ namespace Csharp_comicviewer.WPF
         {
             if (ComicBook != null)
             {
-                PageInfoBox.Text = "Archive" + (Convert.ToInt32(ComicBook.GetCurrentFile()) + 1) + "/" + ComicBook.GetTotalFiles() + "\r\nPage: " + (Convert.ToInt32(ComicBook.GetCurrentPageOfTotal()) + 1) + "/" + ComicBook.GetTotalPages();
+                if (ComicBook.FilesAreArchives)
+                {
+                    PageInfoBox.Text = "Archive " + (Convert.ToInt32(ComicBook.GetCurrentFile()) + 1) + "/" + ComicBook.GetTotalFiles() + "\r\nArchive name: " + ComicBook.GetCurrentFileName() + "\r\nPage: " + (Convert.ToInt32(ComicBook.GetCurrentPageOfTotal()) + 1) + "/" + ComicBook.GetTotalPages();
+                }
+                else
+                {
+                    PageInfoBox.Text = "File name: " + ComicBook.GetCurrentFileName() + "\r\nPage: " + (Convert.ToInt32(ComicBook.GetCurrentPageOfTotal()) + 1) + "/" + ComicBook.GetTotalPages();
+
+                }
+
                 PageInfoBox.Visibility = System.Windows.Visibility.Visible;
 
                 if (PageInformationTimer != null)
@@ -748,7 +762,10 @@ namespace Csharp_comicviewer.WPF
         #endregion
 
         #region Load an Display
-        public void DisplayImage(byte[] ImageAsByteArray, string scrollTo)
+
+
+
+        public void DisplayImage(byte[] ImageAsByteArray, ImageLocation scrollTo)
         {
             // If page information is displayed update it with new information
             if (PageInfoBox.Visibility == System.Windows.Visibility.Visible)
@@ -756,15 +773,15 @@ namespace Csharp_comicviewer.WPF
                 UpdatePageInformation();
             }
 
-            switch (scrollTo)
+            switch (scrollTo.ToString())
             {
-                case "top":
+                case "Top":
                     {
                         ScrollField.ScrollToTop();
                         ScrollField.ScrollToLeftEnd();
                         break;
                     }
-                case "bottom":
+                case "Bottom":
                     {
                         ScrollField.ScrollToBottom();
                         ScrollField.ScrollToRightEnd();
@@ -835,9 +852,9 @@ namespace Csharp_comicviewer.WPF
                     if (ComicBook != null)
                     {
                         Bookmark Bookmark = ComicBook.GetBookmark();
-                        OpenFileDialog.InitialDirectory = Bookmark.GetCurrentDirectoryLocation();
+                        OpenFileDialog.InitialDirectory = Bookmark.GetCurrentFileDirectoryLocation();
                     }
-                    OpenFileDialog.Filter = "Supported formats (*.cbr;*.cbz;*.zip;*.rar)|*.cbr;*.cbz;*.zip;*.rar|All files (*.*)|*.*";
+                    OpenFileDialog.Filter = "Supported archive formats (*.cbr; *.cbz; *.zip; *.rar)|*.cbr;*.cbz;*.zip;*.rar|Supported image formats (*.jpg; *.bmp; *.png)|*.jpg;*.bmp;*.png|All files (*.*)|*.*";
                     OpenFileDialog.Multiselect = true;
                     OpenFileDialog.ShowDialog();
                     if (OpenFileDialog.FileNames.Length <= 0)
@@ -859,7 +876,7 @@ namespace Csharp_comicviewer.WPF
                     }
                 }
                 Mouse.OverrideCursor = Cursors.Wait;
-                LoadArchive(Files, 0, 0);
+                LoadFile(Files, 0, 0);
             }
             catch { }
             Mouse.OverrideCursor = Cursors.Arrow;
@@ -884,7 +901,7 @@ namespace Csharp_comicviewer.WPF
                 }
 
                 Mouse.OverrideCursor = Cursors.Wait;
-                LoadArchive(Files, 0, 0);
+                LoadFile(Files, 0, 0);
             }
             catch { }
             Mouse.OverrideCursor = Cursors.Arrow;
@@ -909,7 +926,7 @@ namespace Csharp_comicviewer.WPF
                     }
                 }
                 Mouse.OverrideCursor = Cursors.Wait;
-                LoadArchive(Files, FileNumber, PageNumber);
+                LoadFile(Files, FileNumber, PageNumber);
             }
             catch { }
             Mouse.OverrideCursor = Cursors.Arrow;
@@ -921,21 +938,21 @@ namespace Csharp_comicviewer.WPF
         /// <param name="Files">Archive location</param>
         /// <param name="FileNumber">File in array to start at</param>
         /// <param name="PageNumber">Page on wich to start from selected file</param>
-        public void LoadArchive(String[] Files, int FileNumber, int PageNumber)
+        public void LoadFile(String[] Files, int FileNumber, int PageNumber)
         {
             FileLoader.Load(Files);
 
             if (FileLoader.HasFile)
             {
                 ComicBook = FileLoader.ComicBook;
-                DisplayImage(ComicBook.GetPage(FileNumber, PageNumber), "top");
+                DisplayImage(ComicBook.GetPage(FileNumber, PageNumber), ImageLocation.Top);
                 if (!String.IsNullOrEmpty(FileLoader.Error))
                     ShowMessage(FileLoader.Error);
             }
             else if (!String.IsNullOrEmpty(FileLoader.Error))
                 ShowMessage(FileLoader.Error);
             else
-                ShowMessage("No supported files found in archive");
+                ShowMessage("No supported files found.");
         }
 
         /// <summary>
@@ -973,7 +990,7 @@ namespace Csharp_comicviewer.WPF
                 ShowMessage("Normal mode.");
             }
             if (DisplayedImage.Source != null)
-                DisplayImage(ComicBook.GetCurrentPage(), "top");
+                DisplayImage(ComicBook.GetCurrentPage(), ImageLocation.Top);
 
         }
 
@@ -1005,7 +1022,7 @@ namespace Csharp_comicviewer.WPF
                         byte[] image = ComicBook.GetPage(ComicBook.GetCurrentFile() + 1, 0);
                         if (image != null)
                         {
-                            DisplayImage(image, "top");
+                            DisplayImage(image, ImageLocation.Top);
                         }
                     }
                 }
@@ -1038,7 +1055,7 @@ namespace Csharp_comicviewer.WPF
                         byte[] image = ComicBook.GetPage(ComicBook.GetCurrentFile() - 1, ComicBook.GetTotalPagesOfFile(ComicBook.GetCurrentFile() - 1) - 1);
                         if (image != null)
                         {
-                            DisplayImage(image, "bottom");
+                            DisplayImage(image, ImageLocation.Bottom);
                         }
                     }
                 }
@@ -1059,9 +1076,7 @@ namespace Csharp_comicviewer.WPF
                     byte[] image = ComicBook.NextPage();
                     if (image != null)
                     {
-                        DisplayImage(image, "top");
-                        ScrollField.ScrollToVerticalOffset(0);
-                        ScrollField.ScrollToHorizontalOffset(0);
+                        DisplayImage(image, ImageLocation.Top);
                     }
                 }
             }
@@ -1079,47 +1094,11 @@ namespace Csharp_comicviewer.WPF
                     byte[] image = ComicBook.PreviousPage();
                     if (image != null)
                     {
-                        DisplayImage(image, "bottom");
+                        DisplayImage(image, ImageLocation.Bottom);
                     }
                 }
             }
         }
-
-        private void UpdateBookMarkMenus()
-        {
-
-            //Bookmarks_MenuRightClick.DropDownItems.Clear();
-            //Bookmarks_MenuRightClick.DropDownItems.Add(AddBookmark_item);
-            //Bookmarks_MenuRightClick.DropDownItems.Add(ManageBookmarks_item);
-            //Bookmarks_MenuRightClick.DropDownItems.Add(Bookmark_Separator);
-
-            //Bookmark_menu_bar.DropDownItems.Clear();
-            //Bookmark_menu_bar.DropDownItems.Add(AddBookmark_item_bar);
-            //Bookmark_menu_bar.DropDownItems.Add(ManageBookmarks_item_bar);
-            //Bookmark_menu_bar.DropDownItems.Add(Bookmark_Separator_bar);
-
-            //if (Configuration != null)
-            //{
-            //    if (Configuration.Bookmarks.Count > 0)
-            //    {
-            //        for (int i = 0; i < Configuration.Bookmarks.Count; i++)
-            //        {
-            //            Bookmark Data = Configuration.Bookmarks[i];
-            //            String[] Files = Data.Files;
-            //            ToolStripMenuItem Bookmark = new ToolStripMenuItem(Data.GetCurrentFileName());
-            //            Bookmark.ToolTipText = Files[Data.FileNumber];
-            //            Bookmark.Click += new EventHandler(LoadBookmark_Click);
-            //            Bookmark_menu.DropDownItems.Add(Bookmark);
-
-            //            ToolStripMenuItem Bookmark_bar = new ToolStripMenuItem(Data.GetCurrentFileName());
-            //            Bookmark_bar.ToolTipText = Files[Data.FileNumber];
-            //            Bookmark_bar.Click += new EventHandler(LoadBookmark_Click);
-            //            Bookmark_menu_bar.DropDownItems.Add(Bookmark_bar);
-            //        }
-            //    }
-            //}
-        }
-
         #region Properties
         private string OpeningFile
         {
@@ -1197,10 +1176,10 @@ namespace Csharp_comicviewer.WPF
             set;
         }
 
-        private Configuration Configuration
+        public Configuration Configuration
         {
             get;
-            set;
+            private set;
         }
 
         private DateTime LastMouseMove
@@ -1273,6 +1252,12 @@ namespace Csharp_comicviewer.WPF
         {
             get;
             set;
+        }
+
+        public enum ImageLocation
+        {
+            Top,
+            Bottom
         }
         #endregion
 

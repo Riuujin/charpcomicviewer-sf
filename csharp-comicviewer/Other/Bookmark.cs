@@ -16,12 +16,13 @@
 //  You should have received a copy of the GNU General Public License
 //  along with csharp comicviewer.  If not, see <http://www.gnu.org/licenses/>.
 //-------------------------------------------------------------------------------------
-using System;
-using System.Xml;
-using System.Xml.Serialization;
 
 namespace Csharp_comicviewer.Other
 {
+    using System;
+    using System.Xml;
+    using System.Xml.Serialization;
+
     /// <summary>
     /// A Bookmark
     /// </summary>
@@ -29,91 +30,129 @@ namespace Csharp_comicviewer.Other
     [XmlRoot("Bookmark")]
     public class Bookmark
     {
-        private String[] _Files;
-        private int _CurrentFile;
-        private int _CurrentPageOfFile;
-        
         /// <summary>
         /// The files
         /// </summary>
-        [XmlArray("Files")]
-        public String[] Files
+        private string[] files;
+
+        /// <summary>
+        /// Current file being read.
+        /// </summary>
+        private int currentFile;
+
+        /// <summary>
+        /// Current page of file being read.
+        /// </summary>
+        private int currentPageOfFile;
+
+        /// <summary>
+        ///  Initializes a new instance of the Bookmark class.
+        /// </summary>
+        public Bookmark()
         {
-            get { return _Files; }
-            set { _Files = value; }
         }
 
         /// <summary>
-        /// Current file being read
+        /// Initializes a new instance of the Bookmark class.
+        /// </summary>
+        /// <param name="files">The files.</param>
+        /// <param name="currentFile">Current file being read.</param>
+        /// <param name="currentPageOfFile">Current page of file being read.</param>
+        public Bookmark(string[] files, int currentFile, int currentPageOfFile)
+        {
+            this.Files = files;
+            this.FileNumber = currentFile;
+            this.PageNumber = currentPageOfFile;
+        }
+
+        /// <summary>
+        /// Gets or sets the files
+        /// </summary>
+        [XmlArray("Files")]
+        public string[] Files
+        {
+            get { return files; }
+            set { files = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets current file being read.
         /// </summary>
         [XmlElement("CurrentFile")]
         public int FileNumber
         {
-            get { return _CurrentFile; }
-            set { _CurrentFile = value; }
+            get { return currentFile; }
+            set { currentFile = value; }
         }
 
         /// <summary>
-        /// Current page of file being read
+        /// Gets or sets current page of file being read.
         /// </summary>
         [XmlElement("CurrentPage")]
         public int PageNumber
         {
-            get { return _CurrentPageOfFile; }
-            set { _CurrentPageOfFile = value; }
+            get { return currentPageOfFile; }
+            set { currentPageOfFile = value; }
         }
 
         /// <summary>
-        /// Create a bookmark without specified data
+        /// Gets the name of the current file.
         /// </summary>
-        public Bookmark()
-        { }
-
-        /// <summary>
-        /// Create a bookmark with specified data
-        /// </summary>
-        /// <param name="Files">The files</param>
-        /// <param name="CurrentFile">Current file being read</param>
-        /// <param name="CurrentPageOfFile">Current page of file being read</param>
-        public Bookmark(String[] Files, int CurrentFile, int CurrentPageOfFile)
+        [XmlIgnore]
+        public string CurrentFileName
         {
-            this.Files = Files;
-            this.FileNumber = CurrentFile;
-            this.PageNumber = CurrentPageOfFile;
+            get { return GetCurrentFileName(); }
         }
 
         /// <summary>
-        /// Get the file name of the CurrentFile
+        /// Gets the location of the directory of the current file.
         /// </summary>
-        /// <returns>Filename of current file</returns>
-        public String GetCurrentFileName()
+        [XmlIgnore]
+        public string CurrentFileDirectoryLocation
         {
-            String FilePath = _Files[_CurrentFile];
-            String[] FilePathSplit = FilePath.Split('\\');
-            String FileNameWithExtension = FilePathSplit[FilePathSplit.Length - 1];
-            FilePathSplit = FileNameWithExtension.Split('.');
-            String Filename = "";
-            for (int i = 0; i < FilePathSplit.Length - 1; i++)
+            get { return GetCurrentFileDirectoryLocation(); }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether bookmark manager should delet this bookmark.
+        /// </summary>
+        [XmlIgnore]
+        public bool Delete { get; set; }
+
+        /// <summary>
+        /// Get the directory location of the CurrentFile.
+        /// </summary>
+        /// <returns>directory location of the current file.</returns>
+        public string GetCurrentFileDirectoryLocation()
+        {
+            string filePath = files[currentFile];
+            string[] filePathSplit = filePath.Split('\\');
+            string directory = "";
+            for (int i = 0; i < filePathSplit.Length - 1; i++)
             {
-                Filename += FilePathSplit[i];
+                directory += filePathSplit[i] + "\\";
             }
-            return Filename;
+
+            return directory;
         }
 
         /// <summary>
-        /// Get the directory location of the CurrentFile
+        /// Get the file name of the CurrentFile.
         /// </summary>
-        /// <returns>directory location of the current file</returns>
-        public String GetCurrentDirectoryLocation()
+        /// <returns>Filename of current file.</returns>
+        private string GetCurrentFileName()
         {
-            String FilePath = _Files[_CurrentFile];
-            String[] FilePathSplit = FilePath.Split('\\');
-            String Directory = "";
-            for (int i = 0; i < FilePathSplit.Length - 1; i++)
+            string filePath = files[currentFile];
+            string[] filePathSplit = filePath.Split('\\');
+            string fileNameWithExtension = filePathSplit[filePathSplit.Length - 1];
+            filePathSplit = fileNameWithExtension.Split('.');
+            string filename = "";
+            for (int i = 0; i < filePathSplit.Length - 1; i++)
             {
-                Directory += FilePathSplit[i] + "\\";
+                filename += filePathSplit[i];
             }
-            return Directory;
+
+            return filename;
         }
     }
 }

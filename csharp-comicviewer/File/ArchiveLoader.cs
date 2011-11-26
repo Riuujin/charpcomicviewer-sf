@@ -16,29 +16,37 @@
 //  You should have received a copy of the GNU General Public License
 //  along with csharp comicviewer.  If not, see <http://www.gnu.org/licenses/>.
 //-------------------------------------------------------------------------------------
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Csharp_comicviewer.Comic;
-using SevenZip;
 
 namespace Csharp_comicviewer
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using Csharp_comicviewer.Comic;
+    using SevenZip;
+
     /// <summary>
     /// Load archives using SevenZipSharp
     /// </summary>
-    class ArchiveLoader
+    public class ArchiveLoader
     {
-        private ArrayList SupportedImageFormats = new ArrayList();
+        /// <summary>
+        /// The supported image extensions
+        /// </summary>
+        private ArrayList supportedImageExtensions;
+
         // private InfoText_Form InfoText;
 
         /// <summary>
-        /// Load the dll required
+        /// Initializes a new instance of the ArchiveLoader class.
         /// </summary>
-        public ArchiveLoader()
+        /// <param name="supportedImageExtensions">The supported image extensions</param>
+        public ArchiveLoader(ArrayList supportedImageExtensions)
         {
+            this.supportedImageExtensions = supportedImageExtensions;
+
             //Get the location of the 7z dll (location .EXE is in)
             String executableName = System.Reflection.Assembly.GetExecutingAssembly().Location;
             FileInfo executableFileInfo = new FileInfo(executableName);
@@ -46,138 +54,137 @@ namespace Csharp_comicviewer
 
             //load the  dll
             SevenZipExtractor.SetLibraryPath(executableDirectoryName + "//7z.dll");
-
-            setSupported_image_formats();
         }
 
         /// <summary>
-        /// Set supported images types
+        /// Creates a ComicBook from an array of archive paths.
         /// </summary>
-        private void setSupported_image_formats()
+        /// <param name="archives">Array of archive paths</param>
+        /// <param name="comicbook">The ComicBook.</param>
+        /// <param name="hasFile"><value>True</value> if ComicBook has files otherwise <value>false</value>.</param>
+        /// <param name="error">An error message if any</param>
+        /// <returns><value>True</value> on succes otherwise <value>false</value>.</returns>
+        public bool Load(String[] archives, out ComicBook comicbook, out bool hasFile, out string error)
         {
-            SupportedImageFormats.Add(".jpg");
-            SupportedImageFormats.Add(".JPG");
-            SupportedImageFormats.Add(".bmp");
-            SupportedImageFormats.Add(".BMP");
-            SupportedImageFormats.Add(".png");
-            SupportedImageFormats.Add(".PNG");
-        }
-
-        /// <summary>
-        /// Creates a ComicBook from an array of archive paths
-        /// </summary>
-        /// <param name="Archives">Array of archive paths</param>
-        /// <returns>ComicBook</returns>
-        public bool Load(String[] Archives, out ComicBook Comicbook, out bool HasFile, out string Error)
-        {
-            Error = null;
-            HasFile = false;
-            Array.Sort(Archives);
-            Comicbook = new ComicBook();
-            String InfoTxt = "";
-            String CurrentFile;
-            List<byte[]> ImagesAsBytes = new List<byte[]>();
+            error = null;
+            hasFile = false;
+            Array.Sort(archives);
+            comicbook = new ComicBook();
+            String infoTxt = "";
+            String currentFile;
+            List<byte[]> imagesAsBytes = new List<byte[]>();
             MemoryStream ms = new MemoryStream();
-            SevenZipExtractor Extractor;
-            Boolean NextFile = false;
+            SevenZipExtractor extractor;
+            Boolean nextFile = false;
 
-            foreach (String Archive in Archives)
+            foreach (String archive in archives)
             {
-                if (!File.Exists(Archive))
+                if (!File.Exists(archive))
                 {
-                    Error = "One or more archives where not found";
+                    error = "One or more archives where not found";
                     return false;
                 }
             }
 
             try
             {
-                for (int y = 0; y < Archives.Length; y++)
+                for (int y = 0; y < archives.Length; y++)
                 {
                     //open archive
-                    CurrentFile = Archives[y];
-                    Extractor = new SevenZipExtractor(CurrentFile);
-                    String[] FileNames = Extractor.ArchiveFileNames.ToArray();
-                    Array.Sort(FileNames);
+                    currentFile = archives[y];
+                    extractor = new SevenZipExtractor(currentFile);
+                    string[] fileNames = extractor.ArchiveFileNames.ToArray();
+                    Array.Sort(fileNames);
 
                     //create ComicFiles for every single archive
-                    for (int i = 0; i < Extractor.FilesCount; i++)
+                    for (int i = 0; i < extractor.FilesCount; i++)
                     {
-                        for (int x = 0; x < SupportedImageFormats.Count; x++)
+                        for (int x = 0; x < supportedImageExtensions.Count; x++)
                         {
                             //if it is an image add it to arraylist
-                            if (FileNames[i].EndsWith(SupportedImageFormats[x].ToString()))
+                            if (fileNames[i].ToLower().EndsWith(supportedImageExtensions[x].ToString()))
                             {
                                 ms = new MemoryStream();
-                                Extractor.ExtractFile(FileNames[i], ms);
+                                extractor.ExtractFile(fileNames[i], ms);
                                 ms.Position = 0;
                                 try
                                 {
-                                    ImagesAsBytes.Add(ms.ToArray());
+                                    imagesAsBytes.Add(ms.ToArray());
                                 }
                                 catch (Exception)
                                 {
                                     ms.Close();
-                                    Error = "One or more files are corrupted, and where skipped";
+                                    error = "One or more files are corrupted, and where skipped";
                                 }
+
                                 ms.Close();
-                                NextFile = true;
+                                nextFile = true;
                             }
+
                             //if it is a txt file set it as InfoTxt
-                            else if (FileNames[i].EndsWith(".txt") || FileNames[i].EndsWith(".TXT"))
+                            else if (fileNames[i].EndsWith(".txt") || fileNames[i].EndsWith(".TXT"))
                             {
                                 ms = new MemoryStream();
-                                Extractor.ExtractFile(FileNames[i], ms);
+                                extractor.ExtractFile(fileNames[i], ms);
                                 ms.Position = 0;
                                 try
                                 {
                                     StreamReader sr = new StreamReader(ms);
-                                    InfoTxt = sr.ReadToEnd();
+                                    infoTxt = sr.ReadToEnd();
                                 }
                                 catch (Exception)
                                 {
                                     ms.Close();
-                                    Error = "One or more files are corrupted, and where skipped";
+                                    error = "One or more files are corrupted, and where skipped";
                                 }
+
                                 ms.Close();
-                                NextFile = true;
+                                nextFile = true;
                             }
-                            if (NextFile)
+
+                            if (nextFile)
                             {
-                                NextFile = false;
-                                x = SupportedImageFormats.Count;
+                                nextFile = false;
+                                x = supportedImageExtensions.Count;
                             }
                         }
                     }
+
                     //unlock files again
-                    Extractor.Dispose();
+                    extractor.Dispose();
 
                     //make a ComicFile, with either an InfoTxt or without
-                    if (ImagesAsBytes.Count > 0)
+                    if (imagesAsBytes.Count > 0)
                     {
-                        if (InfoTxt.Length > 0)
+                        if (infoTxt.Length > 0)
                         {
-                            Comicbook.CreateComicFile(CurrentFile, ImagesAsBytes, InfoTxt);
+                            comicbook.CreateComicFile(currentFile, imagesAsBytes, infoTxt);
+
                             //InfoText = new InfoText_Form(Archives[y], InfoTxt);
-                            InfoTxt = "";
+                            infoTxt = "";
                         }
                         else
-                            Comicbook.CreateComicFile(CurrentFile, ImagesAsBytes, null);
+                        {
+                            comicbook.CreateComicFile(currentFile, imagesAsBytes, null);
+                        }
                     }
-                    ImagesAsBytes.Clear();
+
+                    imagesAsBytes.Clear();
                 }
 
-                if (Comicbook.HasFiles())
+                if (comicbook.HasFiles())
                 {
-                    HasFile = true;
+                    hasFile = true;
                 }
                 else
-                    HasFile = false;
+                {
+                    hasFile = false;
+                }
 
                 //return the ComicBook on succes
                 return true;
             }
-            catch (Exception e)
+            catch
             {
                 //show error and return nothing
                 return false;

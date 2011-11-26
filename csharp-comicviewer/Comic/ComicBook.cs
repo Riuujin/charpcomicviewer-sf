@@ -16,250 +16,308 @@
 //  You should have received a copy of the GNU General Public License
 //  along with csharp comicviewer.  If not, see <http://www.gnu.org/licenses/>.
 //-------------------------------------------------------------------------------------
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using Csharp_comicviewer.Other;
 
 namespace Csharp_comicviewer.Comic
 {
+    using System;
+    using System.Collections.Generic;
+    using Csharp_comicviewer.Other;
+
     /// <summary>
-    /// A Collection of ComicFile's (archives)
+    /// A Collection of ComicFile's (archives).
     /// </summary>
     public class ComicBook
     {
-        List<ComicFile> Files = new List<ComicFile>();
-        int TotalPages;
-        int CurrentFile;
-        int CurrentPageOfFile;
-        int CurrentPageOfTotal;
+        /// <summary>
+        /// All the files in the comicbook.
+        /// </summary>
+        private List<ComicFile> files = new List<ComicFile>();
 
         /// <summary>
-        /// Create a ComicBook
+        /// The total pages in the comicbook.
+        /// </summary>
+        private int totalPages;
+
+        /// <summary>
+        /// Index of the current file in the list.
+        /// </summary>
+        private int currentFile;
+
+        /// <summary>
+        /// Index of the current page within the file.
+        /// </summary>
+        private int currentPageOfFile;
+
+        /// <summary>
+        /// Number of the current page of the total pages within the comicbook.
+        /// </summary>
+        private int currentPageOfTotal;
+
+        /// <summary>
+        /// Initializes a new instance of the ComicBook class.
         /// </summary>
         public ComicBook()
         {
-            TotalPages = 0;
-            CurrentFile = 0;
-            CurrentPageOfFile = 0;
-            CurrentPageOfTotal = 0;
+            this.totalPages = 0;
+            this.currentFile = 0;
+            this.currentPageOfFile = 0;
+            this.currentPageOfTotal = 0;
         }
 
         /// <summary>
-        /// Check if the ComicBook has ComicFiles
+        /// Gets or sets a value indicating whether comicfiles are archives
         /// </summary>
-        public Boolean HasFiles()
-        {
-            if (Files.Count > 0)
-                return true;
-            else
-                return false;
-        }
+        public bool FilesAreArchives { get; set; }
 
         /// <summary>
-        /// Count the total pages of the ComicBook (Pages of all ComicFiles)
+        /// Check if the ComicBook has ComicFiles.
         /// </summary>
-        private void CountTotalPages()
+        /// <returns>Returns <value>true</value> if comicbook has files else returns <value>false</value>.</returns>
+        public bool HasFiles()
         {
-            TotalPages = 0;
-            for (int i = 0; i < Files.Count; i++)
+            if (this.files.Count > 0)
             {
-                TotalPages += Files[i].TotalPages.Value;
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
         /// <summary>
-        /// Get the total pages of the ComicBook (Pages of all ComicFiles)
+        /// Get the total pages of the ComicBook (Pages of all ComicFiles).
         /// </summary>
-        /// <returns>The total pages of the ComicBook (Pages of all ComicFiles)</returns>
+        /// <returns>The total pages of the ComicBook (Pages of all ComicFiles).</returns>
         public int GetTotalPages()
         {
-            if (TotalPages == 0)
-                CountTotalPages();
-            return TotalPages;
+            if (this.totalPages == 0)
+            { 
+                CountTotalPages(); 
+            }
+
+            return this.totalPages;
         }
 
         /// <summary>
-        /// Get the current of total pages of the ComicBook
+        /// Get the current of total pages of the ComicBook.
         /// </summary>
-        /// <returns>The current of  total pages of the ComicBook</returns>
+        /// <returns>The current of  total pages of the ComicBoo.k</returns>
         public int GetCurrentPageOfTotal()
         {
             if (GetCurrentFile() != 0)
             {
-                CurrentPageOfTotal = CurrentPageOfFile;
+                this.currentPageOfTotal = this.currentPageOfFile;
                 for (int i = 0; i < GetCurrentFile(); i++)
                 {
-                    CurrentPageOfTotal += Files[i].TotalPages.Value;
+                    this.currentPageOfTotal += this.files[i].TotalPages.Value;
                 }
             }
             else
-                CurrentPageOfTotal = CurrentPageOfFile;
-            return CurrentPageOfTotal;
+            {
+                this.currentPageOfTotal = this.currentPageOfFile;
+            }
+
+            return this.currentPageOfTotal;
         }
 
         /// <summary>
-        /// Get the current of total pages of the ComicFile
+        /// Get the current of total pages of the ComicFile.
         /// </summary>
-        /// <param name="FilesIndex">The number of the ComicFile</param>
-        /// <returns>The current of  total pages of the ComicFile</returns>
-        public int GetTotalPagesOfFile(int FilesIndex)
+        /// <param name="filesIndex">The number of the ComicFile.</param>
+        /// <returns>The current of  total pages of the ComicFile.</returns>
+        public int GetTotalPagesOfFile(int filesIndex)
         {
-            return Files[FilesIndex].TotalPages.Value;
+            return this.files[filesIndex].TotalPages.Value;
         }
 
         /// <summary>
-        /// Get the total number of ComicFiles of the ComicBook
+        /// Get the total number of ComicFiles of the ComicBook.
         /// </summary>
-        /// <returns>Total files in the ComicBook</returns>
+        /// <returns>Total files in the ComicBook.</returns>
         public int GetTotalFiles()
         {
-            return Files.Count;
+            return files.Count;
         }
 
         /// <summary>
-        /// Get the index of the current ComicFile of the ComicBook
+        /// Get the index of the current ComicFile of the ComicBook.
         /// </summary>
-        /// <returns>The index of the current ComicFile in the ComicBook</returns>
+        /// <returns>The index of the current ComicFile in the ComicBook.</returns>
         public int GetCurrentFile()
         {
-            return CurrentFile;
+            return this.currentFile;
         }
 
         /// <summary>
-        /// Get a page (image) of the ComicBook
+        /// Gets the filename of the current active file.
         /// </summary>
-        /// <param name="FileNumber">Index number of the ComicFile</param>
-        /// <param name="PageNumber">Index number of page from the ComicFile</param>
-        /// <returns>The requested image</returns>
-        public byte[] GetPage(int FileNumber, int PageNumber)
+        /// <returns>Filename of the current file.</returns>
+        public string GetCurrentFileName()
+        {
+            string filePath = this.files[GetCurrentFile()].Location;
+            string[] filePathSplit = filePath.Split('\\');
+            string fileNameWithExtension = filePathSplit[filePathSplit.Length - 1];
+            return fileNameWithExtension;
+        }
+
+        /// <summary>
+        /// Get a page (image) of the ComicBook.
+        /// </summary>
+        /// <param name="fileNumber">Index number of the ComicFile.</param>
+        /// <param name="pageNumber">Index number of page from the ComicFile.</param>
+        /// <returns>The requested image.</returns>
+        public byte[] GetPage(int fileNumber, int pageNumber)
         {
             if (GetTotalFiles() > 0)
             {
-                if (Files[FileNumber].GetPage(PageNumber) != null)
+                if (this.files[fileNumber].GetPage(pageNumber) != null)
                 {
-                    CurrentFile = FileNumber;
-                    CurrentPageOfFile = PageNumber;
-                    return Files[FileNumber].GetPage(PageNumber);
+                    this.currentFile = fileNumber;
+                    this.currentPageOfFile = pageNumber;
+                    return this.files[fileNumber].GetPage(pageNumber);
                 }
                 else
+                {
                     return null;
+                }
             }
             else
+            {
                 return null;
+            }
         }
 
         /// <summary>
-        /// Get the information text from a ComicFile
+        /// Get the information text from a ComicFile.
         /// </summary>
-        /// <param name="FileNumber">Index number of the ComicFile</param>
+        /// <param name="fileNumber">Index number of the ComicFile.</param>
         /// <returns>The text</returns>
-        public String GetInfoText(int FileNumber)
+        public string GetInfoText(int fileNumber)
         {
-            return Files[CurrentFile].InfoText;
+            return this.files[currentFile].InfoText;
         }
 
         /// <summary>
-        /// Get the information needed to save the ComicBook as bookmark or resume
+        /// Get the information needed to save the ComicBook as bookmark or resume.
         /// </summary>
-        /// <returns>Bookmark</returns>
+        /// <returns>Bookmark.</returns>
         public Bookmark GetBookmark()
         {
-            Bookmark Data;
-            String[] FileLocations = new String[Files.Count];
-            for (int i = 0; i < Files.Count; i++)
+            Bookmark data;
+            string[] fileLocations = new string[this.files.Count];
+            for (int i = 0; i < this.files.Count; i++)
             {
-                FileLocations[i] = Files[i].Location;
+                fileLocations[i] = this.files[i].Location;
             }
-            Data = new Bookmark(FileLocations, CurrentFile, CurrentPageOfFile);
-            return Data;
+
+            data = new Bookmark(fileLocations, this.currentFile, this.currentPageOfFile);
+            return data;
         }
 
         /// <summary>
-        /// Create a ComicFile using an archive
+        /// Create a ComicFile using an archive.
         /// </summary>
-        /// <param name="Location">Location of the ComicFile</param>
-        /// <param name="Images">Images inside the ComicFile</param>
-        /// <param name="InfoText">Information text if any in the ComicFile</param>
-        public void CreateComicFile(String Location, List<byte[]> Images, String InfoText)
+        /// <param name="location">Location of the ComicFile.</param>
+        /// <param name="images">Images inside the ComicFile.</param>
+        /// <param name="infoText">Information text if any in the ComicFile.</param>
+        public void CreateComicFile(string location, List<byte[]> images, string infoText)
         {
-            ComicFile File = new ComicFile(Location, Images, InfoText);
-            Files.Add(File);
+            ComicFile file = new ComicFile(location, images, infoText);
+            this.files.Add(file);
         }
 
         /// <summary>
-        /// Create a ComicFile using loose images
+        /// Create a ComicFile using loose images.
         /// </summary>
-        /// <param name="Location">Locations of the Files</param>
-        /// <param name="Images">The Images</param>
-        /// <param name="InfoText">Information text if any</param>
-        public void CreateComicFile(List<String> Location, List<byte[]> Images, String InfoText)
+        /// <param name="location">Locations of the Files.</param>
+        /// <param name="images">The Images.</param>
+        /// <param name="infoText">Information text if any.</param>
+        public void CreateComicFile(List<string> location, List<byte[]> images, string infoText)
         {
-            ComicFile File = new ComicFile(Location[0], Images, InfoText);
-            Files.Add(File);
+            ComicFile file = new ComicFile(location[0], images, infoText);
+            this.files.Add(file);
         }
 
         /// <summary>
-        /// Get the next page of the ComicBook
+        /// Get the next page of the ComicBook.
         /// </summary>
-        /// <returns>The next page of the ComicBook</returns>
+        /// <returns>The next page of the ComicBook.</returns>
         public byte[] NextPage()
         {
-            byte[] Page = null;
-            if (CurrentPageOfFile + 1 < GetTotalPagesOfFile(CurrentFile))
+            byte[] page = null;
+            if (this.currentPageOfFile + 1 < GetTotalPagesOfFile(this.currentFile))
             {
-                Page = GetPage(CurrentFile, CurrentPageOfFile + 1);
+                page = GetPage(this.currentFile, this.currentPageOfFile + 1);
             }
-            else if (CurrentFile < Files.Count - 1)
+            else if (this.currentFile < this.files.Count - 1)
             {
-                Page = GetPage(CurrentFile + 1, 0);
+                page = GetPage(this.currentFile + 1, 0);
+            }
 
+            if (page != null)
+            {
+                this.currentPageOfTotal++;
             }
-            if (Page != null)
-                CurrentPageOfTotal++;
-            return Page;
+
+            return page;
         }
 
         /// <summary>
-        /// Get the previous page of the ComicBook
+        /// Get the previous page of the ComicBook.
         /// </summary>
-        /// <returns>The previous page of the ComicBook</returns>
+        /// <returns>The previous page of the ComicBook.</returns>
         public byte[] PreviousPage()
         {
-            byte[] Page = null;
-            if (CurrentPageOfFile - 1 >= 0)
+            byte[] page = null;
+            if (this.currentPageOfFile - 1 >= 0)
             {
-                Page = GetPage(CurrentFile, CurrentPageOfFile - 1);
+                page = GetPage(this.currentFile, this.currentPageOfFile - 1);
             }
-            else if (CurrentFile > 0)
+            else if (this.currentFile > 0)
             {
-                Page = GetPage(CurrentFile - 1, GetTotalPagesOfFile(CurrentFile - 1) - 1);
+                page = GetPage(this.currentFile - 1, GetTotalPagesOfFile(this.currentFile - 1) - 1);
+            }
 
+            if (page != null)
+            {
+                this.currentPageOfTotal--;
             }
-            if (Page != null)
-                CurrentPageOfTotal--;
-            return Page;
+
+            return page;
         }
 
         /// <summary>
-        /// Get the current page of the ComicBook
+        /// Get the current page of the ComicBook.
         /// </summary>
-        /// <returns>The current page of the ComicBook</returns>
+        /// <returns>The current page of the ComicBook.</returns>
         public byte[] GetCurrentPage()
         {
-            byte[] Page = null;
-            Page = GetPage(CurrentFile, CurrentPageOfFile);
-            return Page;
+            byte[] page = null;
+            page = GetPage(this.currentFile, this.currentPageOfFile);
+            return page;
         }
 
         /// <summary>
-        /// Get the file location of a ComicFile
+        /// Get the file location of a ComicFile.
         /// </summary>
-        /// <param name="FileNumber">Index of the ComicFile</param>
-        /// <returns>The file location of the ComicFile</returns>
-        public String GetFileLocation(int FileNumber)
+        /// <param name="fileNumber">Index of the ComicFile.</param>
+        /// <returns>The file location of the ComicFile.</returns>
+        public string GetFileLocation(int fileNumber)
         {
-            return Files[FileNumber].Location;
+            return this.files[fileNumber].Location;
+        }
+
+        /// <summary>
+        /// Count the total pages of the ComicBook (Pages of all ComicFiles).
+        /// </summary>
+        private void CountTotalPages()
+        {
+            totalPages = 0;
+            for (int i = 0; i < this.files.Count; i++)
+            {
+                totalPages += this.files[i].TotalPages.Value;
+            }
         }
     }
 }

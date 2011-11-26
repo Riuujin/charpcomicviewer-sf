@@ -29,39 +29,19 @@ namespace Csharp_comicviewer.Comic
     {
         private List<byte[]> ImagesAsBytes = new List<byte[]>();
 
-        public string FileName { get; set; }
-
-        private List<String> Locations;
-
         /// <summary>
         /// Create a ComicFile
         /// </summary>
-        /// <param name="locations">Location of the loose images</param>
-        /// <param name="images">The images</param>
-        /// <param name="infoText">Information text</param>
-        public ComicFile(string fileName, List<String> locations, List<byte[]> images, String infoText)
+        /// <param name="location">Location of the archive</param>
+        /// <param name="images">The images of the archive</param>
+        /// <param name="infoText">Information text within the archive</param>
+        public ComicFile(String location, List<byte[]> images, String infoText)
         {
-            FileName = fileName;
-            Locations = locations;
-            ImagesAsBytes.AddRange(images);
+            this.Location = location;
+            this.ImagesAsBytes.AddRange(images);
             CountTotalPages();
             if (infoText != null)
-                InfoText = infoText;
-        }
-
-        /// <summary>
-        /// Create a ComicFile
-        /// </summary>
-        /// <param name="Location">Location of the archive</param>
-        /// <param name="Images">The images of the archive</param>
-        /// <param name="InfoText">Information text within the archive</param>
-        public ComicFile(String Location, List<byte[]> Images, String InfoText)
-        {
-            this.Location = Location;
-            this.ImagesAsBytes.AddRange(Images);
-            CountTotalPages();
-            if (InfoText != null)
-                this.InfoText = InfoText;
+                this.InfoText = infoText;
         }
 
         /// <summary>
@@ -71,8 +51,6 @@ namespace Csharp_comicviewer.Comic
         {
             TotalPages = ImagesAsBytes.Count;
         }
-
-
 
         /// <summary>
         /// Get a page(image)

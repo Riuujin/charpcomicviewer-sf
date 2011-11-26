@@ -130,6 +130,7 @@ namespace Csharp_comicviewer
         /// <returns>The next file path</returns>
         private String nextFile(String currentfile)
         {
+            //TODO add images
             String dir = Directory.GetParent(currentfile).FullName;
             String[] cbr = Directory.GetFiles(dir, "*.cbr");
             String[] cbz = Directory.GetFiles(dir, "*.cbz");

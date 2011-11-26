@@ -101,12 +101,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InfoText_Form.resx</DependentUpon>
     </None>
-    <None Include="Gui\MannageBookmarks_Form.cs">
-      <SubType>Form</SubType>
-    </None>
-    <None Include="Gui\MannageBookmarks_Form.Designer.cs">
-      <DependentUpon>MannageBookmarks_Form.cs</DependentUpon>
-    </None>
+    <Compile Include="File\ImageLoader.cs" />
     <Compile Include="File\FileLoader.cs" />
     <Compile Include="File\FileNextPrevious.cs" />
     <Compile Include="Comic\ComicBook.cs" />
@@ -124,6 +119,9 @@
     <Compile Include="WPF\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPF\BookmarkManager.xaml.cs">
+      <DependentUpon>BookmarkManager.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF\MainDisplay.xaml.cs">
       <DependentUpon>MainDisplay.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -131,9 +129,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Gui\Display_Form.resx">
       <DependentUpon>Display_Form.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Gui\MannageBookmarks_Form.resx">
-      <DependentUpon>MannageBookmarks_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Gui\InfoText_Form.resx">
       <DependentUpon>InfoText_Form.cs</DependentUpon>
@@ -196,6 +191,10 @@
     <Page Include="WPF\About.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF\BookmarkManager.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="WPF\MainDisplay.xaml">
       <SubType>Designer</SubType>
