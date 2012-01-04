@@ -35,17 +35,26 @@ namespace Csharp_comicviewer.WPF
     using System.Collections.Generic;
 
 
-    /// <summary>
-    /// Interaction logic for Window2.xaml
-    /// </summary>
+	/// <summary>
+	/// Interaction logic for Window2.xaml
+	/// </summary>
     public partial class MainDisplay : Window
     {
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MainDisplay"/> class.
+		/// </summary>
+		/// <param name="OpeningFile">The opening file.</param>
         public MainDisplay(string OpeningFile)
         {
             InitializeComponent();
             this.OpeningFile = OpeningFile;
         }
 
+		/// <summary>
+		/// Handles the Loaded event of the MainDisplay control.
+		/// </summary>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
         private void MainDisplay_Loaded(object sender, RoutedEventArgs e)
         {
             //Ensure that the window is active on start
@@ -111,8 +120,11 @@ namespace Csharp_comicviewer.WPF
             }
         }
 
-
-
+		/// <summary>
+		/// Exit the applications.
+		/// </summary>
+		/// <param name="sender">The sender.</param>
+		/// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void ApplicationExit(object sender, EventArgs e)
         {
             SaveResumeToConfiguration();
@@ -120,6 +132,9 @@ namespace Csharp_comicviewer.WPF
             Application.Current.Shutdown();
         }
 
+		/// <summary>
+		/// Loads the configuration.
+		/// </summary>
         private void LoadConfiguration()
         {
             //xml config load
@@ -147,6 +162,10 @@ namespace Csharp_comicviewer.WPF
             }
         }
 
+		/// <summary>
+		/// Saves the configuration.
+		/// </summary>
+		/// <returns><c>True</c> if succes, otherwise returns <c>false</c>.</returns>
         private Boolean SaveConfiguration()
         {
             //xml config save
@@ -170,6 +189,9 @@ namespace Csharp_comicviewer.WPF
 
         }
 
+		/// <summary>
+		/// Saves the resume to configuration.
+		/// </summary>
         private void SaveResumeToConfiguration()
         {
             if (ComicBook != null && ComicBook.GetTotalFiles() != 0)
@@ -198,7 +220,7 @@ namespace Csharp_comicviewer.WPF
                 {
                     if (Configuration.Bookmarks.Count > 0)
                     {
-                        foreach(Bookmark bookmark in Configuration.Bookmarks)
+                        foreach (Bookmark bookmark in Configuration.Bookmarks)
                         {
                             String[] Files = bookmark.Files;
                             MenuItem Bookmark = new MenuItem();
@@ -332,7 +354,7 @@ namespace Csharp_comicviewer.WPF
                 ImageEdit.SetScreenWidth((int)ScrollField.ViewportWidth);
 
                 if (DisplayedImage.Source != null)
-                    DisplayImage(ComicBook.GetCurrentPage(), ImageLocation.Top);
+                    DisplayImage(ComicBook.GetCurrentPage(), ImageStartPosition.Top);
 
             }
         }
@@ -347,7 +369,7 @@ namespace Csharp_comicviewer.WPF
                     byte[] image = ComicBook.GetPage(0, 0);
                     if (image != null)
                     {
-                        DisplayImage(image, ImageLocation.Top);
+                        DisplayImage(image, ImageStartPosition.Top);
                     }
                 }
             }
@@ -360,7 +382,7 @@ namespace Csharp_comicviewer.WPF
                     byte[] image = ComicBook.GetPage(ComicBook.GetCurrentFile(), 0);
                     if (image != null)
                     {
-                        DisplayImage(image, ImageLocation.Top);
+                        DisplayImage(image, ImageStartPosition.Top);
                     }
                 }
             }
@@ -373,7 +395,7 @@ namespace Csharp_comicviewer.WPF
                     byte[] image = ComicBook.GetPage(ComicBook.GetTotalFiles() - 1, ComicBook.GetTotalPagesOfFile(ComicBook.GetTotalFiles() - 1) - 1);
                     if (image != null)
                     {
-                        DisplayImage(image, ImageLocation.Top);
+                        DisplayImage(image, ImageStartPosition.Top);
                     }
                 }
             }
@@ -386,7 +408,7 @@ namespace Csharp_comicviewer.WPF
                     byte[] image = ComicBook.GetPage(ComicBook.GetCurrentFile(), ComicBook.GetTotalPagesOfFile(ComicBook.GetCurrentFile()) - 1);
                     if (image != null)
                     {
-                        DisplayImage(image, ImageLocation.Top);
+                        DisplayImage(image, ImageStartPosition.Top);
                     }
                 }
             }
@@ -471,6 +493,11 @@ namespace Csharp_comicviewer.WPF
             }
         }
 
+		/// <summary>
+		/// Called when mouse wheel scrolls.
+		/// </summary>
+		/// <param name="sender">The sender.</param>
+		/// <param name="e">The <see cref="System.Windows.Input.MouseWheelEventArgs"/> instance containing the event data.</param>
         private void OnMouseWheel(object sender, MouseWheelEventArgs e)
         {
 
@@ -482,7 +509,7 @@ namespace Csharp_comicviewer.WPF
                 if (DisplayedImage.Width > ScrollField.ViewportWidth)
                 {
                     //image widther then screen
-                    if (ScrollField.HorizontalOffset == ScrollField.ScrollableWidth)
+					if (ScrollField.HorizontalOffset == ScrollField.ScrollableWidth && ScrollField.VerticalOffset == ScrollField.ScrollableHeight)
                     {
                         //Can count down for next page
                         NextPageBoolean = true;
@@ -765,7 +792,7 @@ namespace Csharp_comicviewer.WPF
 
 
 
-        public void DisplayImage(byte[] ImageAsByteArray, ImageLocation scrollTo)
+        public void DisplayImage(byte[] ImageAsByteArray, ImageStartPosition scrollTo)
         {
             // If page information is displayed update it with new information
             if (PageInfoBox.Visibility == System.Windows.Visibility.Visible)
@@ -793,25 +820,15 @@ namespace Csharp_comicviewer.WPF
                     }
             }
 
-
-            BitmapImage bitmapimage = new BitmapImage();
-            bitmapimage.BeginInit();
-            MemoryStream stream = new MemoryStream(ImageAsByteArray);
-            bitmapimage.StreamSource = stream;
-            bitmapimage.EndInit();
+            BitmapImage bitmapimage = GetImage(ImageAsByteArray);
 
             if (Configuration.OverideHeight || Configuration.OverideWidth)
             {
                 ImageAsByteArray = ImageEdit.ResizeImage(ImageAsByteArray, new System.Drawing.Size(bitmapimage.PixelWidth, (int)ScrollField.ViewportHeight), Configuration.OverideHeight, Configuration.OverideWidth);
-                stream.Close();
-                bitmapimage = new BitmapImage();
-                bitmapimage.BeginInit();
-                stream = new MemoryStream(ImageAsByteArray);
-                bitmapimage.StreamSource = stream;
-                bitmapimage.EndInit();
+                bitmapimage = GetImage(ImageAsByteArray);
             }
-            DisplayedImage.Source = bitmapimage;
 
+            DisplayedImage.Source = bitmapimage;
 
             DisplayedImage.Width = bitmapimage.PixelWidth;
             DisplayedImage.Height = bitmapimage.PixelHeight;
@@ -834,6 +851,45 @@ namespace Csharp_comicviewer.WPF
                 DisplayedImage.VerticalAlignment = VerticalAlignment.Top;
             }
             ShowPageInformation();
+        }
+
+        private BitmapImage GetImage(byte[] ImageAsByteArray)
+        {
+            BitmapImage bi = new BitmapImage();
+
+            try
+            {
+                bi.CacheOption = BitmapCacheOption.OnLoad;
+                MemoryStream ms = new MemoryStream(ImageAsByteArray);
+                ms.Position = 0;
+                bi.BeginInit();
+                bi.StreamSource = ms;
+                bi.EndInit();
+            }
+            catch
+            {
+                try
+                {
+                    //If it fails the normal way try it again with a convert (possible quality loss.
+                    System.Drawing.ImageConverter ic = new System.Drawing.ImageConverter();
+                    System.Drawing.Image img = (System.Drawing.Image)ic.ConvertFrom(ImageAsByteArray);
+                    System.Drawing.Bitmap bitmap1 = new System.Drawing.Bitmap(img);
+                    MemoryStream ms = new MemoryStream();
+                    bitmap1.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    ms.Position = 0;
+                    bi = new BitmapImage();
+                    bi.CacheOption = BitmapCacheOption.OnLoad;
+                    bi.BeginInit();
+                    bi.StreamSource = ms;
+                    bi.EndInit();
+                }
+                catch
+                {
+                    ShowMessage("Could not load image.");
+                }
+            }
+            return bi;
+
         }
 
         /// <summary>
@@ -878,7 +934,7 @@ namespace Csharp_comicviewer.WPF
                 Mouse.OverrideCursor = Cursors.Wait;
                 LoadFile(Files, 0, 0);
             }
-            catch { }
+            catch (Exception e) { }
             Mouse.OverrideCursor = Cursors.Arrow;
 
         }
@@ -945,7 +1001,7 @@ namespace Csharp_comicviewer.WPF
             if (FileLoader.HasFile)
             {
                 ComicBook = FileLoader.ComicBook;
-                DisplayImage(ComicBook.GetPage(FileNumber, PageNumber), ImageLocation.Top);
+                DisplayImage(ComicBook.GetPage(FileNumber, PageNumber), ImageStartPosition.Top);
                 if (!String.IsNullOrEmpty(FileLoader.Error))
                     ShowMessage(FileLoader.Error);
             }
@@ -990,7 +1046,7 @@ namespace Csharp_comicviewer.WPF
                 ShowMessage("Normal mode.");
             }
             if (DisplayedImage.Source != null)
-                DisplayImage(ComicBook.GetCurrentPage(), ImageLocation.Top);
+                DisplayImage(ComicBook.GetCurrentPage(), ImageStartPosition.Top);
 
         }
 
@@ -1018,11 +1074,10 @@ namespace Csharp_comicviewer.WPF
                     }
                     else
                     {
-                        // TODO make it work with secondary
                         byte[] image = ComicBook.GetPage(ComicBook.GetCurrentFile() + 1, 0);
                         if (image != null)
                         {
-                            DisplayImage(image, ImageLocation.Top);
+                            DisplayImage(image, ImageStartPosition.Top);
                         }
                     }
                 }
@@ -1051,18 +1106,15 @@ namespace Csharp_comicviewer.WPF
                     }
                     else
                     {
-                        // TODO make it work with secondary
                         byte[] image = ComicBook.GetPage(ComicBook.GetCurrentFile() - 1, ComicBook.GetTotalPagesOfFile(ComicBook.GetCurrentFile() - 1) - 1);
                         if (image != null)
                         {
-                            DisplayImage(image, ImageLocation.Bottom);
+                            DisplayImage(image, ImageStartPosition.Bottom);
                         }
                     }
                 }
             }
         }
-
-        #endregion
 
         /// <summary>
         /// Go to next page
@@ -1076,7 +1128,7 @@ namespace Csharp_comicviewer.WPF
                     byte[] image = ComicBook.NextPage();
                     if (image != null)
                     {
-                        DisplayImage(image, ImageLocation.Top);
+                        DisplayImage(image, ImageStartPosition.Top);
                     }
                 }
             }
@@ -1094,30 +1146,57 @@ namespace Csharp_comicviewer.WPF
                     byte[] image = ComicBook.PreviousPage();
                     if (image != null)
                     {
-                        DisplayImage(image, ImageLocation.Bottom);
+                        DisplayImage(image, ImageStartPosition.Bottom);
                     }
                 }
             }
         }
-        #region Properties
-        private string OpeningFile
+
+		#endregion
+		
+		#region Properties
+		/// <summary>
+		/// Gets or sets the opening file.
+		/// </summary>
+		/// <value>
+		/// The opening file.
+		/// </value>
+		private string OpeningFile
         {
             get;
             set;
         }
 
+		/// <summary>
+		/// Gets or sets the comic book.
+		/// </summary>
+		/// <value>
+		/// The comic book.
+		/// </value>
         private ComicBook ComicBook
         {
             get;
             set;
         }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether to go to next page.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if go to next page; otherwise, <c>false</c>.
+		/// </value>
         private bool GoToNextPage
         {
             get;
             set;
         }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether to go to previous page.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if go to previous page; otherwise, <c>false</c>.
+		/// </value>
         private bool GoToPreviousPage
         {
             get;
@@ -1126,6 +1205,12 @@ namespace Csharp_comicviewer.WPF
 
         private int _NextPageCount = 2;
 
+		/// <summary>
+		/// Gets or sets the next page count.
+		/// </summary>
+		/// <value>
+		/// The next page count.
+		/// </value>
         private int NextPageCount
         {
             get
@@ -1140,6 +1225,12 @@ namespace Csharp_comicviewer.WPF
 
         private int _PreviousPageCount = 2;
 
+		/// <summary>
+		/// Gets or sets the previous page count.
+		/// </summary>
+		/// <value>
+		/// The previous page count.
+		/// </value>
         private int PreviousPageCount
         {
             get
@@ -1152,109 +1243,211 @@ namespace Csharp_comicviewer.WPF
             }
         }
 
+		/// <summary>
+		/// Gets or sets the image edit.
+		/// </summary>
+		/// <value>
+		/// The image edit.
+		/// </value>
         private ImageEdit ImageEdit
         {
             get;
             set;
         }
 
+		/// <summary>
+		/// Gets or sets the file loader.
+		/// </summary>
+		/// <value>
+		/// The file loader.
+		/// </value>
         private FileLoader FileLoader
         {
             get;
             set;
         }
 
+		/// <summary>
+		/// Gets or sets the show message timer.
+		/// </summary>
+		/// <value>
+		/// The show message timer.
+		/// </value>
         private DispatcherTimer ShowMessageTimer
         {
             get;
             set;
         }
 
+		/// <summary>
+		/// Gets or sets the page information timer.
+		/// </summary>
+		/// <value>
+		/// The page information timer.
+		/// </value>
         private DispatcherTimer PageInformationTimer
         {
             get;
             set;
         }
 
-        public Configuration Configuration
-        {
-            get;
-            private set;
-        }
-
+		/// <summary>
+		/// Gets or sets the last mouse move.
+		/// </summary>
+		/// <value>
+		/// The last mouse move.
+		/// </value>
         private DateTime LastMouseMove
         {
             get;
             set;
         }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether mouse is hidden.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if mouse is hidden; otherwise, <c>false</c>.
+		/// </value>
         private bool MouseIsHidden
         {
             get;
             set;
         }
 
+		/// <summary>
+		/// Gets or sets the scroll value vertical.
+		/// </summary>
+		/// <value>
+		/// The scroll value vertical.
+		/// </value>
         private int scrollValueVertical
         {
             get;
             set;
         }
 
+		/// <summary>
+		/// Gets or sets the scroll value horizontal.
+		/// </summary>
+		/// <value>
+		/// The scroll value horizontal.
+		/// </value>
         private int scrollValueHorizontal
         {
             get;
             set;
         }
 
-        public DispatcherTimer MouseIdle
-        {
-            get;
-            set;
-        }
-
+		/// <summary>
+		/// Gets or sets the current mouse position.
+		/// </summary>
+		/// <value>
+		/// The current mouse position.
+		/// </value>
         private Point CurrentMousePosition
         {
             get;
             set;
         }
 
+		/// <summary>
+		/// Gets or sets the mouse X.
+		/// </summary>
+		/// <value>
+		/// The mouse X.
+		/// </value>
         private double MouseX
         {
             get;
             set;
         }
 
+		/// <summary>
+		/// Gets or sets the mouse Y.
+		/// </summary>
+		/// <value>
+		/// The mouse Y.
+		/// </value>
         private double MouseY
         {
             get;
             set;
         }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether mouse drag.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if mouse drag; otherwise, <c>false</c>.
+		/// </value>
         private bool MouseDrag
         {
             get;
             set;
         }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether going to next page is allowed.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if going to next page is allowed; otherwise, <c>false</c>.
+		/// </value>
         private bool NextPageBoolean
         {
             get;
             set;
         }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether going to previous page is allowed.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if going to previous page is allowed; otherwise, <c>false</c>.
+		/// </value>
         private bool PreviousPageBoolean
         {
             get;
             set;
         }
 
+		/// <summary>
+		/// Gets or sets the timeout to hide.
+		/// </summary>
+		/// <value>
+		/// The timeout to hide.
+		/// </value>
         private TimeSpan TimeoutToHide
         {
             get;
             set;
         }
 
-        public enum ImageLocation
+		/// <summary>
+		/// Gets or sets the mouse idle.
+		/// </summary>
+		/// <value>
+		/// The mouse idle.
+		/// </value>
+		public DispatcherTimer MouseIdle
+		{
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// Gets the configuration.
+		/// </summary>
+		public Configuration Configuration
+		{
+			get;
+			private set;
+		}
+
+		/// <summary>
+		/// Start position on the image
+		/// </summary>
+        public enum ImageStartPosition
         {
             Top,
             Bottom

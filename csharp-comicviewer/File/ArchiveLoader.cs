@@ -53,7 +53,14 @@ namespace Csharp_comicviewer
             String executableDirectoryName = executableFileInfo.DirectoryName;
 
             //load the  dll
-            SevenZipExtractor.SetLibraryPath(executableDirectoryName + "//7z.dll");
+            try
+            {
+                SevenZipExtractor.SetLibraryPath(executableDirectoryName + "//7z.dll");
+            }
+            catch (Exception e)
+            {
+                
+            }
         }
 
         /// <summary>

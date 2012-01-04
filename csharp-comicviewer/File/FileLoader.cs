@@ -31,27 +31,27 @@ namespace Csharp_comicviewer
             this.ComicBook = null;
             this.HasFile = false;
             this.Error = null;
-            this.Archive = true;
+            this.FileType = FileType.Archive;
             SetSupportedImageExtensions();
         }
 
         public bool Load(string[] files)
         {
-            this.Archive = true;
+            this.FileType = FileType.Archive;
             bool ReturnValue = false;
 
             foreach (string file in files)
             {
-                for(int i = 0; i< SupportedImageExtensions.Count;i++)
+                for (int i = 0; i < SupportedImageExtensions.Count; i++)
                 {
                     if (file.ToLower().EndsWith(SupportedImageExtensions[i].ToString()))
                     {
-                        this.Archive = false;
+                        this.FileType = FileType.Images;
                         break;
                     }
                     else
                     {
-                        if (i == SupportedImageExtensions.Count -1 && this.Archive == false)
+                        if (i == SupportedImageExtensions.Count - 1 && this.FileType == FileType.Images)
                         {
                             this.HasFile = false;
                             this.Error = "Please select only archives or only images.";
@@ -61,7 +61,7 @@ namespace Csharp_comicviewer
                 }
             }
 
-            if (Archive)
+            if (FileType == FileType.Archive)
             {
                 ComicBook comicbook;
                 bool hasfile;
@@ -74,9 +74,8 @@ namespace Csharp_comicviewer
                 this.ComicBook.FilesAreArchives = true;
                 this.HasFile = hasfile;
                 this.Error = error;
-                return ReturnValue;
             }
-            else
+            else if (FileType == FileType.Images)
             {
                 ComicBook comicbook;
                 bool hasfile;
@@ -89,15 +88,16 @@ namespace Csharp_comicviewer
                 this.ComicBook.FilesAreArchives = false;
                 this.HasFile = hasfile;
                 this.Error = error;
-                return ReturnValue;
             }
+
+            return ReturnValue;
         }
 
         /// <summary>
-        /// Get or set to load an archive
+        /// Get or set the type of file to load.
         /// </summary>
-        /// <value><c>true</c> if it should use <see cref="LoadArchives"/>, else <c>false</c> if it should load loose images</value>
-        public bool Archive
+        /// <value>The type of file.</value>
+        public FileType FileType
         {
             get;
             set;
@@ -145,5 +145,11 @@ namespace Csharp_comicviewer
             SupportedImageExtensions.Add(".png");
         }
 
+    }
+
+    public enum FileType
+    {
+        Archive = 0,
+        Images
     }
 }
