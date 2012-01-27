@@ -14,6 +14,18 @@
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>1024</FileAlignment>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <NoStdLib>False</NoStdLib>
+    <DebugType>Full</DebugType>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <SignAssembly>False</SignAssembly>
+    <DelaySign>False</DelaySign>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <RunCodeAnalysis>False</RunCodeAnalysis>
+    <RunSourceAnalysis>False</RunSourceAnalysis>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -26,20 +38,8 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <NoStdLib>False</NoStdLib>
-    <DebugType>Full</DebugType>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <DebugSymbols>true</DebugSymbols>
-    <SignAssembly>False</SignAssembly>
-    <DelaySign>False</DelaySign>
-    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <RunCodeAnalysis>False</RunCodeAnalysis>
-    <RunSourceAnalysis>False</RunSourceAnalysis>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>icon.ico</ApplicationIcon>
@@ -64,13 +64,12 @@
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <BaseAddress>4194304</BaseAddress>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>CSharpComicViewer.App</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="SevenZipSharp, Version=0.64.3890.29348, Culture=neutral, PublicKeyToken=20de82c62b055c88, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\SevenZipSharp.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
@@ -78,7 +77,6 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -90,51 +88,24 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <None Include="Gui\Display_Form.cs">
-      <SubType>Form</SubType>
-    </None>
-    <None Include="Gui\Display_Form.Designer.cs">
-      <DependentUpon>Display_Form.cs</DependentUpon>
-    </None>
-    <None Include="Gui\InfoText_Form2.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>InfoText_Form.resx</DependentUpon>
-    </None>
-    <Compile Include="File\ImageLoader.cs" />
     <Compile Include="File\FileLoader.cs" />
-    <Compile Include="File\FileNextPrevious.cs" />
-    <Compile Include="Comic\ComicBook.cs" />
+    <None Include="Comic\ComicBook.cs" />
     <Compile Include="Configuration\Configuration.cs" />
-    <Compile Include="Other\Bookmark.cs" />
     <Compile Include="Comic\ComicFile.cs" />
-    <Compile Include="Other\ImageEdit.cs" />
-    <None Include="Gui\InfoText_Form.cs">
-      <SubType>Form</SubType>
-    </None>
-    <None Include="Gui\InfoText_Form.Designer.cs">
-      <DependentUpon>InfoText_Form.cs</DependentUpon>
-    </None>
-    <Compile Include="File\ArchiveLoader.cs" />
     <Compile Include="WPF\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
     <Compile Include="WPF\BookmarkManager.xaml.cs">
       <DependentUpon>BookmarkManager.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPF\InformationText.xaml.cs">
+      <DependentUpon>InformationText.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF\MainDisplay.xaml.cs">
       <DependentUpon>MainDisplay.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Gui\Display_Form.resx">
-      <DependentUpon>Display_Form.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Gui\InfoText_Form.resx">
-      <DependentUpon>InfoText_Form.cs</DependentUpon>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>InfoText_Form2.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -157,12 +128,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="icon.ico" />
-    <None Include="SevenZipSharp.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
@@ -196,13 +161,25 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="WPF\InformationText.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="WPF\MainDisplay.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="About.png" />
+    <ProjectReference Include="..\CSharpComicLoader\CSharpComicLoader.csproj">
+      <Project>{88BF022A-0495-425F-9F36-BCA8839E853D}</Project>
+      <Name>CSharpComicLoader</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="About.png" />
+    <Resource Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(ProgramFiles)\MSBuild\StyleCop\v4.5\StyleCop.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
