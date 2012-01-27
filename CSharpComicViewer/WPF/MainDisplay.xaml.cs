@@ -80,12 +80,14 @@ namespace CSharpComicViewer.WPF
 				MenuBar.Visibility = Visibility.Hidden;
 				this.WindowStyle = System.Windows.WindowStyle.SingleBorderWindow;
 				this.WindowState = System.Windows.WindowState.Maximized;
+				this.ResizeMode = System.Windows.ResizeMode.CanResize;
 				MenuBar.Visibility = Visibility.Visible;
 			}
 			else //if fullscreen
 			{
 				this.WindowStyle = System.Windows.WindowStyle.None;
 				this.WindowState = System.Windows.WindowState.Maximized;
+				this.ResizeMode = System.Windows.ResizeMode.NoResize;
 			}
 
 			//gray out resume last file if the files dont't exist
@@ -338,6 +340,7 @@ namespace CSharpComicViewer.WPF
 					//go minimized first to hide taskbar
 					this.WindowState = System.Windows.WindowState.Minimized;
 					this.WindowState = System.Windows.WindowState.Maximized;
+					this.ResizeMode = System.Windows.ResizeMode.NoResize;
 					MenuBar.Visibility = Visibility.Collapsed;
 
 				}
@@ -348,6 +351,7 @@ namespace CSharpComicViewer.WPF
 					MenuBar.Visibility = Visibility.Hidden;
 					this.WindowStyle = System.Windows.WindowStyle.SingleBorderWindow;
 					this.WindowState = System.Windows.WindowState.Maximized;
+					this.ResizeMode = System.Windows.ResizeMode.CanResize;
 					MenuBar.Visibility = Visibility.Visible;
 					Configuration.windowed = true;
 				}

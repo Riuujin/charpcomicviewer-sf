@@ -31,7 +31,7 @@
     MouseWheel="OnMouseWheel"
     Closing="ApplicationExit"
     MouseMove="OnMouseMove"
-    PreviewKeyDown="OnPreviewKeyDown" WindowState="Maximized" WindowStyle="None" MouseRightButtonDown="OnRightButtonDown" Icon="/csharp-comicviewer;component/icon.ico">
+    PreviewKeyDown="OnPreviewKeyDown" WindowState="Maximized" WindowStyle="None" MouseRightButtonDown="OnRightButtonDown" Icon="/csharp-comicviewer;component/icon.ico" ResizeMode="NoResize">
     <Grid>
         <DockPanel>
             <Menu
