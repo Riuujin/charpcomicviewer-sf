@@ -938,15 +938,6 @@ namespace CSharpComicViewer.WPF
 				}
 				Mouse.OverrideCursor = Cursors.Wait;
 				LoadFile(Files, 0, 0);
-
-				if (String.IsNullOrEmpty(comicBook.GetInfoText(comicBook.GetCurrentFile())))
-				{
-					ShowMessage("No information text");
-				}
-				else
-				{
-
-				}
 			}
 			catch { }
 			Mouse.OverrideCursor = Cursors.Arrow;
