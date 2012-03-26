@@ -50,21 +50,37 @@ namespace CSharpComicLoader.File
 		}
 
 		/// <summary>
+		/// Gets or sets the total files (archives).
+		/// </summary>
+		/// <value>
+		/// The total files.
+		/// </value>
+		public int TotalFiles { get; set; }
+
+
+		/// <summary>
+		/// Gets or sets the loaded files (archives).
+		/// </summary>
+		/// <value>
+		/// The loaded files.
+		/// </value>
+		public int LoadedFiles { get; set; }
+
+		/// <summary>
 		/// Loads the comic book.
 		/// </summary>
 		/// <param name="files">The files.</param>
 		/// <returns></returns>
 		public LoadedFilesData LoadComicBook(string[] files)
 		{
+			LoadedFiles = 0;
 			LoadedFilesData returnValue = new LoadedFilesData();
 			returnValue.ComicBook = new ComicBook();
-			returnValue.ComicBook.FilesAreArchives = true;
+			Comic.ComicFile comicFile = new Comic.ComicFile();
 
 			Array.Sort(files);
 
 			string infoTxt = "";
-			string currentFile;
-			List<byte[]> imagesAsBytes = new List<byte[]>();
 			MemoryStream ms = new MemoryStream();
 			SevenZipExtractor extractor;
 			Boolean nextFile = false;
@@ -80,11 +96,11 @@ namespace CSharpComicLoader.File
 
 			try
 			{
-				for (int y = 0; y < files.Length; y++)
+				TotalFiles = files.Length;
+				foreach (string file in files)
 				{
 					//open archive
-					currentFile = files[y];
-					extractor = new SevenZipExtractor(currentFile);
+					extractor = new SevenZipExtractor(file);
 					string[] fileNames = extractor.ArchiveFileNames.ToArray();
 					Array.Sort(fileNames);
 
@@ -93,24 +109,15 @@ namespace CSharpComicLoader.File
 					{
 						for (int x = 0; x < Enum.GetNames(typeof(SupportedImages)).Length; x++)
 						{
-							//if it is an image add it to arraylist
-							int startExtension = fileNames[i].ToLower().LastIndexOf('.');
-							if (startExtension < 0)
-							{
-								//File does not have an extension so skip it
-								break;
-							}
-
-							string extension = fileNames[i].ToLower().Substring(startExtension + 1);
-							SupportedImages empty;
-							if (Enum.TryParse<SupportedImages>(extension, true, out empty))
+							//if it is an image add it to array list
+							if (Utils.ValidateImageFileExtension(fileNames[i]))
 							{
 								ms = new MemoryStream();
 								extractor.ExtractFile(fileNames[i], ms);
 								ms.Position = 0;
 								try
 								{
-									imagesAsBytes.Add(ms.ToArray());
+									comicFile.Add(ms.ToArray());
 								}
 								catch (Exception)
 								{
@@ -124,7 +131,7 @@ namespace CSharpComicLoader.File
 							}
 
 							//if it is a txt file set it as InfoTxt
-							else if (fileNames[i].EndsWith(".txt") || fileNames[i].EndsWith(".TXT"))
+							else if (Utils.ValidateTextFileExtension(fileNames[i]))
 							{
 								ms = new MemoryStream();
 								extractor.ExtractFile(fileNames[i], ms);
@@ -157,24 +164,19 @@ namespace CSharpComicLoader.File
 					//unlock files again
 					extractor.Dispose();
 
-					//make a ComicFile, with either an InfoTxt or without
-					if (imagesAsBytes.Count > 0)
+					//Add a ComicFile
+					if (comicFile.Count > 0)
 					{
-						if (infoTxt.Length > 0)
-						{
-							returnValue.ComicBook.CreateComicFile(currentFile, imagesAsBytes, infoTxt);
-							infoTxt = "";
-						}
-						else
-						{
-							returnValue.ComicBook.CreateComicFile(currentFile, imagesAsBytes, null);
-						}
+						comicFile.Location = file;
+						comicFile.InfoText = infoTxt;
+						returnValue.ComicBook.Add(comicFile);
+						infoTxt = "";
 					}
-
-					imagesAsBytes.Clear();
+					comicFile = new ComicFile();
+					LoadedFiles++;
 				}
 
-				//return the ComicBook on succes
+				//return the ComicBook on success
 				return returnValue;
 			}
 			catch (Exception e)

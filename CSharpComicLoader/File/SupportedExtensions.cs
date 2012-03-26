@@ -23,23 +23,23 @@ using System.Text;
 
 namespace CSharpComicLoader.File
 {
-    public enum SupportedImages
-    {
-        jpg,
-        bmp,
-        png
-    }
+	public enum SupportedImages
+	{
+		jpg,
+		bmp,
+		png
+	}
 
-    public enum SupportedArchives
-    {
-        zip,
-        rar,
-        cbr,
-        cbz
-    }
+	public enum SupportedArchives
+	{
+		zip,
+		rar,
+		cbr,
+		cbz
+	}
 
-    public enum SupportedTextFiles
-    {
-        txt
-    }
+	public enum SupportedTextFiles
+	{
+		txt
+	}
 }

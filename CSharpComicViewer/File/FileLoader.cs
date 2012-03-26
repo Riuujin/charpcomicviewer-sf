@@ -18,91 +18,92 @@
 //-------------------------------------------------------------------------------------
 namespace CSharpComicViewer
 {
-    using System.Collections;
-    using CSharpComicLoader.File;
-    using CSharpComicLoader.Comic;
-    using System;
+	using System.Collections;
+	using CSharpComicLoader.File;
+	using CSharpComicLoader.Comic;
+	using System;
 
-    class FileLoader
-    {
-        public FileLoader()
-        {
-            this.FileType = FileType.Archive;
-        }
+	class FileLoader
+	{
+		public FileLoader()
+		{
+			this.PageType = PageType.Archive;
+		}
 
-        public bool Load(string[] files)
-        {
-            this.FileType = FileType.Archive;
-            bool ReturnValue;
+		public bool Load(string[] files)
+		{
+			this.PageType = PageType.Archive;
+			bool ReturnValue;
 
-            foreach (string file in files)
-            {
-                //if it is an image add it to arraylist
-                int startExtension = file.ToLower().LastIndexOf('.');
-                if (startExtension < 0)
-                {
-                    //File does not have an extension so skip it
-                    break;
-                }
+			foreach (string file in files)
+			{
+				//if it is an image add it to arraylist
+				int startExtension = file.ToLower().LastIndexOf('.');
+				if (startExtension < 0)
+				{
+					//File does not have an extension so skip it
+					break;
+				}
 
-                string extension = file.ToLower().Substring(startExtension + 1);
-                SupportedImages empty;
-                if (Enum.TryParse<SupportedImages>(extension, true, out empty))
-                {
-                    this.FileType = FileType.Images;
-                    break;
-                }
-                else if (this.FileType == FileType.Images)
-                {
-                    this.Error = "Please select only archives or only images.";
-                }
+				string extension = file.ToLower().Substring(startExtension + 1);
+				SupportedImages empty;
+				if (Enum.TryParse<SupportedImages>(extension, true, out empty))
+				{
+					this.PageType = PageType.Image;
+					break;
+				}
+				else if (this.PageType == PageType.Image)
+				{
+					this.Error = "Please select only archives or only images.";
+				}
 
-            }
+			}
 
-            if (String.IsNullOrEmpty(this.Error))
-            {
-                if (FileType == FileType.Archive)
-                {
-                    ArchiveLoader archiveLoader = new ArchiveLoader();
-                    LoadedFileData = archiveLoader.LoadComicBook(files);
+			if (String.IsNullOrEmpty(this.Error))
+			{
+				if (PageType == PageType.Archive)
+				{
+					ArchiveLoader archiveLoader = new ArchiveLoader();
+					LoadedFileData = archiveLoader.LoadComicBook(files);
 
-                    this.Error = LoadedFileData.Error;
-                }
-                else if (FileType == FileType.Images)
-                {
-                    ImageLoader imageLoader = new ImageLoader();
-                    LoadedFileData = imageLoader.LoadComicBook(files);
+					this.Error = LoadedFileData.Error;
+				}
+				else if (PageType == PageType.Image)
+				{
+					ImageLoader imageLoader = new ImageLoader();
+					LoadedFileData = imageLoader.LoadComicBook(files);
 
-                    this.Error = LoadedFileData.Error;
-                }
-            }
+					this.Error = LoadedFileData.Error;
+				}
+			}
 
-            ReturnValue = String.IsNullOrEmpty(this.Error) ? true : false;
-            return ReturnValue;
-        }
+			ReturnValue = String.IsNullOrEmpty(this.Error) ? true : false;
+			return ReturnValue;
+		}
 
-        /// <summary>
-        /// Get or set the type of file to load.
-        /// </summary>
-        /// <value>The type of file.</value>
-        public FileType FileType
-        {
-            get;
-            set;
-        }
+		/// <summary>
+		/// Get or set the type of file to load.
+		/// </summary>
+		/// <value>The type of file.</value>
+		public PageType PageType
+		{
+			get;
+			set;
+		}
 
-        public LoadedFilesData LoadedFileData { get; private set; }
+		public LoadedFilesData LoadedFileData { get; private set; }
 
-        /// <summary>
-        /// Error message that occured during load action
-        /// </summary>
-        /// <value>The error message</value>
-        public string Error { get; private set; }
-    }
+		/// <summary>
+		/// Error message that occured during load action
+		/// </summary>
+		/// <value>The error message</value>
+		public string Error { get; private set; }
 
-    public enum FileType
-    {
-        Archive = 0,
-        Images
-    }
+	}
+
+	public enum PageType
+	{
+		Archive = 0,
+		Image
+	}
 }

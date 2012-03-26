@@ -24,280 +24,52 @@ using System.Linq;
 namespace CSharpComicLoader
 {
 	/// <summary>
-	/// Find and locate next and previous usable files(archives) on disk
+	/// Find and locate next and previous usable files(archives) in current dir
 	/// </summary>
 	public class FileNextPrevious
 	{
-		/// <summary>
-		/// Get next file in known file list
-		/// </summary>
-		/// <param name="CurrentFiles">Known file paths</param>
-		/// <returns>The next file path</returns>
-		public string[] GetNextFile(string[] CurrentFiles)
+		public string GetNextFileInDirectory(string currentFilePath)
 		{
-			string[] Files = CurrentFiles;
-			Array.Sort(Files);
-			string file = Files.Last();
+			string returnValue = "";
 
-			string nextfile = nextFile(file);
-			string dir = Directory.GetParent(file).ToString();
-			string lastdir = dir;
-			while (string.IsNullOrEmpty(nextfile))
+			string directory = Directory.GetParent(currentFilePath).FullName;
+			List<string> supportedFiles = Directory.GetFiles(directory).Where(file => Utils.ValidateArchiveFileExtension(file)).ToList();
+			supportedFiles.Sort();
+
+			int currentFileIndex = supportedFiles.IndexOf(currentFilePath);
+
+			if (currentFileIndex != -1 && currentFileIndex <= supportedFiles.Count)
 			{
-				lastdir = dir;
-				dir = nextDir(dir);
-				if (string.IsNullOrEmpty(dir))
-				{
-					dir = nextDir(Directory.GetParent(lastdir).ToString());
-				}
-				if (string.IsNullOrEmpty(dir))
-					break;
-
-
-				nextfile = firstOrLastFileInDir(dir, true);
+				returnValue = supportedFiles[currentFileIndex + 1];
 			}
-			string[] returnarray = new string[1];
-			returnarray[0] = nextfile;
-			return returnarray;
+
+			return returnValue;
 		}
 
-		/// <summary>
-		/// Get previous file in known file list
-		/// </summary>
-		/// <param name="CurrentFiles">Known file path</param>
-		/// <returns>The previous file path</returns>
-		public string[] GetPreviousFile(string[] CurrentFiles)
+		public string GetPreviousFileInDirectory(string currentFilePath)
 		{
-			string[] Files = CurrentFiles;
-			Array.Sort(Files);
-			string file = Files.Last();
+			string returnValue = "";
 
-			string nextfile = previousFile(file);
-			string dir = Directory.GetParent(file).ToString();
-			string lastdir = dir;
-			while (string.IsNullOrEmpty(nextfile))
+			string directory = Directory.GetParent(currentFilePath).FullName;
+			List<string> supportedFiles = Directory.GetFiles(directory).Where(file => Utils.ValidateArchiveFileExtension(file)).ToList();
+			supportedFiles.Sort();
+
+			int currentFileIndex = supportedFiles.IndexOf(currentFilePath);
+
+			if (currentFileIndex != -1 && currentFileIndex != 0)
 			{
-				lastdir = dir;
-				dir = previousDir(dir);
-				if (string.IsNullOrEmpty(dir))
-				{
-					dir = previousDir(Directory.GetParent(lastdir).ToString());
-				}
-				if (string.IsNullOrEmpty(dir))
-					break;
-
-
-				nextfile = firstOrLastFileInDir(dir, false);
+				returnValue = supportedFiles[currentFileIndex - 1];
 			}
-			string[] returnarray = new string[1];
-			returnarray[0] = nextfile;
-			return returnarray;
+
+			return returnValue;
 		}
 
-		/// <summary>
-		/// Get the next directory path to search in
-		/// </summary>
-		/// <param name="currentdir">The current directory path</param>
-		/// <returns>The next directory path</returns>
-		private string nextDir(string currentdir)
+		public List<string> GetDirectoriesInDirectory(string currentDir)
 		{
-			Boolean next = false;
-			try
-			{
-				string[] Dirs = Directory.GetDirectories(Directory.GetParent(currentdir).ToString());
-				Array.Sort(Dirs);
-				foreach (string dir in Dirs)
-				{
-					if (next)
-						return dir.ToString();
+			List<string> directories = Directory.GetDirectories(currentDir, "*", SearchOption.TopDirectoryOnly).ToList();
+			directories.Sort();
 
-					if (currentdir == dir)
-						next = true;
-				}
-			}
-			catch
-			{
-				return null;
-			}
-			return null;
+			return directories;
 		}
-
-		/// <summary>
-		/// Get the next usable file location on disk
-		/// </summary>
-		/// <param name="currentfile">Current file path</param>
-		/// <returns>The next file path</returns>
-		private string nextFile(string currentfile)
-		{
-			string dir = Directory.GetParent(currentfile).FullName;
-			string[] cbr = Directory.GetFiles(dir, "*.cbr");
-			string[] cbz = Directory.GetFiles(dir, "*.cbz");
-			string[] rar = Directory.GetFiles(dir, "*.rar");
-			string[] zip = Directory.GetFiles(dir, "*.zip");
-
-			List<string> filePaths = new List<string>();
-
-			foreach (string filename in cbr)
-			{
-				filePaths.Add(filename);
-			}
-			foreach (string filename in cbz)
-			{
-				filePaths.Add(filename);
-			}
-			foreach (string filename in rar)
-			{
-				filePaths.Add(filename);
-			}
-			foreach (string filename in zip)
-			{
-				filePaths.Add(filename);
-			}
-
-
-			filePaths.Sort();
-
-
-			Boolean next = false;
-			foreach (string filename in filePaths)
-			{
-				if (next)
-
-					return filename;
-
-
-				if (currentfile == filename && filename != filePaths.Last())
-					next = true;
-			}
-			return null;
-		}
-
-		/// <summary>
-		/// Get the previous directory path to search in
-		/// </summary>
-		/// <param name="currentdir">The current directory path</param>
-		/// <returns>The previous directory path</returns>
-		private string previousDir(string currentdir)
-		{
-			try
-			{
-				string[] Dirs = Directory.GetDirectories(Directory.GetParent(currentdir).ToString());
-				Array.Sort(Dirs);
-				for (int i = 0; i < Dirs.Length; i++)
-				{
-					if (currentdir == Dirs.First())
-						return null;
-
-					if (currentdir == Dirs[i])
-						return Dirs[i - 1];
-				}
-			}
-			catch
-			{
-				return null;
-			}
-			return null;
-		}
-
-		/// <summary>
-		/// Get the previous usable file location on disk
-		/// </summary>
-		/// <param name="currentfile">Current file path</param>
-		/// <returns>The previous file path</returns>
-		private string previousFile(string currentfile)
-		{
-			string dir = Directory.GetParent(currentfile).FullName;
-			string[] cbr = Directory.GetFiles(dir, "*.cbr");
-			string[] cbz = Directory.GetFiles(dir, "*.cbz");
-			string[] rar = Directory.GetFiles(dir, "*.rar");
-			string[] zip = Directory.GetFiles(dir, "*.zip");
-
-			List<string> filePaths = new List<string>();
-
-			foreach (string filename in cbr)
-			{
-				filePaths.Add(filename);
-			}
-			foreach (string filename in cbz)
-			{
-				filePaths.Add(filename);
-			}
-			foreach (string filename in rar)
-			{
-				filePaths.Add(filename);
-			}
-			foreach (string filename in zip)
-			{
-				filePaths.Add(filename);
-			}
-
-
-			filePaths.Sort();
-
-
-			for (int i = 0; i < filePaths.Count; i++)
-			{
-				if (currentfile == filePaths.First())
-					return null;
-
-				if (currentfile == filePaths[i])
-					return filePaths[i - 1];
-			}
-			return null;
-		}
-
-		/// <summary>
-		/// Get first or last file in a directory
-		/// </summary>
-		/// <param name="dir">Directory path</param>
-		/// <param name="First">Return first file?</param>
-		/// <returns>The file path</returns>
-		private string firstOrLastFileInDir(string dir, Boolean First)
-		{
-			try
-			{
-				string[] cbr = Directory.GetFiles(dir, "*.cbr");
-				string[] cbz = Directory.GetFiles(dir, "*.cbz");
-				string[] rar = Directory.GetFiles(dir, "*.rar");
-				string[] zip = Directory.GetFiles(dir, "*.zip");
-
-				List<string> filePaths = new List<string>();
-
-				foreach (string filename in cbr)
-				{
-					filePaths.Add(filename);
-				}
-				foreach (string filename in cbz)
-				{
-					filePaths.Add(filename);
-				}
-				foreach (string filename in rar)
-				{
-					filePaths.Add(filename);
-				}
-				foreach (string filename in zip)
-				{
-					filePaths.Add(filename);
-				}
-
-				if (filePaths.Count > 0)
-				{
-					filePaths.Sort();
-
-					if (First)
-						return filePaths.First();
-					else
-						return filePaths.Last();
-				}
-				return null;
-			}
-			catch
-			{
-				return null;
-			}
-		}
-
-
-
 	}
 }

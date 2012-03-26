@@ -24,25 +24,25 @@ using CSharpComicLoader.Comic;
 
 namespace CSharpComicLoader.File
 {
-    public class LoadedFilesData
-    {
-        public ComicBook ComicBook { get; set; }
+	public class LoadedFilesData
+	{
+		public ComicBook ComicBook { get; set; }
 
-        public string Error { get; set; }
+		public string Error { get; set; }
 
-        public bool HasFile
-        {
-            get
-            {
-                if (ComicBook != null)
-                {
-                    return ComicBook.HasFiles;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
-    }
+		public bool HasFile
+		{
+			get
+			{
+				if (ComicBook != null)
+				{
+					return ComicBook.Count > 0;
+				}
+				else
+				{
+					return false;
+				}
+			}
+		}
+	}
 }

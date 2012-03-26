@@ -32,6 +32,7 @@ namespace CSharpComicViewer.WPF
 	using CSharpComicLoader.Comic;
 	using CSharpComicViewer.Configuration;
 	using Microsoft.Win32;
+	using CSharpComicLoader.File;
 
 
 	/// <summary>
@@ -39,14 +40,215 @@ namespace CSharpComicViewer.WPF
 	/// </summary>
 	public partial class MainDisplay : Window
 	{
+		#region Properties
+
+		/// <summary>
+		/// Gets or sets the opening file.
+		/// </summary>
+		/// <value>
+		/// The opening file.
+		/// </value>
+		private string _openingFile;
+
+		/// <summary>
+		/// Gets or sets the comic book.
+		/// </summary>
+		/// <value>
+		/// The comic book.
+		/// </value>
+		private ComicBook _comicBook;
+
+		/// <summary>
+		/// Gets or sets a value indicating whether to go to next page.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if go to next page; otherwise, <c>false</c>.
+		/// </value>
+		private bool _goToNextPage;
+
+		/// <summary>
+		/// Gets or sets a value indicating whether to go to previous page.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if go to previous page; otherwise, <c>false</c>.
+		/// </value>
+		private bool _goToPreviousPage;
+
+		/// <summary>
+		/// Gets or sets the next page count.
+		/// </summary>
+		/// <value>
+		/// The next page count.
+		/// </value>
+		private int _nextPageCount = 2;
+
+		/// <summary>
+		/// Gets or sets the previous page count.
+		/// </summary>
+		/// <value>
+		/// The previous page count.
+		/// </value>
+		private int _previousPageCount;
+
+		/// <summary>
+		/// The comic page (ea the displayed image)
+		/// </summary>
+		private ImageUtils _imageUtils;
+
+		/// <summary>
+		/// The information Text
+		/// </summary>
+		private InformationText _informationText;
+
+		/// <summary>
+		/// The file loader.
+		/// </summary>
+		private FileLoader _fileLoader;
+
+		/// <summary>
+		/// The show message timer.
+		/// </summary>
+		private DispatcherTimer _showMessageTimer;
+
+		/// <summary>
+		/// The page information timer.
+		/// </summary>
+		private DispatcherTimer _pageInformationTimer;
+
+		/// <summary>
+		/// The last mouse move.
+		/// </summary>
+		private DateTime _lastMouseMove;
+
+		/// <summary>
+		/// Gets or sets a value indicating whether mouse is hidden.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if mouse is hidden; otherwise, <c>false</c>.
+		/// </value>
+		private bool _MouseIsHidden;
+
+		/// <summary>
+		/// Gets or sets the scroll value vertical.
+		/// </summary>
+		/// <value>
+		/// The scroll value vertical.
+		///   </value>
+		private int _scrollValueVertical;
+
+		/// <summary>
+		/// Gets or sets the scroll value horizontal.
+		/// </summary>
+		/// <value>
+		/// The scroll value horizontal.
+		/// </value>
+		private int _scrollValueHorizontal;
+
+		/// <summary>
+		/// Gets or sets the current mouse position.
+		/// </summary>
+		/// <value>
+		/// The current mouse position.
+		/// </value>
+		private Point _currentMousePosition;
+
+		/// <summary>
+		/// Gets or sets the mouse X.
+		/// </summary>
+		/// <value>
+		/// The mouse X.
+		/// </value>
+		private double _mouseX;
+
+		/// <summary>
+		/// Gets or sets the mouse Y.
+		/// </summary>
+		/// <value>
+		/// The mouse Y.
+		/// </value>
+		private double _mouseY;
+
+		/// <summary>
+		/// Gets or sets a value indicating whether mouse drag.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if mouse drag; otherwise, <c>false</c>.
+		/// </value>
+		private bool _mouseDrag;
+
+		/// <summary>
+		/// Gets or sets a value indicating whether going to next page is allowed.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if going to next page is allowed; otherwise, <c>false</c>.
+		/// </value>
+		private bool _nextPageBoolean;
+
+		/// <summary>
+		/// Gets or sets a value indicating whether going to previous page is allowed.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if going to previous page is allowed; otherwise, <c>false</c>.
+		/// </value>
+		private bool _previousPageBoolean;
+
+		/// <summary>
+		/// Gets or sets the timeout to hide.
+		/// </summary>
+		/// <value>
+		/// The timeout to hide.
+		/// </value>
+		private TimeSpan _timeoutToHide;
+
+		/// <summary>
+		/// Gets or sets the mouse idle.
+		/// </summary>
+		/// <value>
+		/// The mouse idle.
+		/// </value>
+		public DispatcherTimer MouseIdle
+		{
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// Gets the configuration.
+		/// </summary>
+		public Configuration Configuration
+		{
+			get;
+			private set;
+		}
+
+		/// <summary>
+		/// Start position on the image
+		/// </summary>
+		public enum ImageStartPosition
+		{
+			Top,
+			Bottom
+		}
+		#endregion
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MainDisplay"/> class.
+		/// </summary>
+		public MainDisplay()
+		{
+			_nextPageCount = 2;
+			_previousPageCount = 2;
+		}
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MainDisplay"/> class.
 		/// </summary>
 		/// <param name="OpeningFile">The opening file.</param>
 		public MainDisplay(string OpeningFile)
+			: this()
 		{
 			InitializeComponent();
-			this.OpeningFile = OpeningFile;
+			this._openingFile = OpeningFile;
 		}
 
 		/// <summary>
@@ -59,11 +261,11 @@ namespace CSharpComicViewer.WPF
 			//Ensure that the window is active on start
 			this.Activate();
 
-			comicPage = new ComicPage();
-			fileLoader = new FileLoader();
+			_imageUtils = new ImageUtils();
+			_fileLoader = new FileLoader();
 
 			//set mouse idle timer
-			TimeoutToHide = TimeSpan.FromSeconds(2);
+			_timeoutToHide = TimeSpan.FromSeconds(2);
 			MouseIdle = new DispatcherTimer();
 			MouseIdle.Interval = TimeSpan.FromSeconds(1);
 			MouseIdle.Tick += new EventHandler(MouseIdleChecker);
@@ -108,14 +310,14 @@ namespace CSharpComicViewer.WPF
 				ResumeFile_RightClick.IsEnabled = false;
 			}
 
-			scrollValueHorizontal = (int)(ScrollField.ViewportHeight * 0.05);
-			scrollValueVertical = (int)(ScrollField.ViewportWidth * 0.05);
-			comicPage.ScreenHeight = (int)ScrollField.ViewportHeight;
-			comicPage.ScreenWidth = (int)ScrollField.ViewportWidth;
+			_scrollValueHorizontal = (int)(ScrollField.ViewportHeight * 0.05);
+			_scrollValueVertical = (int)(ScrollField.ViewportWidth * 0.05);
+			_imageUtils.ScreenHeight = (int)ScrollField.ViewportHeight;
+			_imageUtils.ScreenWidth = (int)ScrollField.ViewportWidth;
 
 
 			//open file (when opening assosicated by double click)
-			if (OpeningFile != null)
+			if (_openingFile != null)
 			{
 				LoadAndDisplayComic(false);
 			}
@@ -195,9 +397,9 @@ namespace CSharpComicViewer.WPF
 		/// </summary>
 		private void SaveResumeToConfiguration()
 		{
-			if (comicBook != null && comicBook.TotalFiles != 0)
+			if (_comicBook != null && _comicBook.TotalFiles != 0)
 			{
-				Bookmark Data = comicBook.GetBookmark();
+				Bookmark Data = _comicBook.GetBookmark();
 				Configuration.Resume = Data;
 			}
 		}
@@ -291,12 +493,12 @@ namespace CSharpComicViewer.WPF
 
 			if (e.Key == Key.L)
 			{
-				lastMouseMove = DateTime.Now;
+				_lastMouseMove = DateTime.Now;
 
-				if (MouseIsHidden)
+				if (_MouseIsHidden)
 				{
 					Mouse.OverrideCursor = Cursors.Arrow;
-					MouseIsHidden = false;
+					_MouseIsHidden = false;
 				}
 
 				LoadAndDisplayComic(true);
@@ -314,16 +516,16 @@ namespace CSharpComicViewer.WPF
 
 			if (e.Key == Key.N)
 			{
-				if (comicBook != null && comicBook.TotalFiles != 0)
+				if (_comicBook != null && _comicBook.TotalFiles != 0)
 				{
-					if (String.IsNullOrEmpty(comicBook.GetInfoText(comicBook.GetCurrentFile())))
+					if (String.IsNullOrEmpty(_comicBook.CurrentFile.InfoText))
 					{
 						ShowMessage("No information text");
 					}
 					else
 					{
-						informationText = new InformationText(comicBook.GetFileLocation(comicBook.GetCurrentFile()), comicBook.GetInfoText(comicBook.GetCurrentFile()));
-						informationText.ShowDialog();
+						_informationText = new InformationText(_comicBook.CurrentFile.Location, _comicBook.CurrentFile.InfoText);
+						_informationText.ShowDialog();
 					}
 				}
 				else
@@ -333,7 +535,7 @@ namespace CSharpComicViewer.WPF
 			{
 				if (Configuration.windowed)
 				{
-					//go fullscreen if windowed
+					//go full screen if windowed
 					Configuration.windowed = false;
 
 					this.WindowStyle = System.Windows.WindowStyle.None;
@@ -356,13 +558,13 @@ namespace CSharpComicViewer.WPF
 					Configuration.windowed = true;
 				}
 
-				scrollValueHorizontal = (int)(ScrollField.ViewportHeight * 0.05);
-				scrollValueVertical = (int)(ScrollField.ViewportWidth * 0.05);
-				comicPage.ScreenHeight = (int)ScrollField.ViewportHeight;
-				comicPage.ScreenWidth = (int)ScrollField.ViewportWidth;
+				_scrollValueHorizontal = (int)(ScrollField.ViewportHeight * 0.05);
+				_scrollValueVertical = (int)(ScrollField.ViewportWidth * 0.05);
+				_imageUtils.ScreenHeight = (int)ScrollField.ViewportHeight;
+				_imageUtils.ScreenWidth = (int)ScrollField.ViewportWidth;
 
 				if (DisplayedImage.Source != null)
-					DisplayImage(comicBook.GetCurrentPage(), ImageStartPosition.Top);
+					DisplayImage(_comicBook.CurrentFile.CurrentPage, ImageStartPosition.Top);
 
 			}
 		}
@@ -372,9 +574,9 @@ namespace CSharpComicViewer.WPF
 			if (e.Key == Key.Home && !Keyboard.Modifiers.HasFlag(ModifierKeys.Alt))
 			{
 				// first page of all
-				if (comicBook.TotalFiles != 0)
+				if (_comicBook.TotalFiles != 0)
 				{
-					byte[] image = comicBook.GetPage(0, 0);
+					byte[] image = _comicBook.GetPage(0, 0);
 					if (image != null)
 					{
 						DisplayImage(image, ImageStartPosition.Top);
@@ -385,9 +587,9 @@ namespace CSharpComicViewer.WPF
 			if (e.Key == Key.Home && Keyboard.Modifiers.HasFlag(ModifierKeys.Alt))
 			{
 				// first page of current archive
-				if (comicBook.TotalFiles != 0)
+				if (_comicBook.TotalFiles != 0)
 				{
-					byte[] image = comicBook.GetPage(comicBook.GetCurrentFile(), 0);
+					byte[] image = _comicBook.GetPage(0);
 					if (image != null)
 					{
 						DisplayImage(image, ImageStartPosition.Top);
@@ -398,9 +600,9 @@ namespace CSharpComicViewer.WPF
 			if (e.Key == Key.End && !Keyboard.Modifiers.HasFlag(ModifierKeys.Alt))
 			{
 				// last page of all
-				if (comicBook.TotalFiles != 0)
+				if (_comicBook.TotalFiles != 0)
 				{
-					byte[] image = comicBook.GetPage(comicBook.TotalFiles - 1, comicBook.GetTotalPagesOfFile(comicBook.TotalFiles - 1) - 1);
+					byte[] image = _comicBook.GetPage(_comicBook.TotalFiles - 1, _comicBook[_comicBook.TotalFiles - 1].TotalPages - 1);
 					if (image != null)
 					{
 						DisplayImage(image, ImageStartPosition.Top);
@@ -411,9 +613,9 @@ namespace CSharpComicViewer.WPF
 			if (e.Key == Key.End && Keyboard.Modifiers.HasFlag(ModifierKeys.Alt))
 			{
 				// last page of current archive
-				if (comicBook.TotalFiles != 0)
+				if (_comicBook.TotalFiles != 0)
 				{
-					byte[] image = comicBook.GetPage(comicBook.GetCurrentFile(), comicBook.GetTotalPagesOfFile(comicBook.GetCurrentFile()) - 1);
+					byte[] image = _comicBook.GetPage(_comicBook.CurrentFile.TotalPages - 1);
 					if (image != null)
 					{
 						DisplayImage(image, ImageStartPosition.Top);
@@ -512,69 +714,69 @@ namespace CSharpComicViewer.WPF
 			//scroll down
 			if (e.Delta < 0 && DisplayedImage.Source != null)
 			{
-				PreviousPageBoolean = false;
-				PreviousPageCount = 2;
+				_previousPageBoolean = false;
+				_previousPageCount = 2;
 				if (DisplayedImage.Width > ScrollField.ViewportWidth)
 				{
 					//image widther then screen
 					if (ScrollField.HorizontalOffset == ScrollField.ScrollableWidth && ScrollField.VerticalOffset == ScrollField.ScrollableHeight)
 					{
 						//Can count down for next page
-						NextPageBoolean = true;
-						NextPageCount--;
+						_nextPageBoolean = true;
+						_nextPageCount--;
 					}
 					else if (ScrollField.VerticalOffset == ScrollField.ScrollableHeight)
 					{
 						//scroll horizontal
-						ScrollField.ScrollToHorizontalOffset(ScrollField.HorizontalOffset + scrollValueHorizontal);
+						ScrollField.ScrollToHorizontalOffset(ScrollField.HorizontalOffset + _scrollValueHorizontal);
 					}
 				}
 				else if (ScrollField.VerticalOffset == ScrollField.ScrollableHeight)
 				{
 					//Can count down for next page
-					NextPageBoolean = true;
-					NextPageCount--;
+					_nextPageBoolean = true;
+					_nextPageCount--;
 				}
 			}
 			//scroll up
 			else if (e.Delta > 0 && DisplayedImage.Source != null)
 			{
-				NextPageBoolean = false;
-				NextPageCount = 2;
+				_nextPageBoolean = false;
+				_nextPageCount = 2;
 				if (DisplayedImage.Width > ScrollField.ViewportWidth)
 				{
 					//image widther then screen
 					if (ScrollField.HorizontalOffset == 0)
 					{
 						//Can count down for previous page
-						PreviousPageBoolean = true;
-						PreviousPageCount--;
+						_previousPageBoolean = true;
+						_previousPageCount--;
 					}
 					else if (ScrollField.VerticalOffset == 0)
 					{
 						//scroll horizontal
-						ScrollField.ScrollToHorizontalOffset(ScrollField.HorizontalOffset - scrollValueHorizontal);
+						ScrollField.ScrollToHorizontalOffset(ScrollField.HorizontalOffset - _scrollValueHorizontal);
 					}
 				}
 				else if (ScrollField.VerticalOffset == 0)
 				{
 					//Can count down for previous page
-					PreviousPageBoolean = true;
-					PreviousPageCount--;
+					_previousPageBoolean = true;
+					_previousPageCount--;
 				}
 			}
 
-			if (NextPageBoolean && NextPageCount <= 0)
+			if (_nextPageBoolean && _nextPageCount <= 0)
 			{
 				NextPage();
-				NextPageBoolean = false;
-				NextPageCount = 2;
+				_nextPageBoolean = false;
+				_nextPageCount = 2;
 			}
-			else if (PreviousPageBoolean && PreviousPageCount <= 0)
+			else if (_previousPageBoolean && _previousPageCount <= 0)
 			{
 				PreviousPage();
-				PreviousPageBoolean = false;
-				PreviousPageCount = 2;
+				_previousPageBoolean = false;
+				_previousPageCount = 2;
 			}
 		}
 
@@ -585,81 +787,81 @@ namespace CSharpComicViewer.WPF
 
 		private void OnMouseMove(object sender, MouseEventArgs e)
 		{
-			lastMouseMove = DateTime.Now;
+			_lastMouseMove = DateTime.Now;
 
-			if (MouseIsHidden && (Mouse.GetPosition(this) != CurrentMousePosition))
+			if (_MouseIsHidden && (Mouse.GetPosition(this) != _currentMousePosition))
 			{
 				Mouse.OverrideCursor = Cursors.Arrow;
-				MouseIsHidden = false;
+				_MouseIsHidden = false;
 			}
 
-			CurrentMousePosition = Mouse.GetPosition(this);
+			_currentMousePosition = Mouse.GetPosition(this);
 
 			int Speed = 2; //amount by with mouse_x/y - MousePosition.X/Y is divided, determines drag speed
 			//am i dragging the mouse with left button pressed
 			if (e.LeftButton == MouseButtonState.Pressed)
 			{
 				//did i already change position
-				if (MouseDrag == false)
+				if (_mouseDrag == false)
 				{
 					//if yes then i need to reset check position
-					MouseX = CurrentMousePosition.X;
-					MouseY = CurrentMousePosition.Y;
-					MouseDrag = true;
+					_mouseX = _currentMousePosition.X;
+					_mouseY = _currentMousePosition.Y;
+					_mouseDrag = true;
 				}
 				else
 				//if no then i can perform checks on drag
 				{
 					//Drag left
-					if (CurrentMousePosition.X < MouseX && DisplayedImage.Source != null)
+					if (_currentMousePosition.X < _mouseX && DisplayedImage.Source != null)
 					{
-						ScrollField.ScrollToHorizontalOffset(ScrollField.HorizontalOffset + (MouseX - CurrentMousePosition.X) / Speed);
-						MouseDrag = false;
+						ScrollField.ScrollToHorizontalOffset(ScrollField.HorizontalOffset + (_mouseX - _currentMousePosition.X) / Speed);
+						_mouseDrag = false;
 					}
 					//Drag right
-					else if (CurrentMousePosition.X > MouseX && DisplayedImage.Source != null)
+					else if (_currentMousePosition.X > _mouseX && DisplayedImage.Source != null)
 					{
-						ScrollField.ScrollToHorizontalOffset(ScrollField.HorizontalOffset + (MouseX - CurrentMousePosition.X) / Speed);
-						MouseDrag = false;
+						ScrollField.ScrollToHorizontalOffset(ScrollField.HorizontalOffset + (_mouseX - _currentMousePosition.X) / Speed);
+						_mouseDrag = false;
 					}
 					//Drag up
-					if (CurrentMousePosition.Y < MouseY && DisplayedImage.Source != null)
+					if (_currentMousePosition.Y < _mouseY && DisplayedImage.Source != null)
 					{
-						ScrollField.ScrollToVerticalOffset(ScrollField.VerticalOffset + (MouseY - CurrentMousePosition.Y) / Speed);
-						MouseDrag = false;
+						ScrollField.ScrollToVerticalOffset(ScrollField.VerticalOffset + (_mouseY - _currentMousePosition.Y) / Speed);
+						_mouseDrag = false;
 					}
 					//Drag down
-					else if (CurrentMousePosition.Y > MouseY && DisplayedImage.Source != null)
+					else if (_currentMousePosition.Y > _mouseY && DisplayedImage.Source != null)
 					{
-						ScrollField.ScrollToVerticalOffset(ScrollField.VerticalOffset + (MouseY - CurrentMousePosition.Y) / Speed);
-						MouseDrag = false;
+						ScrollField.ScrollToVerticalOffset(ScrollField.VerticalOffset + (_mouseY - _currentMousePosition.Y) / Speed);
+						_mouseDrag = false;
 					}
 				}
 			}
 			//make it possible to drag on next check
 			else
-				MouseDrag = false;
+				_mouseDrag = false;
 		}
 
 		private void OnRightButtonDown(object sender, MouseButtonEventArgs e)
 		{
 			Mouse.OverrideCursor = Cursors.Arrow;
-			MouseIsHidden = false;
+			_MouseIsHidden = false;
 		}
 
 		private void MouseIdleChecker(object sender, EventArgs e)
 		{
-			TimeSpan elaped = DateTime.Now - lastMouseMove;
-			if (elaped >= TimeoutToHide && !MouseIsHidden)
+			TimeSpan elaped = DateTime.Now - _lastMouseMove;
+			if (elaped >= _timeoutToHide && !_MouseIsHidden)
 			{
 				if (this.IsActive && !MenuRightClick.IsOpen)
 				{
 					Mouse.OverrideCursor = Cursors.None;
-					MouseIsHidden = true;
+					_MouseIsHidden = true;
 				}
 				else if (this.IsActive && MenuRightClick.IsOpen)
 				{
-					lastMouseMove = DateTime.Now;
+					_lastMouseMove = DateTime.Now;
 				}
 			}
 		}
@@ -712,9 +914,9 @@ namespace CSharpComicViewer.WPF
 
 		private void AddBookmark_Click(object sender, RoutedEventArgs e)
 		{
-			if (comicBook != null)
+			if (_comicBook != null)
 			{
-				Configuration.Bookmarks.Add(comicBook.GetBookmark());
+				Configuration.Bookmarks.Add(_comicBook.GetBookmark());
 				SetBookmarkMenus();
 			}
 		}
@@ -739,15 +941,15 @@ namespace CSharpComicViewer.WPF
 			MessageBox.Text = Message;
 			MessageBox.Visibility = System.Windows.Visibility.Visible;
 
-			if (showMessageTimer != null)
+			if (_showMessageTimer != null)
 			{
-				showMessageTimer.Stop();
+				_showMessageTimer.Stop();
 			}
 
-			showMessageTimer = new DispatcherTimer();
-			showMessageTimer.Tick += new EventHandler(HideMessage);
-			showMessageTimer.Interval = new TimeSpan(0, 0, 2);
-			showMessageTimer.Start();
+			_showMessageTimer = new DispatcherTimer();
+			_showMessageTimer.Tick += new EventHandler(HideMessage);
+			_showMessageTimer.Interval = new TimeSpan(0, 0, 2);
+			_showMessageTimer.Start();
 
 		}
 
@@ -759,29 +961,29 @@ namespace CSharpComicViewer.WPF
 
 		public void ShowPageInformation()
 		{
-			if (comicBook != null)
+			if (_comicBook != null)
 			{
-				if (comicBook.FilesAreArchives)
+				if (_fileLoader.PageType == PageType.Archive)
 				{
-					PageInfoBox.Text = "Archive " + (Convert.ToInt32(comicBook.GetCurrentFile()) + 1) + "/" + comicBook.TotalFiles + "\r\nArchive name: " + comicBook.GetCurrentFileName() + "\r\nPage: " + (Convert.ToInt32(comicBook.GetCurrentPageOfTotal()) + 1) + "/" + comicBook.GetTotalPages();
+					PageInfoBox.Text = "Archive " + _comicBook.CurrentFileNumber + "/" + _comicBook.TotalFiles + "\r\nArchive name: " + _comicBook.CurrentFile.FileName + "\r\nPage: " + _comicBook.CurrentPageNumber + "/" + _comicBook.TotalPages;
 				}
 				else
 				{
-					PageInfoBox.Text = "File name: " + comicBook.GetCurrentFileName() + "\r\nPage: " + (Convert.ToInt32(comicBook.GetCurrentPageOfTotal()) + 1) + "/" + comicBook.GetTotalPages();
+					PageInfoBox.Text = "File name: " + _comicBook.CurrentFile.FileName + "\r\nPage: " + _comicBook.CurrentPageNumber + "/" + _comicBook.TotalPages;
 
 				}
 
 				PageInfoBox.Visibility = System.Windows.Visibility.Visible;
 
-				if (pageInformationTimer != null)
+				if (_pageInformationTimer != null)
 				{
-					pageInformationTimer.Stop();
+					_pageInformationTimer.Stop();
 				}
 
-				pageInformationTimer = new DispatcherTimer();
-				pageInformationTimer.Tick += new EventHandler(HidePageInformation);
-				pageInformationTimer.Interval = new TimeSpan(0, 0, 5);
-				pageInformationTimer.Start();
+				_pageInformationTimer = new DispatcherTimer();
+				_pageInformationTimer.Tick += new EventHandler(HidePageInformation);
+				_pageInformationTimer.Interval = new TimeSpan(0, 0, 5);
+				_pageInformationTimer.Start();
 			}
 		}
 
@@ -792,7 +994,7 @@ namespace CSharpComicViewer.WPF
 
 		private void UpdatePageInformation()
 		{
-			PageInfoBox.Text = "Archive" + (Convert.ToInt32(comicBook.GetCurrentFile()) + 1) + "/" + comicBook.TotalFiles + "\r\nPage: " + (Convert.ToInt32(comicBook.GetCurrentPageOfTotal()) + 1) + "/" + comicBook.GetTotalPages();
+			PageInfoBox.Text = "Archive" + _comicBook.CurrentFileNumber + "/" + _comicBook.TotalFiles + "\r\nPage: " + _comicBook.CurrentPageNumber + "/" + _comicBook.TotalPages;
 		}
 		#endregion
 
@@ -800,7 +1002,7 @@ namespace CSharpComicViewer.WPF
 
 
 
-		public void DisplayImage(byte[] ImageAsByteArray, ImageStartPosition scrollTo)
+		public void DisplayImage(byte[] ImageAsBytes, ImageStartPosition scrollTo)
 		{
 			// If page information is displayed update it with new information
 			if (PageInfoBox.Visibility == System.Windows.Visibility.Visible)
@@ -828,20 +1030,20 @@ namespace CSharpComicViewer.WPF
 					}
 			}
 
-			BitmapImage bitmapimage = GetImage(ImageAsByteArray);
-			comicPage.ObjectValue = ImageAsByteArray;
+			BitmapImage bitmapimage = GetImage(ImageAsBytes);
+			_imageUtils.ObjectValue = ImageAsBytes;
 
 			if (Configuration.OverideHeight || Configuration.OverideWidth)
 			{
-				comicPage.ResizeImage(new System.Drawing.Size(bitmapimage.PixelWidth, (int)ScrollField.ViewportHeight), Configuration.OverideHeight, Configuration.OverideWidth);
-				bitmapimage = GetImage(comicPage.ObjectValueAsBytes);
+				_imageUtils.ResizeImage(new System.Drawing.Size(bitmapimage.PixelWidth, (int)ScrollField.ViewportHeight), Configuration.OverideHeight, Configuration.OverideWidth);
+				bitmapimage = GetImage(_imageUtils.ObjectValueAsBytes);
 			}
 
 			DisplayedImage.Source = bitmapimage;
 
 			DisplayedImage.Width = bitmapimage.PixelWidth;
 			DisplayedImage.Height = bitmapimage.PixelHeight;
-			this.Background = comicPage.BackgroundColor;
+			this.Background = _imageUtils.BackgroundColor;
 
 			if (DisplayedImage.Width < ScrollField.ViewportWidth)
 			{
@@ -914,12 +1116,12 @@ namespace CSharpComicViewer.WPF
 				if (AskOpenFileDialog)
 				{
 					OpenFileDialog OpenFileDialog = new OpenFileDialog();
-					if (comicBook != null)
+					if (_comicBook != null)
 					{
-						Bookmark Bookmark = comicBook.GetBookmark();
+						Bookmark Bookmark = _comicBook.GetBookmark();
 						OpenFileDialog.InitialDirectory = Bookmark.GetCurrentFileDirectoryLocation();
 					}
-					OpenFileDialog.Filter = "Supported archive formats (*.cbr; *.cbz; *.zip; *.rar)|*.cbr;*.cbz;*.zip;*.rar|Supported image formats (*.jpg; *.bmp; *.png)|*.jpg;*.bmp;*.png|All files (*.*)|*.*";
+					OpenFileDialog.Filter = Utils.FileLoaderFilter;
 					OpenFileDialog.Multiselect = true;
 					OpenFileDialog.ShowDialog();
 					if (OpenFileDialog.FileNames.Length <= 0)
@@ -929,7 +1131,7 @@ namespace CSharpComicViewer.WPF
 				}
 				else
 				{
-					Files = new String[] { OpeningFile };
+					Files = new String[] { _openingFile };
 				}
 
 				foreach (String file in Files)
@@ -1005,32 +1207,31 @@ namespace CSharpComicViewer.WPF
 		/// <param name="PageNumber">Page on wich to start from selected file</param>
 		public void LoadFile(String[] Files, int FileNumber, int PageNumber)
 		{
-			fileLoader.Load(Files);
+			_fileLoader.Load(Files);
 
-			if (fileLoader.LoadedFileData.HasFile)
+			if (_fileLoader.LoadedFileData.HasFile)
 			{
-				comicBook = fileLoader.LoadedFileData.ComicBook;
+				_comicBook = _fileLoader.LoadedFileData.ComicBook;
 
-				for (int i = 0; i < comicBook.TotalFiles; i++)
+				foreach (ComicFile comicFile in _comicBook)
 				{
-					if (!String.IsNullOrEmpty(comicBook.GetComicFileAt(i).InfoText))
+					if (!String.IsNullOrEmpty(comicFile.InfoText))
 					{
 						Mouse.OverrideCursor = Cursors.Arrow;
-						informationText = new InformationText(comicBook.GetComicFileAt(i).Location, comicBook.GetComicFileAt(i).InfoText);
-						informationText.ShowDialog();
+						_informationText = new InformationText(comicFile.Location, comicFile.InfoText);
+						_informationText.ShowDialog();
 						Mouse.OverrideCursor = Cursors.Wait;
 					}
-
 				}
 
-				DisplayImage(comicBook.GetPage(FileNumber, PageNumber), ImageStartPosition.Top);
-				if (!String.IsNullOrEmpty(fileLoader.Error))
+				DisplayImage(_comicBook.GetPage(FileNumber, PageNumber), ImageStartPosition.Top);
+				if (!String.IsNullOrEmpty(_fileLoader.Error))
 				{
-					ShowMessage(fileLoader.Error);
+					ShowMessage(_fileLoader.Error);
 				}
 			}
-			else if (!String.IsNullOrEmpty(fileLoader.Error))
-				ShowMessage(fileLoader.Error);
+			else if (!String.IsNullOrEmpty(_fileLoader.Error))
+				ShowMessage(_fileLoader.Error);
 			else
 				ShowMessage("No supported files found.");
 		}
@@ -1070,39 +1271,32 @@ namespace CSharpComicViewer.WPF
 				ShowMessage("Normal mode.");
 			}
 			if (DisplayedImage.Source != null)
-				DisplayImage(comicBook.GetCurrentPage(), ImageStartPosition.Top);
+				DisplayImage(_comicBook.CurrentFile.CurrentPage, ImageStartPosition.Top);
 
 		}
 
 		/// <summary>
-		/// Loads the first file found afther the current one and displays the first image if possible.
+		/// Loads the first file found after the current one and displays the first image if possible.
 		/// </summary>
 		private void NextFile()
 		{
-			if (comicBook != null)
+			if (_comicBook != null)
 			{
-				if (comicBook.TotalFiles != 0)
+				if (_comicBook.NextFile() == null)
 				{
-					if (comicBook.TotalFiles == 1 || comicBook.GetCurrentFile() == comicBook.TotalFiles - 1)
+					FileNextPrevious FileNextPrevious = new FileNextPrevious();
+					string file = FileNextPrevious.GetNextFileInDirectory(_comicBook.CurrentFile.Location);
+					if (!String.IsNullOrEmpty(file))
 					{
-						Mouse.OverrideCursor = Cursors.Wait;
-						FileNextPrevious FileNextPrevious = new FileNextPrevious();
-						String[] CurrentLastFile = new String[1];
-						CurrentLastFile[0] = comicBook.GetFileLocation(comicBook.TotalFiles - 1);
-						String[] Files = FileNextPrevious.GetNextFile(CurrentLastFile);
-						if (Files.Length > 0)
-						{
-							LoadAndDisplayComic(Files);
-						}
-						Mouse.OverrideCursor = Cursors.Arrow;
+						LoadAndDisplayComic(new string[] { file });
 					}
-					else
+				}
+				else
+				{
+					byte[] image = _comicBook.CurrentFile.CurrentPage;
+					if (image != null)
 					{
-						byte[] image = comicBook.GetPage(comicBook.GetCurrentFile() + 1, 0);
-						if (image != null)
-						{
-							DisplayImage(image, ImageStartPosition.Top);
-						}
+						DisplayImage(image, ImageStartPosition.Top);
 					}
 				}
 			}
@@ -1111,30 +1305,23 @@ namespace CSharpComicViewer.WPF
 
 		private void PreviousFile()
 		{
-			if (comicBook != null)
+			if (_comicBook != null)
 			{
-				if (comicBook.TotalFiles != 0)
+				if (_comicBook.PreviousFile() == null)
 				{
-					if (comicBook.TotalFiles == 1 || comicBook.GetCurrentFile() == 0)
+					FileNextPrevious FileNextPrevious = new FileNextPrevious();
+					string file = FileNextPrevious.GetPreviousFileInDirectory(_comicBook.CurrentFile.Location);
+					if (!String.IsNullOrEmpty(file))
 					{
-						Mouse.OverrideCursor = Cursors.Wait;
-						FileNextPrevious FileNextPrevious = new FileNextPrevious();
-						String[] CurrentLastFile = new String[1];
-						CurrentLastFile[0] = comicBook.GetFileLocation(comicBook.TotalFiles - 1);
-						String[] Files = FileNextPrevious.GetPreviousFile(CurrentLastFile);
-						if (Files.Length > 0)
-						{
-							LoadAndDisplayComic(Files);
-						}
-						Mouse.OverrideCursor = Cursors.Arrow;
+						LoadAndDisplayComic(new string[] { file });
 					}
-					else
+				}
+				else
+				{
+					byte[] image = _comicBook.CurrentFile.CurrentPage;
+					if (image != null)
 					{
-						byte[] image = comicBook.GetPage(comicBook.GetCurrentFile() - 1, comicBook.GetTotalPagesOfFile(comicBook.GetCurrentFile() - 1) - 1);
-						if (image != null)
-						{
-							DisplayImage(image, ImageStartPosition.Bottom);
-						}
+						DisplayImage(image, ImageStartPosition.Bottom);
 					}
 				}
 			}
@@ -1145,11 +1332,11 @@ namespace CSharpComicViewer.WPF
 		/// </summary>
 		public void NextPage()
 		{
-			if (comicBook != null)
+			if (_comicBook != null)
 			{
-				if (comicBook.TotalFiles != 0)
+				if (_comicBook.TotalFiles != 0)
 				{
-					byte[] image = comicBook.NextPage();
+					byte[] image = _comicBook.NextPage();
 					if (image != null)
 					{
 						DisplayImage(image, ImageStartPosition.Top);
@@ -1163,11 +1350,11 @@ namespace CSharpComicViewer.WPF
 		/// </summary>
 		public void PreviousPage()
 		{
-			if (comicBook != null)
+			if (_comicBook != null)
 			{
-				if (comicBook.TotalFiles != 0)
+				if (_comicBook.TotalFiles != 0)
 				{
-					byte[] image = comicBook.PreviousPage();
+					byte[] image = _comicBook.PreviousPage();
 					if (image != null)
 					{
 						DisplayImage(image, ImageStartPosition.Bottom);
@@ -1177,277 +1364,5 @@ namespace CSharpComicViewer.WPF
 		}
 
 		#endregion
-
-		#region Properties
-		/// <summary>
-		/// Gets or sets the opening file.
-		/// </summary>
-		/// <value>
-		/// The opening file.
-		/// </value>
-		private string OpeningFile
-		{
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// Gets or sets the comic book.
-		/// </summary>
-		/// <value>
-		/// The comic book.
-		/// </value>
-		private ComicBook comicBook
-		{
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// Gets or sets a value indicating whether to go to next page.
-		/// </summary>
-		/// <value>
-		///   <c>true</c> if go to next page; otherwise, <c>false</c>.
-		/// </value>
-		private bool GoToNextPage
-		{
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// Gets or sets a value indicating whether to go to previous page.
-		/// </summary>
-		/// <value>
-		///   <c>true</c> if go to previous page; otherwise, <c>false</c>.
-		/// </value>
-		private bool GoToPreviousPage
-		{
-			get;
-			set;
-		}
-
-		private int _NextPageCount = 2;
-
-		/// <summary>
-		/// Gets or sets the next page count.
-		/// </summary>
-		/// <value>
-		/// The next page count.
-		/// </value>
-		private int NextPageCount
-		{
-			get
-			{
-				return _NextPageCount;
-			}
-			set
-			{
-				_NextPageCount = value;
-			}
-		}
-
-		private int _PreviousPageCount = 2;
-
-		/// <summary>
-		/// Gets or sets the previous page count.
-		/// </summary>
-		/// <value>
-		/// The previous page count.
-		/// </value>
-		private int PreviousPageCount
-		{
-			get
-			{
-				return _PreviousPageCount;
-			}
-			set
-			{
-				_PreviousPageCount = value;
-			}
-		}
-
-		/// <summary>
-		/// The comic page (ea the displayed image)
-		/// </summary>
-		private ComicPage comicPage;
-
-		/// <summary>
-		/// The information Text
-		/// </summary>
-		private InformationText informationText;
-
-		/// <summary>
-		/// The file loader.
-		/// </summary>
-		private FileLoader fileLoader;
-
-		/// <summary>
-		/// The show message timer.
-		/// </summary>
-		private DispatcherTimer showMessageTimer;
-
-		/// <summary>
-		/// The page information timer.
-		/// </summary>
-		private DispatcherTimer pageInformationTimer;
-
-		/// <summary>
-		/// The last mouse move.
-		/// </summary>
-		private DateTime lastMouseMove;
-
-		/// <summary>
-		/// Gets or sets a value indicating whether mouse is hidden.
-		/// </summary>
-		/// <value>
-		///   <c>true</c> if mouse is hidden; otherwise, <c>false</c>.
-		/// </value>
-		private bool MouseIsHidden
-		{
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// Gets or sets the scroll value vertical.
-		/// </summary>
-		/// <value>
-		/// The scroll value vertical.
-		/// </value>
-		private int scrollValueVertical
-		{
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// Gets or sets the scroll value horizontal.
-		/// </summary>
-		/// <value>
-		/// The scroll value horizontal.
-		/// </value>
-		private int scrollValueHorizontal
-		{
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// Gets or sets the current mouse position.
-		/// </summary>
-		/// <value>
-		/// The current mouse position.
-		/// </value>
-		private Point CurrentMousePosition
-		{
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// Gets or sets the mouse X.
-		/// </summary>
-		/// <value>
-		/// The mouse X.
-		/// </value>
-		private double MouseX
-		{
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// Gets or sets the mouse Y.
-		/// </summary>
-		/// <value>
-		/// The mouse Y.
-		/// </value>
-		private double MouseY
-		{
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// Gets or sets a value indicating whether mouse drag.
-		/// </summary>
-		/// <value>
-		///   <c>true</c> if mouse drag; otherwise, <c>false</c>.
-		/// </value>
-		private bool MouseDrag
-		{
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// Gets or sets a value indicating whether going to next page is allowed.
-		/// </summary>
-		/// <value>
-		///   <c>true</c> if going to next page is allowed; otherwise, <c>false</c>.
-		/// </value>
-		private bool NextPageBoolean
-		{
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// Gets or sets a value indicating whether going to previous page is allowed.
-		/// </summary>
-		/// <value>
-		///   <c>true</c> if going to previous page is allowed; otherwise, <c>false</c>.
-		/// </value>
-		private bool PreviousPageBoolean
-		{
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// Gets or sets the timeout to hide.
-		/// </summary>
-		/// <value>
-		/// The timeout to hide.
-		/// </value>
-		private TimeSpan TimeoutToHide
-		{
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// Gets or sets the mouse idle.
-		/// </summary>
-		/// <value>
-		/// The mouse idle.
-		/// </value>
-		public DispatcherTimer MouseIdle
-		{
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// Gets the configuration.
-		/// </summary>
-		public Configuration Configuration
-		{
-			get;
-			private set;
-		}
-
-		/// <summary>
-		/// Start position on the image
-		/// </summary>
-		public enum ImageStartPosition
-		{
-			Top,
-			Bottom
-		}
-		#endregion
-
-
 	}
 }
