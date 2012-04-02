@@ -221,7 +221,7 @@ namespace CSharpComicLoader.Comic
 				fileLocations.Add(comicFile.Location);
 			}
 
-			result = new Bookmark(fileLocations.ToArray(), this.IndexOf(CurrentFile), CurrentFile.CurrentPageNumber);
+			result = new Bookmark(fileLocations.ToArray(), this.IndexOf(CurrentFile), CurrentFile.CurrentPageNumber - 1);
 			return result;
 		}
 
