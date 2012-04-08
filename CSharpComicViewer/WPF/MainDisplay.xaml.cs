@@ -918,6 +918,7 @@ namespace CSharpComicViewer.WPF
 			{
 				Configuration.Bookmarks.Add(_comicBook.GetBookmark());
 				SetBookmarkMenus();
+				ShowMessage("Bookmark added.");
 			}
 		}
 

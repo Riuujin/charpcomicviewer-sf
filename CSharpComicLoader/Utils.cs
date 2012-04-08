@@ -110,14 +110,14 @@ namespace CSharpComicLoader
 				//Add Images to filter
 				returnValue += "Supported image formats (";
 
-				foreach (string extension in supportedArchives)
+				foreach (string extension in supportedImages)
 				{
 					returnValue += "*." + extension + ";";
 				}
 
 				returnValue += ")|";
 
-				foreach (string extension in supportedArchives)
+				foreach (string extension in supportedImages)
 				{
 					returnValue += "*." + extension + ";";
 				}
