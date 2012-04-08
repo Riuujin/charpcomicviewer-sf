@@ -175,7 +175,7 @@ namespace CSharpComicLoader.Comic
 		{
 			byte[] result = null;
 
-			if (CurrentFile != null && CurrentPageNumber != TotalPages)
+			if (CurrentFile != null && CurrentPageNumber != 0)
 			{
 				result = CurrentFile.PreviousPage();
 			}
