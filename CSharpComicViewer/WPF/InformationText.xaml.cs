@@ -1,5 +1,5 @@
 ﻿//-------------------------------------------------------------------------------------
-//  Copyright 2011 Rutger Spruyt
+//  Copyright 2012 Rutger Spruyt
 //
 //  This file is part of C# Comicviewer.
 //
@@ -17,15 +17,15 @@
 //  along with csharp comicviewer.  If not, see <http://www.gnu.org/licenses/>.
 //-------------------------------------------------------------------------------------
 
+using System;
+using System.Diagnostics;
+using System.Reflection;
+using System.Windows;
+using System.Windows.Documents;
+using System.Windows.Markup;
+
 namespace CSharpComicViewer.WPF
 {
-	using System;
-	using System.Diagnostics;
-	using System.Reflection;
-	using System.Windows;
-	using System.Windows.Documents;
-	using System.Windows.Markup;
-
 	/// <summary>
 	/// Interaction logic for About.xaml
 	/// </summary>
@@ -42,8 +42,8 @@ namespace CSharpComicViewer.WPF
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InformationText"/> class.
 		/// </summary>
-		/// <param name="FileLocation">The file location.</param>
-		/// <param name="InfoText">The info text.</param>
+		/// <param name="fileLocation">The file location.</param>
+		/// <param name="infoText">The info text.</param>
 		public InformationText(string fileLocation, string infoText)
 		{
 			InitializeComponent();

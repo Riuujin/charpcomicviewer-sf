@@ -1,5 +1,5 @@
 ﻿//-------------------------------------------------------------------------------------
-//  Copyright 2011 Rutger Spruyt
+//  Copyright 2012 Rutger Spruyt
 //
 //  This file is part of C# Comicviewer.
 //
@@ -16,6 +16,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with csharp comicviewer.  If not, see <http://www.gnu.org/licenses/>.
 //-------------------------------------------------------------------------------------
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,32 +27,46 @@ namespace CSharpComicViewer.Configuration
 	/// <summary>
 	/// Configuration that is saved to an xml file
 	/// </summary>
-	[Serializable]
 	public class Configuration
 	{
 		/// <summary>
-		/// Version of C# Comicviewer (currently unused)
+		/// Gets or sets the resume.
 		/// </summary>
-		public string Version = "";
+		/// <value>
+		/// The resume data.
+		/// </value>
+		public Bookmark Resume { get; set; }
+
 		/// <summary>
-		/// Resume data
+		/// Gets or sets the bookmarks.
 		/// </summary>
-		public Bookmark Resume;
+		/// <value>
+		/// The bookmarks.
+		/// </value>
+		public List<Bookmark> Bookmarks { get; set; }
+
 		/// <summary>
-		/// The stored bookmarks
+		/// Gets or sets a value indicating whether to override height.
 		/// </summary>
-		public List<Bookmark> Bookmarks;
+		/// <value>
+		///   <c>true</c> if height should be overridden; otherwise, <c>false</c>.
+		/// </value>
+		public bool OverideHeight { get; set; }
+
 		/// <summary>
-		/// Should height be overridden
+		/// Gets or sets a value indicating whether to override width.
 		/// </summary>
-		public Boolean OverideHeight = false;
+		/// <value>
+		///   <c>true</c> if width should be overridden; otherwise, <c>false</c>.
+		/// </value>
+		public bool OverideWidth { get; set; }
+
 		/// <summary>
-		/// Should width be overridden
+		/// Gets or sets a value indicating whether this <see cref="Configuration"/> is windowed.
 		/// </summary>
-		public Boolean OverideWidth = false;
-		/// <summary>
-		/// Windowed mode
-		/// </summary>
-		public Boolean windowed = false;
+		/// <value>
+		///   <c>true</c> if windowed; otherwise, <c>false</c>.
+		/// </value>
+		public bool Windowed { get; set; }
 	}
 }

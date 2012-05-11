@@ -1,5 +1,5 @@
 ﻿//-------------------------------------------------------------------------------------
-//  Copyright 2011 Rutger Spruyt
+//  Copyright 2012 Rutger Spruyt
 //
 //  This file is part of C# Comicviewer.
 //
@@ -17,13 +17,13 @@
 //  along with csharp comicviewer.  If not, see <http://www.gnu.org/licenses/>.
 //-------------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Controls;
+using CSharpComicLoader;
+
 namespace CSharpComicViewer.WPF
 {
-	using System.Collections.Generic;
-	using System.Windows;
-	using System.Windows.Controls;
-	using CSharpComicLoader;
-
 	/// <summary>
 	/// Interaction logic for BookmarkManager.xaml
 	/// </summary>
@@ -73,8 +73,8 @@ namespace CSharpComicViewer.WPF
 		/// <summary>
 		/// Save and delete bookmarks that are selected for deletion.
 		/// </summary>
-		/// <param name="sender">sender.</param>
-		/// <param name="e">RoutedEventArgs.</param>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
 		private void Ok_btn_Click(object sender, RoutedEventArgs e)
 		{
 			for (int i = 0; i < this.bookmarks.Count; i++)
@@ -92,8 +92,8 @@ namespace CSharpComicViewer.WPF
 		/// <summary>
 		/// Cancel, reset and close.
 		/// </summary>
-		/// <param name="sender">sender.</param>
-		/// <param name="e">RoutedEventArgs.</param>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
 		/// <remarks>Delete boolean for bookmarks that are selected for deletion.</remarks>
 		private void Cancel_btn_Click(object sender, RoutedEventArgs e)
 		{
@@ -103,8 +103,8 @@ namespace CSharpComicViewer.WPF
 		/// <summary>
 		/// Allows one click editing.
 		/// </summary>
-		/// <param name="sender">sender.</param>
-		/// <param name="e">MouseButtonEventArgs.</param>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">The <see cref="System.Windows.Input.MouseButtonEventArgs"/> instance containing the event data.</param>
 		private void DataGridCell_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
 		{
 			DataGridCell cell = sender as DataGridCell;
@@ -137,6 +137,11 @@ namespace CSharpComicViewer.WPF
 			}
 		}
 
+		/// <summary>
+		/// Handles the Closing event of the ManageBookmarksWindow control.
+		/// </summary>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">The <see cref="System.ComponentModel.CancelEventArgs"/> instance containing the event data.</param>
 		private void ManageBookmarksWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
 			for (int i = 0; i < this.bookmarks.Count; i++)

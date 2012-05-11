@@ -1,5 +1,5 @@
 ﻿//-------------------------------------------------------------------------------------
-//  Copyright 2011 Rutger Spruyt
+//  Copyright 2012 Rutger Spruyt
 //
 //  This file is part of C# Comicviewer.
 //
@@ -23,12 +23,32 @@ using System.Text;
 
 namespace CSharpComicLoader.File
 {
+	/// <summary>
+	/// Interface for the required from a file load.
+	/// </summary>
 	public interface IFileLoader
 	{
+		/// <summary>
+		/// Loads the comic book.
+		/// </summary>
+		/// <param name="files">The files.</param>
+		/// <returns></returns>
 		LoadedFilesData LoadComicBook(string[] files);
 
+		/// <summary>
+		/// Gets or sets the total files.
+		/// </summary>
+		/// <value>
+		/// The total files.
+		/// </value>
 		int TotalFiles { get; set; }
 
+		/// <summary>
+		/// Gets or sets the loaded files.
+		/// </summary>
+		/// <value>
+		/// The loaded files.
+		/// </value>
 		int LoadedFiles { get; set; }
 	}
 }

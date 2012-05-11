@@ -1,5 +1,5 @@
 ﻿//-------------------------------------------------------------------------------------
-//  Copyright 2011 Rutger Spruyt
+//  Copyright 2012 Rutger Spruyt
 //
 //  This file is part of C# Comicviewer.
 //
@@ -18,37 +18,37 @@
 //-------------------------------------------------------------------------------------
 
 using System;
-using System.Windows;
-using System.Data;
-using System.Xml;
 using System.Configuration;
+using System.Data;
+using System.Windows;
+using System.Xml;
 using CSharpComicViewer.WPF;
 
 namespace CSharpComicViewer
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
-    {
-        /// <summary>
-        /// Raises the <see cref="E:System.Windows.Application.Startup"/> event.
-        /// </summary>
-        /// <param name="e">A <see cref="T:System.Windows.StartupEventArgs"/> that contains the event data.</param>
-        protected override void OnStartup(StartupEventArgs e)
-        {
-            base.OnStartup(e);
+	/// <summary>
+	/// Interaction logic for App.xaml
+	/// </summary>
+	public partial class App : Application
+	{
+		/// <summary>
+		/// Raises the <see cref="E:System.Windows.Application.Startup"/> event.
+		/// </summary>
+		/// <param name="e">A <see cref="T:System.Windows.StartupEventArgs"/> that contains the event data.</param>
+		protected override void OnStartup(StartupEventArgs e)
+		{
+			base.OnStartup(e);
 
-            if (e.Args.Length > 0)
-            {
-                var mainWindow = new CSharpComicViewer.WPF.MainDisplay(e.Args[0]);
-                mainWindow.Show();
-            }
-            else
-            {
-                var mainWindow = new CSharpComicViewer.WPF.MainDisplay(null);
-                mainWindow.Show();
-            }
-        }
-    }
+			if (e.Args.Length > 0)
+			{
+				var mainWindow = new CSharpComicViewer.WPF.MainDisplay(e.Args[0]);
+				mainWindow.Show();
+			}
+			else
+			{
+				var mainWindow = new CSharpComicViewer.WPF.MainDisplay(null);
+				mainWindow.Show();
+			}
+		}
+	}
 }

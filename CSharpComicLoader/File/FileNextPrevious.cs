@@ -1,5 +1,5 @@
 ﻿//-------------------------------------------------------------------------------------
-//  Copyright 2011 Rutger Spruyt
+//  Copyright 2012 Rutger Spruyt
 //
 //  This file is part of C# Comicviewer.
 //
@@ -28,6 +28,11 @@ namespace CSharpComicLoader
 	/// </summary>
 	public class FileNextPrevious
 	{
+		/// <summary>
+		/// Gets the next file in directory.
+		/// </summary>
+		/// <param name="currentFilePath">The current file path.</param>
+		/// <returns></returns>
 		public string GetNextFileInDirectory(string currentFilePath)
 		{
 			string returnValue = "";
@@ -46,6 +51,11 @@ namespace CSharpComicLoader
 			return returnValue;
 		}
 
+		/// <summary>
+		/// Gets the previous file in directory.
+		/// </summary>
+		/// <param name="currentFilePath">The current file path.</param>
+		/// <returns></returns>
 		public string GetPreviousFileInDirectory(string currentFilePath)
 		{
 			string returnValue = "";
@@ -62,14 +72,6 @@ namespace CSharpComicLoader
 			}
 
 			return returnValue;
-		}
-
-		public List<string> GetDirectoriesInDirectory(string currentDir)
-		{
-			List<string> directories = Directory.GetDirectories(currentDir, "*", SearchOption.TopDirectoryOnly).ToList();
-			directories.Sort();
-
-			return directories;
 		}
 	}
 }

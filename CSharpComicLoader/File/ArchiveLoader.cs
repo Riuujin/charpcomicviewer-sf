@@ -1,5 +1,5 @@
 ﻿//-------------------------------------------------------------------------------------
-//  Copyright 2011 Rutger Spruyt
+//  Copyright 2012 Rutger Spruyt
 //
 //  This file is part of C# Comicviewer.
 //
@@ -27,8 +27,14 @@ using CSharpComicLoader.File;
 
 namespace CSharpComicLoader.File
 {
+	/// <summary>
+	/// Class used to load archives.
+	/// </summary>
 	public class ArchiveLoader : IFileLoader
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ArchiveLoader"/> class.
+		/// </summary>
 		public ArchiveLoader()
 		{
 			//Get the location of the 7z dll (location .EXE is in)

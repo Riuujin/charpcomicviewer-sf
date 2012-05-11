@@ -89,9 +89,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="File\FileLoader.cs" />
-    <None Include="Comic\ComicBook.cs" />
     <Compile Include="Configuration\Configuration.cs" />
-    <Compile Include="Comic\ComicFile.cs" />
     <Compile Include="WPF\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>

@@ -1,5 +1,5 @@
 ﻿//-------------------------------------------------------------------------------------
-//  Copyright 2011 Rutger Spruyt
+//  Copyright 2012 Rutger Spruyt
 //
 //  This file is part of C# Comicviewer.
 //
@@ -23,6 +23,9 @@ using System.Text;
 
 namespace CSharpComicLoader.File
 {
+	/// <summary>
+	/// Contains supported image extensions.
+	/// </summary>
 	public enum SupportedImages
 	{
 		jpg,
@@ -30,6 +33,9 @@ namespace CSharpComicLoader.File
 		png
 	}
 
+	/// <summary>
+	/// Contains supported archive extensions.
+	/// </summary>
 	public enum SupportedArchives
 	{
 		zip,
@@ -38,6 +44,9 @@ namespace CSharpComicLoader.File
 		cbz
 	}
 
+	/// <summary>
+	/// Contains supported information text extensions.
+	/// </summary>
 	public enum SupportedTextFiles
 	{
 		txt

@@ -1,5 +1,5 @@
 ﻿//-------------------------------------------------------------------------------------
-//  Copyright 2011 Rutger Spruyt
+//  Copyright 2012 Rutger Spruyt
 //
 //  This file is part of C# Comicviewer.
 //
@@ -16,17 +16,15 @@
 //  You should have received a copy of the GNU General Public License
 //  along with csharp comicviewer.  If not, see <http://www.gnu.org/licenses/>.
 //-------------------------------------------------------------------------------------
+using System;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace CSharpComicLoader
 {
-	using System;
-	using System.Xml;
-	using System.Xml.Serialization;
-
 	/// <summary>
 	/// A Bookmark
 	/// </summary>
-	[Serializable]
 	[XmlRoot("Bookmark")]
 	public class Bookmark
 	{
@@ -46,10 +44,24 @@ namespace CSharpComicLoader
 		private int currentPageOfFile;
 
 		/// <summary>
-		///  Initializes a new instance of the Bookmark class.
+		/// Initializes a new instance of the <see cref="Bookmark"/> class.
 		/// </summary>
 		public Bookmark()
 		{
+			//Needed for serialize.
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the Bookmark class.
+		/// </summary>
+		/// <param name="files">The files.</param>
+		/// <param name="currentFile">Current file being read.</param>
+		/// <param name="currentPageOfFile">Current page of file being read.</param>
+		public Bookmark(string[] files, int currentFile, int currentPageOfFile)
+		{
+			this.Files = files;
+			this.FileNumber = currentFile;
+			this.PageNumber = currentPageOfFile;
 		}
 
 		/// <summary>
@@ -105,19 +117,6 @@ namespace CSharpComicLoader
 		/// </summary>
 		[XmlIgnore]
 		public bool Delete { get; set; }
-
-		/// <summary>
-		/// Initializes a new instance of the Bookmark class.
-		/// </summary>
-		/// <param name="files">The files.</param>
-		/// <param name="currentFile">Current file being read.</param>
-		/// <param name="currentPageOfFile">Current page of file being read.</param>
-		public Bookmark(string[] files, int currentFile, int currentPageOfFile)
-		{
-			this.Files = files;
-			this.FileNumber = currentFile;
-			this.PageNumber = currentPageOfFile;
-		}
 
 		/// <summary>
 		/// Get the directory location of the CurrentFile.

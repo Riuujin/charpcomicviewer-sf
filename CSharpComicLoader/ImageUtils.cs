@@ -1,5 +1,5 @@
 ﻿//-------------------------------------------------------------------------------------
-//  Copyright 2011 Rutger Spruyt
+//  Copyright 2012 Rutger Spruyt
 //
 //  This file is part of C# Comicviewer.
 //
@@ -28,6 +28,9 @@ using System.Drawing.Drawing2D;
 
 namespace CSharpComicLoader
 {
+	/// <summary>
+	/// Utilities used on an image.
+	/// </summary>
 	public class ImageUtils
 	{
 		private Image image;
@@ -118,25 +121,21 @@ namespace CSharpComicLoader
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the height of the screen.
+		/// </summary>
+		/// <value>
+		/// The height of the screen.
+		/// </value>
 		public int ScreenHeight { get; set; }
 
+		/// <summary>
+		/// Gets or sets the width of the screen.
+		/// </summary>
+		/// <value>
+		/// The width of the screen.
+		/// </value>
 		public int ScreenWidth { get; set; }
-
-		public Boolean IsImageWidtherOrEquelThenScreen(Image image)
-		{
-			if (image.Width >= ScreenWidth)
-				return true;
-			else return false;
-		}
-
-
-		public Boolean IsImageHigherOrEquelThenScreen(Image image)
-		{
-			if (image.Height >= ScreenHeight)
-				return true;
-			else return false;
-		}
-
 
 		/// <summary>
 		/// Convert a byte array to an image.

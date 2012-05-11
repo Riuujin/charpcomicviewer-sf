@@ -1,5 +1,5 @@
 ﻿//-------------------------------------------------------------------------------------
-//  Copyright 2011 Rutger Spruyt
+//  Copyright 2012 Rutger Spruyt
 //
 //  This file is part of C# Comicviewer.
 //
@@ -24,6 +24,9 @@ using System.Text;
 
 namespace CSharpComicLoader.Comic
 {
+	/// <summary>
+	/// A comic book object.
+	/// </summary>
 	public class ComicBook : List<ComicFile>
 	{
 		private ComicFile _currentFile;
