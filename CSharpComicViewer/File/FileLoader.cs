@@ -66,6 +66,9 @@ namespace CSharpComicViewer
 		/// <returns>Returns <c>true</c> if successful; Otherwise <c>false</c>.</returns>
 		public bool Load(string[] files)
 		{
+			//Clear error
+			this.Error = string.Empty;
+
 			this.PageType = PageType.Archive;
 			bool returnValue;
 

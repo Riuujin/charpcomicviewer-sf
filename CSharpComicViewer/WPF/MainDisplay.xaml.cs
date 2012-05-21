@@ -1132,15 +1132,15 @@ namespace CSharpComicViewer.WPF
 			{
 				case "Top":
 					{
-						ScrollField.ScrollToTop();
-						ScrollField.ScrollToLeftEnd();
+						ScrollField.ScrollToVerticalOffset(0);
+						ScrollField.ScrollToHorizontalOffset(0);
 						break;
 					}
 
 				case "Bottom":
 					{
-						ScrollField.ScrollToBottom();
-						ScrollField.ScrollToRightEnd();
+						ScrollField.ScrollToVerticalOffset(ScrollField.MaxHeight);
+						ScrollField.ScrollToHorizontalOffset(ScrollField.MaxWidth);
 						break;
 					}
 
