@@ -219,6 +219,22 @@ namespace CSharpComicViewer.WPF
 			/// </summary>
 			Bottom
 		}
+
+		/// <summary>
+		/// The window mode.
+		/// </summary>
+		public enum WindowMode
+		{
+			/// <summary>
+			/// Display in a fullscreen.
+			/// </summary>
+			Fullscreen,
+
+			/// <summary>
+			/// Display in a window.
+			/// </summary>
+			Windowed
+		}
 		#endregion
 
 		/// <summary>
@@ -265,22 +281,9 @@ namespace CSharpComicViewer.WPF
 			LoadConfiguration();
 			SetBookmarkMenus();
 
-			//set window mode
 			if (Configuration.Windowed)
 			{
-				//go hidden first to fix size bug
-				MenuBar.Visibility = Visibility.Hidden;
-				this.WindowStyle = System.Windows.WindowStyle.SingleBorderWindow;
-				this.WindowState = System.Windows.WindowState.Maximized;
-				this.ResizeMode = System.Windows.ResizeMode.CanResize;
-				MenuBar.Visibility = Visibility.Visible;
-			}
-			else
-			{
-				//if fullscreen
-				this.WindowStyle = System.Windows.WindowStyle.None;
-				this.WindowState = System.Windows.WindowState.Maximized;
-				this.ResizeMode = System.Windows.ResizeMode.NoResize;
+				SetWindowMode(WindowMode.Windowed);
 			}
 
 			//gray out resume last file if the files dont't exist
@@ -550,24 +553,13 @@ namespace CSharpComicViewer.WPF
 					//go full screen if windowed
 					Configuration.Windowed = false;
 
-					this.WindowStyle = System.Windows.WindowStyle.None;
-
-					//go minimized first to hide taskbar
-					this.WindowState = System.Windows.WindowState.Minimized;
-					this.WindowState = System.Windows.WindowState.Maximized;
-					this.ResizeMode = System.Windows.ResizeMode.NoResize;
-					MenuBar.Visibility = Visibility.Collapsed;
+					SetWindowMode(WindowMode.Fullscreen);
 				}
 				else
 				{
 					//go windowed if fullscreen
-					//go hidden first to fix size bug
-					MenuBar.Visibility = Visibility.Hidden;
-					this.WindowStyle = System.Windows.WindowStyle.SingleBorderWindow;
-					this.WindowState = System.Windows.WindowState.Maximized;
-					this.ResizeMode = System.Windows.ResizeMode.CanResize;
-					MenuBar.Visibility = Visibility.Visible;
 					Configuration.Windowed = true;
+					SetWindowMode(WindowMode.Windowed);
 				}
 
 				_scrollValueHorizontal = (int)(ScrollField.ViewportHeight * 0.05);
@@ -1132,15 +1124,15 @@ namespace CSharpComicViewer.WPF
 			{
 				case "Top":
 					{
-						ScrollField.ScrollToVerticalOffset(0);
-						ScrollField.ScrollToHorizontalOffset(0);
+						ScrollField.ScrollToTop();
+						ScrollField.ScrollToLeftEnd();
 						break;
 					}
 
 				case "Bottom":
 					{
-						ScrollField.ScrollToVerticalOffset(ScrollField.MaxHeight);
-						ScrollField.ScrollToHorizontalOffset(ScrollField.MaxWidth);
+						ScrollField.ScrollToBottom();
+						ScrollField.ScrollToRightEnd();
 						break;
 					}
 
@@ -1151,6 +1143,7 @@ namespace CSharpComicViewer.WPF
 			}
 
 			BitmapImage bitmapimage = GetImage(imageAsBytes);
+
 			_imageUtils.ObjectValue = imageAsBytes;
 
 			if (Configuration.OverideHeight || Configuration.OverideWidth)
@@ -1160,7 +1153,6 @@ namespace CSharpComicViewer.WPF
 			}
 
 			DisplayedImage.Source = bitmapimage;
-
 			DisplayedImage.Width = bitmapimage.PixelWidth;
 			DisplayedImage.Height = bitmapimage.PixelHeight;
 			this.Background = _imageUtils.BackgroundColor;
@@ -1190,7 +1182,9 @@ namespace CSharpComicViewer.WPF
 		/// Gets the image.
 		/// </summary>
 		/// <param name="imageAsByteArray">The image as byte array.</param>
-		/// <returns>Returns an image.</returns>
+		/// <returns>
+		/// Returns an image.
+		/// </returns>
 		private BitmapImage GetImage(byte[] imageAsByteArray)
 		{
 			BitmapImage bi = new BitmapImage();
@@ -1512,6 +1506,40 @@ namespace CSharpComicViewer.WPF
 			}
 		}
 
+		/// <summary>
+		/// Sets the window mode.
+		/// </summary>
+		/// <param name="windowMode">The window mode.</param>
+		public void SetWindowMode(WindowMode windowMode)
+		{
+			//set window mode
+			if (windowMode == WindowMode.Windowed)
+			{
+				//go hidden first to fix size bug
+				MenuBar.Visibility = Visibility.Visible;
+				WindowStyle = System.Windows.WindowStyle.SingleBorderWindow;
+				ResizeMode = System.Windows.ResizeMode.CanResize;
+
+				//Add small delay to prevent bug where window size isn't set correctly.
+				System.Threading.Thread.Sleep(100);
+
+				WindowState = System.Windows.WindowState.Maximized;
+			}
+			else
+			{
+				MenuBar.Visibility = Visibility.Collapsed;
+				WindowStyle = System.Windows.WindowStyle.None;
+				ResizeMode = System.Windows.ResizeMode.NoResize;
+
+				//go minimized first to hide taskbar
+				WindowState = System.Windows.WindowState.Minimized;
+
+				//Add small delay to prevent bug where window size isn't set correctly.
+				System.Threading.Thread.Sleep(100);
+
+				WindowState = System.Windows.WindowState.Maximized;
+			}
+		}
 		#endregion
 	}
 }
