@@ -1538,6 +1538,7 @@ namespace CSharpComicViewer.WPF
 				System.Threading.Thread.Sleep(100);
 
 				WindowState = System.Windows.WindowState.Maximized;
+				Focus();
 			}
 		}
 		#endregion
