@@ -1145,6 +1145,7 @@ namespace CSharpComicViewer.WPF
 			BitmapImage bitmapimage = GetImage(imageAsBytes);
 
 			_imageUtils.ObjectValue = imageAsBytes;
+			this.Background = _imageUtils.BackgroundColor;
 
 			if (Configuration.OverideHeight || Configuration.OverideWidth)
 			{
@@ -1155,7 +1156,6 @@ namespace CSharpComicViewer.WPF
 			DisplayedImage.Source = bitmapimage;
 			DisplayedImage.Width = bitmapimage.PixelWidth;
 			DisplayedImage.Height = bitmapimage.PixelHeight;
-			this.Background = _imageUtils.BackgroundColor;
 
 			if (DisplayedImage.Width < ScrollField.ViewportWidth)
 			{
