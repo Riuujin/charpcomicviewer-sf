@@ -572,6 +572,18 @@ namespace CSharpComicViewer.WPF
 					DisplayImage(_comicBook.CurrentFile.CurrentPage, ImageStartPosition.Top);
 				}
 			}
+
+			if (e.Key == Key.PageDown)
+			{
+				//prevent default action from occurring.
+				e.Handled = true;
+			}
+
+			if (e.Key == Key.PageUp)
+			{
+				//prevent default action from occurring.
+				e.Handled = true;
+			}
 		}
 
 		/// <summary>
@@ -636,11 +648,17 @@ namespace CSharpComicViewer.WPF
 			if (e.Key == Key.PageDown)
 			{
 				NextPage();
+
+				//prevent default action from occurring.
+				e.Handled = true;
 			}
 
 			if (e.Key == Key.PageUp)
 			{
 				PreviousPage();
+
+				//prevent default action from occurring.
+				e.Handled = true;
 			}
 
 			if (e.SystemKey == Key.PageDown && Keyboard.Modifiers.HasFlag(ModifierKeys.Alt))
