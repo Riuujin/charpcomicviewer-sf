@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpComicViewer", "CSharpComicViewer\CSharpComicViewer.csproj", "{DBAF8DE0-D6C8-43AA-A3FE-2F5375B7D9C1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpComicLoader", "CSharpComicLoader\CSharpComicLoader.csproj", "{88BF022A-0495-425F-9F36-BCA8839E853D}"
@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "7-zip x86", "7-zip x86", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setup", "Setup", "{205DF6E7-E7D0-48B3-9020-7DCB7D547F40}"
 	ProjectSection(SolutionItems) = preProject
+		Setup\it_download.iss = Setup\it_download.iss
+		Setup\itdownload.dll = Setup\itdownload.dll
 		Setup\Licence.txt = Setup\Licence.txt
 		Setup\SetupCompile.iss = Setup\SetupCompile.iss
 	EndProjectSection
