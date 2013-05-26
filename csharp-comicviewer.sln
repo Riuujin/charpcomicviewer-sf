@@ -28,11 +28,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setup", "Setup", "{205DF6E7
 		Setup\SetupCompile.iss = Setup\SetupCompile.iss
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{828E00EB-756B-4B1F-9543-87E710A03C59}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
 Global
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -53,5 +54,9 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{F04A882C-1983-411B-BD23-6BE5E143716E} = {0A23C521-7883-4A80-93D1-530CB888B32E}
 		{D94E7892-366B-413E-9809-E5434754B1F8} = {0A23C521-7883-4A80-93D1-530CB888B32E}
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal
