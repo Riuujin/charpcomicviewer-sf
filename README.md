@@ -1,5 +1,5 @@
 # charpcomicviewer-sf
-A comic viewer that is written in C#. It uses dot Net 4.0 and be making use of 7-zip (www.7-zip.org/ ) and SevenZipSharp (http://sevenzipsharp.codeplex.com/ ).
+A comic viewer that is written in C#. It uses dot Net 4.0 and makes use of 7-zip (www.7-zip.org/ ) and SevenZipSharp (http://sevenzipsharp.codeplex.com/).
 
 
 Features
