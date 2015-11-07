@@ -9,10 +9,10 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{8C88D80A-F9F9-4DEF-8510-DA9E438E729A}
 AppName=C# Comicviewer
-AppVersion=V1.5.2
-AppPublisherURL=http://csharpcomicview.sourceforge.net
-AppSupportURL=http://sourceforge.net/projects/csharpcomicview/support
-AppUpdatesURL=http://csharpcomicview.sourceforge.net
+AppVersion=V1.5.3
+AppPublisherURL=http://riuujin.github.io/charpcomicviewer-sf
+AppSupportURL=https://github.com/Riuujin/charpcomicviewer-sf/issues
+AppUpdatesURL=http://riuujin.github.io/charpcomicviewer-sf
 DefaultDirName={pf}\C# Comicviewer
 DefaultGroupName=C# Comicviewer
 LicenseFile=Licence.txt
@@ -87,7 +87,7 @@ Source: "..\CSharpComicLoader\bin\Release\CSharpComicLoader.dll"; DestDir: "{app
 
 [Icons]
 Name: "{group}\C# Comicviewer"; Filename: "{app}\csharp-comicviewer.exe"
-Name: "{group}\{cm:ProgramOnTheWeb,C# Comicviewer}"; Filename: "http://csharpcomicview.sourceforge.net"
+Name: "{group}\{cm:ProgramOnTheWeb,C# Comicviewer}"; Filename: "http://riuujin.github.io/charpcomicviewer-sf"
 Name: "{group}\{cm:UninstallProgram,C# Comicviewer}"; Filename: "{uninstallexe}"
 Name: "{commondesktop}\C# Comicviewer"; Filename: "{app}\csharp-comicviewer.exe"; Tasks: desktopicon
 
