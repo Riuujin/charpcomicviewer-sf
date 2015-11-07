@@ -357,7 +357,7 @@ footer a:hover {
   #downloads {
     margin-bottom: 25px;
   }
-  #download-zip, #download-tar-gz {
+  #download-zip, #download-tar-gz,#download-latest {
     display: none;
   }
   .inner {
@@ -371,3 +371,20 @@ footer a:hover {
 
 /* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
 @media only screen and (max-width: 479px) { }
+
+
+/* CUSTOM */
+#download-latest span {
+  background: transparent url(../images/latest-icon.png) 12px 50% no-repeat;
+}
+
+#download-zip, #download-tar-gz,#download-latest{
+	margin-bottom:5px;
+}
+
+.logo{
+	background: transparent url(../images/logo.png) 12px 50% no-repeat;
+	padding-left: 60px;
+}
+
+
