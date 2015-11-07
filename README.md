@@ -1,9 +1,8 @@
-# charpcomicviewer-sf
+# C# Comicviewer
 A comic viewer that is written in C#. It uses dot Net 4.0 and makes use of 7-zip (www.7-zip.org/ ) and SevenZipSharp (http://sevenzipsharp.codeplex.com/).
 
 
-Features
-Edit
+##Features
 - Load and read comic book files. (*.CBR, *.CBZ *.RAR or *.ZIP)
 - Fit the image to height, width or stretch it to height and width.
 - Load and read loose images. (*.BMP, *.JPG or *.PNG)
