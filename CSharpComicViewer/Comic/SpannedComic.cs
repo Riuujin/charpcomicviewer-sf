@@ -45,7 +45,7 @@ namespace CSharpComicViewer.Comic
                 {
                     return comic.getBookmarkName(pageNumber - count);
                 }
-                count += pages;
+                count = pages;
             }
 
             return null;
@@ -75,7 +75,7 @@ namespace CSharpComicViewer.Comic
                 {
                     return await comic.GetPage(pageNumber - count);
                 }
-                count += pages;
+                count = pages;
             }
 
             return null;
