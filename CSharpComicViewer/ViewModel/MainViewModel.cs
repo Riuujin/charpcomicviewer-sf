@@ -359,7 +359,6 @@ namespace CSharpComicViewer.ViewModel
                 this.resumeData = resumeData;
             }
 
-            var bookmarks = service.Load<Bookmark[]>("bookmarks");
             if (bookmarks?.Length > 0)
             {
                 foreach (var bookmark in bookmarks)
