@@ -328,7 +328,31 @@ namespace CSharpComicViewer.ViewModel
         {
             var service = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IDataStorageService)) as IDataStorageService;
 
+            var state = service.Load<State>("state");
             var resumeData = service.Load<Bookmark>("resumeData");
+            var bookmarks = service.Load<Bookmark[]>("bookmarks");
+           
+            if (state == null && resumeData == null && bookmarks == null)
+            {
+                var legacyService = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(ILegacyConfigurationMigrationService)) as ILegacyConfigurationMigrationService;
+                legacyService.Migrate();
+
+                //Reload data, it might have been changed.
+                resumeData = service.Load<Bookmark>("resumeData");
+                bookmarks = service.Load<Bookmark[]>("bookmarks");
+            }
+
+            if (state != null)
+            {
+                this.ViewMode = state.ViewMode;
+
+                if (state.IsFullScreen)
+                {
+                    //Initial state will never be fullscreen, toggle to fullscreen if state requires it.
+                    var ws = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IWindowService)) as IWindowService;
+                    IsFullscreen = ws.ToggleFullscreen();
+                }
+            }
 
             if (resumeData?.FilePaths?.Length >= 1)
             {
@@ -342,13 +366,6 @@ namespace CSharpComicViewer.ViewModel
                 {
                     Bookmarks.Add(bookmark);
                 }
-            }
-
-            var state = service.Load<State>("state");
-            this.ViewMode = state.ViewMode;
-            if (state.IsFullScreen) {
-                var ws = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IWindowService)) as IWindowService;
-                IsFullscreen = ws.ToggleFullscreen();
             }
         }
 

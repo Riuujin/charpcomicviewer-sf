@@ -142,7 +142,9 @@
     <Compile Include="Service\DataStorageService.cs" />
     <Compile Include="Service\IComicService.cs" />
     <Compile Include="Service\IDataStorageService.cs" />
+    <Compile Include="Service\ILegacyConfigurationMigrationService.cs" />
     <Compile Include="Service\IWindowService.cs" />
+    <Compile Include="Service\LegacyConfigurationMigrationService.cs" />
     <Compile Include="Service\ServiceLocator.cs" />
     <Compile Include="Service\WindowService.cs" />
     <Compile Include="ValueConverters\EnumBooleanConverter.cs" />
