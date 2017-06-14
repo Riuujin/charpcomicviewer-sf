@@ -1,22 +1,4 @@
-﻿//-------------------------------------------------------------------------------------
-//  Copyright 2012 Rutger Spruyt
-//
-//  This file is part of C# Comicviewer.
-//
-//  csharp comicviewer is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//
-//  csharp comicviewer is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with csharp comicviewer.  If not, see <http://www.gnu.org/licenses/>.
-//-------------------------------------------------------------------------------------
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -24,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("C# Comicviewer")]
-[assembly: AssemblyDescription("C# Comicviewer is a comic viewer written in C#.\r\nIts uses:\r\n\t\u2022.Net 4.0 (http://www.microsoft.com/net) \r\n\t\u20227-zip (http://7-zip.org/) \r\n\t\u2022SevenZipSharp (http://sevenzipsharp.codeplex.com/)")]
+[assembly: AssemblyDescription("C# Comicviewer is a comic viewer written in C#.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("C# Comicviewer")]
-[assembly: AssemblyCopyright("Copyright © Rutger Spruyt 2015")]
+[assembly: AssemblyCopyright("Copyright © Rutger Spruijt 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -50,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.5.4.*")]
-[assembly: AssemblyFileVersion("1.5.4")]
+[assembly: AssemblyVersion("2.0.0.*")]
+[assembly: AssemblyFileVersion("2.0.0")]

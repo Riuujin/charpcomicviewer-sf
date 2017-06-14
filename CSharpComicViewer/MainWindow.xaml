@@ -1,0 +1,144 @@
+﻿<Window x:Class="CSharpComicViewer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ignore="http://www.galasoft.ch/ignore"
+        mc:Ignorable="d ignore"
+        xmlns:Controls="clr-namespace:CSharpComicViewer.Controls"
+        xmlns:ValueConverters="clr-namespace:CSharpComicViewer.ValueConverters"
+        DataContext="{Binding Main, Source={StaticResource Locator}}"
+        x:Name="window"
+        Title="{Binding WindowTitle}" Width="1024" Height="768"  MinWidth="1024" MinHeight="768"  MouseWheel="OnMouseWheel">
+    <Window.Resources>
+        <ValueConverters:EnumBooleanConverter x:Key="EnumBooleanConverter" />
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+    </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Key="R" Modifiers="Ctrl" Command="{Binding ResumeCommand}" />
+        <KeyBinding Key="R" Command="{Binding ResumeCommand}" />
+        <KeyBinding Key="O" Modifiers="Ctrl" Command="{Binding OpenCommand}" />
+        <KeyBinding Key="L" Command="{Binding OpenCommand}" />
+        <KeyBinding Key="D" Modifiers="Ctrl" Command="{Binding AddBookmarkCommand}" />
+        <KeyBinding Key="PageDown" Command="{Binding NextPageCommand}" />
+        <KeyBinding Key="PageUp" Command="{Binding PreviousPageCommand}" />
+        <KeyBinding Key="T" Command="{Binding ToggleViewModeCommand}" />
+        <KeyBinding Key="F" Command="{Binding ToggleFullscreenCommand}" />
+        <KeyBinding Key="F4" Modifiers="Alt" Command="{Binding ExitCommand}" />
+        <KeyBinding Key="X" Command="{Binding ExitCommand}" />
+    </Window.InputBindings>
+    <Window.ContextMenu>
+        <ContextMenu>
+            <ContextMenu.Resources>
+                <CollectionViewSource Source="{Binding BookmarkMenu}" x:Key="BookmarkMenu"/>
+            </ContextMenu.Resources>
+            <MenuItem Header="Resume reading" InputGestureText="Ctrl+R" Command="{Binding ResumeCommand}" />
+            <MenuItem Header="Open" InputGestureText="Ctrl+O" Command="{Binding OpenCommand}" />
+            <MenuItem Header="Bookmarks">
+                <MenuItem.ItemsSource>
+                    <CompositeCollection>
+                        <MenuItem Header="Add bookmark" InputGestureText="Ctrl+D" Command="{Binding AddBookmarkCommand}"/>
+                        <MenuItem Header="Manage bookmarks" InputGestureText="Ctrl+Shift+O"/>
+                        <Separator/>
+                        <CollectionContainer Collection="{Binding Source={StaticResource BookmarkMenu}}" />
+                    </CompositeCollection>
+                </MenuItem.ItemsSource>
+                <MenuItem.ItemContainerStyle>
+                    <Style TargetType="MenuItem">
+                        <Setter Property="Header" Value="{Binding Header}"/>
+                        <Setter Property="ToolTip" Value="{Binding ToolTip}"/>
+                        <Setter Property="Command" Value="{Binding Command}"/>
+                        <Setter Property="CommandParameter" Value="{Binding Bookmark}"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding }" Value="{x:Null}">
+                                <Setter Property="Template" >
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <Separator Style="{StaticResource {x:Static MenuItem.SeparatorStyleKey}}"/>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </MenuItem.ItemContainerStyle>
+            </MenuItem>
+            <MenuItem Header="View modes"  InputGestureText="T">
+                <MenuItem Header="Normal" IsCheckable="True" IsChecked="{Binding Path=ViewMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Normal}" />
+                <MenuItem Header="Fit to screen" IsCheckable="True" IsChecked="{Binding Path=ViewMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=FitToScreen}" />
+                <MenuItem Header="Fit to height" IsCheckable="True" IsChecked="{Binding Path=ViewMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=FitToHeight}" />
+                <MenuItem Header="Fit to width" IsCheckable="True" IsChecked="{Binding Path=ViewMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=FitToWidth}" />
+            </MenuItem>
+            <MenuItem Header="Full screen" IsCheckable="True" IsChecked="{Binding IsFullscreen, Mode=OneWay}" Command="{Binding ToggleFullscreenCommand}" />
+            <MenuItem Header="About" />
+            <MenuItem Header="Exit" InputGestureText="Alt+F4" Command="{Binding ExitCommand}" />
+        </ContextMenu>
+    </Window.ContextMenu>
+
+    <Grid MouseWheel="OnMouseWheel">
+
+        <Controls:PageViewer
+            x:Name="pageViewer"
+            ImageSource="{Binding Page}"
+            ViewMode="{Binding ViewMode}"
+            GoToNextCommand="{Binding NextPageCommand}"
+            GoToPreviousCommand="{Binding PreviousPageCommand}"
+            Focusable="False" />
+        <TextBlock
+            Visibility="{Binding Path=PageCountVisible,Converter={StaticResource BoolToVisConverter}}"
+            Opacity="0"
+            Name="PageCount"
+			Background="#000"
+            Foreground="#fff"
+			VerticalAlignment="Bottom"
+			HorizontalAlignment="Right"
+			FocusVisualStyle="{x:Null}"
+			Focusable="False"
+            Padding="0,0,5,0"
+			Panel.ZIndex="50" FontSize="24" TextAlignment="Center">
+            <TextBlock.Text>
+                <MultiBinding StringFormat=" {0}/{1}" NotifyOnTargetUpdated="True">
+                    <Binding Path="PageNumber" />
+                    <Binding Path="NumberOfPages" />
+                </MultiBinding>
+            </TextBlock.Text>
+            <TextBlock.Triggers>
+                <EventTrigger RoutedEvent="Binding.TargetUpdated">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="PageCount" Storyboard.TargetProperty="Opacity" To="1" BeginTime="0:0:0" Duration="0:0:.5" />
+                            <DoubleAnimation Storyboard.TargetName="PageCount" Storyboard.TargetProperty="Opacity" To="0" BeginTime="0:0:3" Duration="0:0:.5" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </TextBlock.Triggers>
+        </TextBlock>
+        <TextBlock
+			Name="Notification"
+            Text="{Binding NotificationText, NotifyOnTargetUpdated=True}"
+            Visibility="Hidden"
+            Opacity="0"
+			Background="Black"
+			Height="40"
+			FontSize="30"
+			Foreground="White"
+			TextAlignment="Center"
+			VerticalAlignment="Center"
+			Focusable="False" 
+			Panel.ZIndex="50">
+            <TextBlock.Triggers>
+                <EventTrigger RoutedEvent="Binding.TargetUpdated">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="Notification" Storyboard.TargetProperty="Opacity" To="1" BeginTime="0:0:0" Duration="0:0:.5" />
+                            <DoubleAnimation Storyboard.TargetName="Notification" Storyboard.TargetProperty="Opacity" To="0" BeginTime="0:0:3" Duration="0:0:.5" />
+                            <ObjectAnimationUsingKeyFrames BeginTime="00:00:05" Storyboard.TargetProperty="Visibility">
+                                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </TextBlock.Triggers>
+        </TextBlock>
+    </Grid>
+</Window>

@@ -7,14 +7,14 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{8C88D80A-F9F9-4DEF-8510-DA9E438E729A}
 AppName=C# Comicviewer
-AppVersion=V1.5.4
+AppVersion=V2.0.0-beta
 AppPublisherURL=http://riuujin.github.io/charpcomicviewer-sf
 AppSupportURL=https://github.com/Riuujin/charpcomicviewer-sf/issues
 AppUpdatesURL=http://riuujin.github.io/charpcomicviewer-sf
 DefaultDirName={pf}\C# Comicviewer
 DefaultGroupName=C# Comicviewer
 LicenseFile=Licence.txt
-OutputBaseFilename=CSharp.Comic.viewer.1.5.4
+OutputBaseFilename=CSharp.Comic.viewer.2.0.0-beta
 Compression=lzma
 SolidCompression=yes
 ChangesAssociations=yes
@@ -41,10 +41,6 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "..\CSharpComicViewer\bin\Release\csharp-comicviewer.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\Resources\7-zip x64\7z.dll"; DestDir: "{app}"; Flags: ignoreversion; Check: Is64BitInstallMode
-Source: "..\Resources\7-zip x86\7z.dll"; DestDir: "{app}"; Flags: ignoreversion; Check: not Is64BitInstallMode
-Source: "..\CSharpComicLoader\bin\Release\SevenZipSharp.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\CSharpComicLoader\bin\Release\CSharpComicLoader.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
@@ -55,3 +51,63 @@ Name: "{commondesktop}\C# Comicviewer"; Filename: "{app}\csharp-comicviewer.exe"
 
 [Run]
 Filename: "{app}\csharp-comicviewer.exe"; Description: "{cm:LaunchProgram,C# Comicviewer}"; Flags: nowait postinstall skipifsilent
+
+[Code]
+/////////////////////////////////////////////////////////////////////
+function GetUninstallString(): String;
+var
+  sUnInstPath: String;
+  sUnInstallString: String;
+begin
+  sUnInstPath := ExpandConstant('Software\Microsoft\Windows\CurrentVersion\Uninstall\{#emit SetupSetting("AppId")}_is1');
+  sUnInstallString := '';
+  if not RegQueryStringValue(HKLM, sUnInstPath, 'UninstallString', sUnInstallString) then
+    RegQueryStringValue(HKCU, sUnInstPath, 'UninstallString', sUnInstallString);
+  Result := sUnInstallString;
+end;
+
+
+/////////////////////////////////////////////////////////////////////
+function IsUpgrade(): Boolean;
+begin
+  Result := (GetUninstallString() <> '');
+end;
+
+
+/////////////////////////////////////////////////////////////////////
+function UnInstallOldVersion(): Integer;
+var
+  sUnInstallString: String;
+  iResultCode: Integer;
+begin
+// Return Values:
+// 1 - uninstall string is empty
+// 2 - error executing the UnInstallString
+// 3 - successfully executed the UnInstallString
+
+  // default return value
+  Result := 0;
+
+  // get the uninstall string of the old app
+  sUnInstallString := GetUninstallString();
+  if sUnInstallString <> '' then begin
+    sUnInstallString := RemoveQuotes(sUnInstallString);
+    if Exec(sUnInstallString, '/SILENT /NORESTART /SUPPRESSMSGBOXES','', SW_HIDE, ewWaitUntilTerminated, iResultCode) then
+      Result := 3
+    else
+      Result := 2;
+  end else
+    Result := 1;
+end;
+
+/////////////////////////////////////////////////////////////////////
+procedure CurStepChanged(CurStep: TSetupStep);
+begin
+  if (CurStep=ssInstall) then
+  begin
+    if (IsUpgrade()) then
+    begin
+      UnInstallOldVersion();
+    end;
+  end;
+end;
