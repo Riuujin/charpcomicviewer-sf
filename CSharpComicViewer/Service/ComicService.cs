@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CSharpComicViewer.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,11 +9,18 @@ namespace CSharpComicViewer.Service
 {
     public class ComicService : IComicService
     {
-        public event EventHandler ComicLoaded;
+        public event EventHandler<ComicLoadedEventArgs> ComicLoaded;
 
-        public void TriggerComicLoaded(object sender)
+        public event EventHandler<PageChangedEventArgs> PageChange;
+
+        public void TriggerComicLoaded(object sender, ComicLoadedEventArgs e)
         {
-            ComicLoaded?.BeginInvoke(sender, new EventArgs(), null, null);
+            ComicLoaded?.BeginInvoke(sender, e, null, null);
+        }
+
+        public void TriggerPageChange(object sender, PageChangedEventArgs e)
+        {
+            PageChange?.BeginInvoke(sender, e, null, null);
         }
     }
 }

@@ -49,6 +49,25 @@ namespace CSharpComicViewer.Controls
             {
                 var cs = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IComicService)) as IComicService;
                 cs.ComicLoaded += ComicService_ComicLoaded;
+                cs.PageChange += ComicService_PageChange;
+            }
+        }
+
+        private void ComicService_PageChange(object sender, PageChangedEventArgs e)
+        {
+            if (e.CurrentPage > e.PreviousPage)
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    ScrollToBeginning();
+                });
+            }
+            else
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    ScrollToEnd();
+                });
             }
         }
 
@@ -128,7 +147,6 @@ namespace CSharpComicViewer.Controls
                     e.Handled = true;
                     scrollLock = true;
                     GoToNextCommand.Execute(null);
-                    ScrollToBeginning();
                     pageSwitchTreshold = PAGE_SWITCH_TRESHOLD;
                     return;
                 }
@@ -160,7 +178,6 @@ namespace CSharpComicViewer.Controls
                     e.Handled = true;
                     scrollLock = true;
                     GoToPreviousCommand.Execute(null);
-                    ScrollToEnd();
                     pageSwitchTreshold = PAGE_SWITCH_TRESHOLD;
                     return;
                 }
@@ -277,6 +294,7 @@ namespace CSharpComicViewer.Controls
         {
             PageViewer pv = d as PageViewer;
             pv.scrollLock = false;
+
 
             return;
 

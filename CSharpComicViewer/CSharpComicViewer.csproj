@@ -134,6 +134,8 @@
     <Compile Include="Controls\PageViewer.xaml.cs">
       <DependentUpon>PageViewer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Data\ComicLoadedEventArgs.cs" />
+    <Compile Include="Data\PageChangedEventArgs.cs" />
     <Compile Include="Data\State.cs" />
     <Compile Include="Data\SupportedExtensions.cs" />
     <Compile Include="Data\ViewMode.cs" />

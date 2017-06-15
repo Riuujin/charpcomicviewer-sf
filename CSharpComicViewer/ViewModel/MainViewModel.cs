@@ -138,6 +138,7 @@ namespace CSharpComicViewer.ViewModel
                                await Task.Run(async () =>
                                {
                                    var files = openFileDialog.FileNames;
+                                   var previousComic = Comic;
                                    Comic = ComicFactory.Create(files);
                                    if (Comic != null)
                                    {
@@ -147,7 +148,7 @@ namespace CSharpComicViewer.ViewModel
                                        Page = page;
 
                                        var cs = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IComicService)) as IComicService;
-                                       cs.TriggerComicLoaded(this);
+                                       cs.TriggerComicLoaded(this, new ComicLoadedEventArgs { PreviousComic = previousComic, CurrentComic = Comic });
                                    }
                                });
                            });
@@ -168,6 +169,9 @@ namespace CSharpComicViewer.ViewModel
                        var page = await Comic.GetPage(PageNumber + 1);
                        PageNumber++;
                        Page = page;
+
+                       var cs = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IComicService)) as IComicService;
+                       cs.TriggerPageChange(this, new PageChangedEventArgs { PreviousPage = PageNumber - 1, CurrentPage = PageNumber });
                    }, () => { return Comic != null && PageNumber < NumberOfPages; });
                 }
 
@@ -213,6 +217,9 @@ namespace CSharpComicViewer.ViewModel
                         var page = await Comic.GetPage(PageNumber - 1);
                         PageNumber--;
                         Page = page;
+
+                        var cs = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IComicService)) as IComicService;
+                        cs.TriggerPageChange(this, new PageChangedEventArgs { PreviousPage = PageNumber + 1, CurrentPage = PageNumber });
                     }, () => { return Comic != null && PageNumber > 1; });
                 }
 
@@ -238,6 +245,7 @@ namespace CSharpComicViewer.ViewModel
 
         public async Task OpenBookmark(Bookmark bookmark)
         {
+            var previousComic = Comic;
             Comic = ComicFactory.Create(bookmark.FilePaths);
             if (Comic != null)
             {
@@ -247,7 +255,7 @@ namespace CSharpComicViewer.ViewModel
                 Page = page;
 
                 var cs = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IComicService)) as IComicService;
-                cs.TriggerComicLoaded(this);
+                cs.TriggerComicLoaded(this, new ComicLoadedEventArgs { PreviousComic = previousComic, CurrentComic = Comic });
             }
         }
 
@@ -331,7 +339,7 @@ namespace CSharpComicViewer.ViewModel
             var state = service.Load<State>("state");
             var resumeData = service.Load<Bookmark>("resumeData");
             var bookmarks = service.Load<Bookmark[]>("bookmarks");
-           
+
             if (state == null && resumeData == null && bookmarks == null)
             {
                 var legacyService = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(ILegacyConfigurationMigrationService)) as ILegacyConfigurationMigrationService;

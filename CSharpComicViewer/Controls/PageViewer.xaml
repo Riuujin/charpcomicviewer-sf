@@ -21,11 +21,11 @@
 			MouseWheel="OnMouseWheel"
             MouseMove="OnMouseMove"
             MouseDown="OnMouseDown"
-            MouseUp="OnMouseUp"
-        Margin="10">
+            MouseUp="OnMouseUp">
+        <!--Margin="10"-->
         <Image
             x:Name="Image"
-			VerticalAlignment="Top"
+			VerticalAlignment="Center"
             Source="{Binding Path=ImageSource, ElementName=uc}"
 			Focusable="False"
 			FocusVisualStyle="{x:Null}"
@@ -34,9 +34,9 @@
             MouseMove="OnMouseMove"
             MouseDown="OnMouseDown"
             MouseUp="OnMouseUp">
-            <Image.Effect>
+            <!--<Image.Effect>
                 <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.8" />
-            </Image.Effect>
+            </Image.Effect>-->
         </Image>
     </ScrollViewer>
 </UserControl>
