@@ -13,6 +13,7 @@
     <Window.Resources>
         <ValueConverters:EnumBooleanConverter x:Key="EnumBooleanConverter" />
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+        <ValueConverters:StringNullOrEmptyToVisibilityConverter x:Key="StringNullOrEmptyToVisibilityConverter" />
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Key="R" Modifiers="Ctrl" Command="{Binding ResumeCommand}" />
@@ -116,7 +117,7 @@
         <TextBlock
 			Name="Notification"
             Text="{Binding NotificationText, NotifyOnTargetUpdated=True}"
-            Visibility="Hidden"
+            Visibility="{Binding NotificationText, Converter={StaticResource StringNullOrEmptyToVisibilityConverter}}" 
             Opacity="0"
 			Background="Black"
 			Height="40"
@@ -132,9 +133,6 @@
                         <Storyboard>
                             <DoubleAnimation Storyboard.TargetName="Notification" Storyboard.TargetProperty="Opacity" To="1" BeginTime="0:0:0" Duration="0:0:.5" />
                             <DoubleAnimation Storyboard.TargetName="Notification" Storyboard.TargetProperty="Opacity" To="0" BeginTime="0:0:3" Duration="0:0:.5" />
-                            <ObjectAnimationUsingKeyFrames BeginTime="00:00:05" Storyboard.TargetProperty="Visibility">
-                                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
-                            </ObjectAnimationUsingKeyFrames>
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>

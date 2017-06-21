@@ -10,7 +10,7 @@ using GalaSoft.MvvmLight;
 
 namespace CSharpComicViewer.ViewModel
 {
-    public class ContextMenuItem : ViewModelBase, IContextItemModel
+    public class BookmarkContextMenuItem : ViewModelBase
     {
         private string header;
         private string inputGestureText;

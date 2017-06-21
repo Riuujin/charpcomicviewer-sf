@@ -150,8 +150,8 @@
     <Compile Include="Service\ServiceLocator.cs" />
     <Compile Include="Service\WindowService.cs" />
     <Compile Include="ValueConverters\EnumBooleanConverter.cs" />
-    <Compile Include="ViewModel\ContextMenuItem.cs" />
-    <Compile Include="ViewModel\IContextItemModel.cs" />
+    <Compile Include="ValueConverters\StringNullOrEmptyToVisibilityConverter.cs" />
+    <Compile Include="ViewModel\BookmarkContextMenuItem.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <None Include="File\FileLoader.cs" />
