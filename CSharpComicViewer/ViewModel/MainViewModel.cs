@@ -48,21 +48,14 @@ namespace CSharpComicViewer.ViewModel
                 {
                     addBookmarkCommand = new RelayCommand(() =>
                     {
-                        try
+                        var bookmark = new Bookmark
                         {
-                            var bookmark = new Bookmark
-                            {
-                                Name = Comic.getBookmarkName(PageNumber),
-                                FilePaths = Comic.GetFilePaths(),
-                                Page = PageNumber
-                            };
+                            Name = Comic.getBookmarkName(PageNumber),
+                            FilePaths = Comic.GetFilePaths(),
+                            Page = PageNumber
+                        };
 
-                            Bookmarks.Add(bookmark);
-                        }
-                        catch (Exception ex)
-                        {
-                            HandleException(ex);
-                        }
+                        Bookmarks.Add(bookmark);
                     }, () => { return Comic != null; });
                 }
 
@@ -70,7 +63,7 @@ namespace CSharpComicViewer.ViewModel
             }
         }
 
-        private void HandleException(Exception ex)
+        internal void HandleException(Exception ex)
         {
             NotificationText = ex.Message;
         }
@@ -152,19 +145,7 @@ namespace CSharpComicViewer.ViewModel
                                    try
                                    {
                                        var files = openFileDialog.FileNames;
-                                       var previousComic = Comic;
-                                       var comic = ComicFactory.Create(files);
-                                       if (comic != null)
-                                       {
-                                           NumberOfPages = comic.Pages();
-                                           PageNumber = 1;
-                                           var page = await comic.GetPage(PageNumber);
-                                           Page = page;
-                                           Comic = comic;
-
-                                           var cs = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IComicService)) as IComicService;
-                                           cs.TriggerComicLoaded(this, new ComicLoadedEventArgs { PreviousComic = previousComic, CurrentComic = Comic });
-                                       }
+                                       await LoadComic(files);
                                    }
                                    catch (Exception ex)
                                    {
@@ -179,6 +160,23 @@ namespace CSharpComicViewer.ViewModel
             }
         }
 
+        private async Task LoadComic(string[] files)
+        {
+            var previousComic = Comic;
+            var comic = ComicFactory.Create(files);
+            if (comic != null)
+            {
+                NumberOfPages = comic.Pages();
+                PageNumber = 1;
+                var page = await comic.GetPage(PageNumber);
+                Page = page;
+                Comic = comic;
+
+                var cs = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IComicService)) as IComicService;
+                cs.TriggerComicLoaded(this, new ComicLoadedEventArgs { PreviousComic = previousComic, CurrentComic = Comic });
+            }
+        }
+
         public RelayCommand NextPageCommand
         {
             get
@@ -187,19 +185,20 @@ namespace CSharpComicViewer.ViewModel
                 {
                     nextPageCommand = new RelayCommand(async () =>
                    {
-                       try
+                       var page = await Comic.GetPage(PageNumber + 1);
+                       if (page != null)
                        {
-                           var page = await Comic.GetPage(PageNumber + 1);
                            PageNumber++;
                            Page = page;
 
                            var cs = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IComicService)) as IComicService;
                            cs.TriggerPageChange(this, new PageChangedEventArgs { PreviousPage = PageNumber - 1, CurrentPage = PageNumber });
                        }
-                       catch (Exception ex)
+                       else
                        {
-                           HandleException(ex);
+                           NotificationText = "Unable to get next page.";
                        }
+
                    }, () => { return Comic != null && PageNumber < NumberOfPages; });
                 }
 
@@ -242,19 +241,20 @@ namespace CSharpComicViewer.ViewModel
                 {
                     previousPageCommand = new RelayCommand(async () =>
                     {
-                        try
+                        var page = await Comic.GetPage(PageNumber - 1);
+                        if (page != null)
                         {
-                            var page = await Comic.GetPage(PageNumber - 1);
                             PageNumber--;
                             Page = page;
 
                             var cs = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IComicService)) as IComicService;
                             cs.TriggerPageChange(this, new PageChangedEventArgs { PreviousPage = PageNumber + 1, CurrentPage = PageNumber });
                         }
-                        catch (Exception ex)
+                        else
                         {
-                            HandleException(ex);
+                            NotificationText = "Unable to get previous page.";
                         }
+
                     }, () => { return Comic != null && PageNumber > 1; });
                 }
 
@@ -270,35 +270,11 @@ namespace CSharpComicViewer.ViewModel
                 {
                     resumeCommand = new RelayCommand(async () =>
                     {
-                        try
-                        {
-                            await OpenBookmark(resumeData);
-                        }
-                        catch (Exception ex)
-                        {
-                            HandleException(ex);
-                        }
+                        await LoadComic(resumeData.FilePaths);
                     }, () => { return resumeData?.FilePaths.Length > 0; });
                 }
 
                 return resumeCommand;
-            }
-        }
-
-        public async Task OpenBookmark(Bookmark bookmark)
-        {
-            var previousComic = Comic;
-            var comic = ComicFactory.Create(bookmark.FilePaths);
-            if (comic != null)
-            {
-                NumberOfPages = comic.Pages();
-                PageNumber = bookmark.Page;
-                var page = await comic.GetPage(PageNumber);
-                Page = page;
-
-                Comic = comic;
-                var cs = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IComicService)) as IComicService;
-                cs.TriggerComicLoaded(this, new ComicLoadedEventArgs { PreviousComic = previousComic, CurrentComic = Comic });
             }
         }
 
@@ -487,15 +463,9 @@ namespace CSharpComicViewer.ViewModel
                             Bookmark = bookmark,
                             Command = new RelayCommand<Bookmark>(async (Bookmark b) =>
                             {
-                                try
-                                {
-                                    await OpenBookmark(b);
-                                }
-                                catch (Exception ex)
-                                {
-                                    HandleException(ex);
-                                }
-                            })
+                                await LoadComic(b.FilePaths);
+                            }),
+                            IsEnabled = bookmark.FilePaths.All(filePath => System.IO.File.Exists(filePath))
                         });
                     }
                 }

@@ -16,6 +16,11 @@ namespace CSharpComicViewer.Comic
 
         public ArchiveComic(string filePath)
         {
+            if (!File.Exists(filePath))
+            {
+                throw new ArgumentException($"File not found: {filePath}", nameof(filePath));
+            }
+
             this.filePath = filePath ?? throw new ArgumentNullException(nameof(filePath));
             tryGetInformationText = false;
         }
@@ -34,6 +39,11 @@ namespace CSharpComicViewer.Comic
         {
             if (tryGetInformationText)
             {
+                if (!File.Exists(this.filePath))
+                {
+                    return null;
+                }
+
                 tryGetInformationText = false;
 
                 using (var archive = ArchiveFactory.Open(filePath))
@@ -59,6 +69,11 @@ namespace CSharpComicViewer.Comic
 
         public async Task<byte[]> GetPage(int pageNumber)
         {
+            if (!File.Exists(this.filePath))
+            {
+                return null;
+            }
+
             byte[] data;
 
             using (var archive = ArchiveFactory.Open(filePath))
@@ -86,6 +101,11 @@ namespace CSharpComicViewer.Comic
 
         public int Pages()
         {
+            if (!File.Exists(this.filePath))
+            {
+                return 0;
+            }
+
             if (pages == null)
             {
                 using (var archive = ArchiveFactory.Open(filePath))

@@ -18,14 +18,14 @@ namespace CSharpComicViewer.Comic
 
             if (filePaths.Length == 0)
             {
-                throw new ArgumentException("files must contain at least 1 file path", nameof(filePaths));
+                throw new ArgumentException("FilePaths must contain at least 1 file path", nameof(filePaths));
             }
 
             comics = new List<IComic>();
 
-            foreach (var file in filePaths)
+            foreach (var filePath in filePaths)
             {
-                var comic = ComicFactory.Create(file);
+                var comic = ComicFactory.Create(filePath);
                 if (comic != null)
                 {
                     comics.Add(comic);

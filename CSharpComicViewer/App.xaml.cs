@@ -16,6 +16,7 @@ namespace CSharpComicViewer
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            this.DispatcherUnhandledException += App_DispatcherUnhandledException;
             ServiceLocator = new Service.ServiceLocator();
 
             var mainWindow = new MainWindow();
@@ -29,10 +30,18 @@ namespace CSharpComicViewer
             mainWindow.Show();
         }
 
+        private void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            var mv = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetInstance<MainViewModel>();
+            mv.HandleException(e.Exception);
+        }
+
         private void Application_Exit(object sender, ExitEventArgs e)
         {
             var mv = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetInstance<MainViewModel>();
             mv.SaveToStorage();
         }
+
+        
     }
 }

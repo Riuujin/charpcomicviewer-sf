@@ -10,12 +10,12 @@ namespace CSharpComicViewer.Comic
 
         public ImageComic(string filePath)
         {
-            if (filePath == null)
+            if (!File.Exists(filePath))
             {
-                throw new ArgumentNullException(nameof(filePath));
+                throw new ArgumentException($"File not found: {filePath}", nameof(filePath));
             }
 
-            this.filePath = filePath;
+            this.filePath = filePath ?? throw new ArgumentNullException(nameof(filePath));
         }
 
         public string getBookmarkName(int pageNumber)
@@ -35,6 +35,11 @@ namespace CSharpComicViewer.Comic
 
         public async Task<byte[]> GetPage(int pageNumber)
         {
+            if (!File.Exists(this.filePath))
+            {
+                return null;
+            }
+
             byte[] data;
 
             using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true))
@@ -51,6 +56,11 @@ namespace CSharpComicViewer.Comic
 
         public int Pages()
         {
+            if (!File.Exists(this.filePath))
+            {
+                return 0;
+            }
+
             return 1;
         }
     }
