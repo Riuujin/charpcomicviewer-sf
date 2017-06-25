@@ -31,6 +31,7 @@ namespace CSharpComicViewer.ViewModel
         private ViewMode viewMode;
         private bool pageCountVisible;
         private string notificationText;
+        private RelayCommand openAboutCommand;
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -62,6 +63,24 @@ namespace CSharpComicViewer.ViewModel
                 return addBookmarkCommand;
             }
         }
+
+        public RelayCommand OpenAboutCommand
+        {
+            get
+            {
+                if (openAboutCommand == null)
+                {
+                    openAboutCommand = new RelayCommand(() =>
+                    {
+                        var ws = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IWindowService)) as IWindowService;
+                        ws.OpenAboutWindow();
+                    });
+                }
+
+                return openAboutCommand;
+            }
+        }
+
 
         internal void HandleException(Exception ex)
         {

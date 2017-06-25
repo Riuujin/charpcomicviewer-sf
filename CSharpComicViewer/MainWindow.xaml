@@ -72,7 +72,7 @@
                 <MenuItem Header="Fit to width" IsCheckable="True" IsChecked="{Binding Path=ViewMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=FitToWidth}" />
             </MenuItem>
             <MenuItem Header="Full screen" IsCheckable="True" IsChecked="{Binding IsFullscreen, Mode=OneWay}" Command="{Binding ToggleFullscreenCommand}" />
-            <MenuItem Header="About" />
+            <MenuItem Header="About" Command="{Binding OpenAboutCommand}"/>
             <MenuItem Header="Exit" InputGestureText="Alt+F4" Command="{Binding ExitCommand}" />
         </ContextMenu>
     </Window.ContextMenu>
@@ -99,7 +99,7 @@
             Padding="0,0,5,0"
 			Panel.ZIndex="50" FontSize="24" TextAlignment="Center">
             <TextBlock.Text>
-                <MultiBinding StringFormat=" {0}/{1}" NotifyOnTargetUpdated="True">
+                <MultiBinding StringFormat="{}{0}/{1}" NotifyOnTargetUpdated="True">
                     <Binding Path="PageNumber" />
                     <Binding Path="NumberOfPages" />
                 </MultiBinding>

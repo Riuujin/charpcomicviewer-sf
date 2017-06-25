@@ -1,5 +1,4 @@
-﻿using CSharpComicViewer.Service;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,20 +15,22 @@ using System.Windows.Shapes;
 namespace CSharpComicViewer
 {
     /// <summary>
-    /// Interaction logic for Main.xaml
+    /// Interaction logic for AboutWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class AboutWindow : Window
     {
-        public MainWindow()
+        public AboutWindow()
         {
             InitializeComponent();
-            var ws = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IWindowService)) as IWindowService;
-            ws.SetMainWindow(this);
         }
 
-        private void OnMouseWheel(object sender, MouseWheelEventArgs e)
+        private void Hyperlink_Click(object sender, RoutedEventArgs e)
         {
-            pageViewer.OnMouseWheel(sender, e);
+            // open URL
+            if (sender  is Hyperlink source)
+            {
+                System.Diagnostics.Process.Start(source.NavigateUri.ToString());
+            }
         }
     }
 }

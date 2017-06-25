@@ -20,6 +20,7 @@ namespace CSharpComicViewer.ViewModel
                 ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
             }
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<AboutViewModel>();
         }
 
         public MainViewModel Main
@@ -27,6 +28,14 @@ namespace CSharpComicViewer.ViewModel
             get
             {
                 return ServiceLocator.Current.GetInstance<MainViewModel>();
+            }
+        }
+
+        public AboutViewModel About
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<AboutViewModel>();
             }
         }
     }

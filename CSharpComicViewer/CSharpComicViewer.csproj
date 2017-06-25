@@ -123,6 +123,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutWindow.xaml.cs">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -151,6 +154,7 @@
     <Compile Include="Service\WindowService.cs" />
     <Compile Include="ValueConverters\EnumBooleanConverter.cs" />
     <Compile Include="ValueConverters\StringNullOrEmptyToVisibilityConverter.cs" />
+    <Compile Include="ViewModel\AboutViewModel.cs" />
     <Compile Include="ViewModel\BookmarkContextMenuItem.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
@@ -159,9 +163,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils.cs" />
-    <None Include="WPF\About.xaml.cs">
-      <DependentUpon>About.xaml</DependentUpon>
-    </None>
     <None Include="WPF\BookmarkManager.xaml.cs">
       <DependentUpon>BookmarkManager.xaml</DependentUpon>
     </None>
@@ -206,6 +207,10 @@
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml" />
+    <Page Include="AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\PageViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -214,10 +219,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <None Include="WPF\About.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </None>
     <None Include="WPF\BookmarkManager.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -233,6 +234,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="FodyWeavers.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icon_48x48x32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

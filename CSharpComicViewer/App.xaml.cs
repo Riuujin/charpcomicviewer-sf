@@ -1,6 +1,4 @@
-﻿//-------------------------------------------------------------------------------------
-//  Copyright 2012 Rutger Spruyt
-using CSharpComicViewer.Data;
+﻿using CSharpComicViewer.Data;
 using CSharpComicViewer.Service;
 using CSharpComicViewer.ViewModel;
 using System.Windows;
@@ -22,7 +20,7 @@ namespace CSharpComicViewer
             var mainWindow = new MainWindow();
 
             var ws = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IWindowService)) as IWindowService;
-            ws.SetWindow(mainWindow);
+            ws.SetMainWindow(mainWindow);
 
             var mv = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetInstance<MainViewModel>();
             mv.LoadFromStorage();

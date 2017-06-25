@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace CSharpComicViewer.Service
@@ -11,11 +7,30 @@ namespace CSharpComicViewer.Service
     {
         private Window window;
 
-        public void SetWindow(Window window)
+        public void OpenAboutWindow()
+        {
+            var window = new AboutWindow();
+            window.ShowDialog();
+        }
+
+        /// <summary>
+        /// Sets the main window.
+        /// </summary>
+        /// <param name="window">The window.</param>
+        public void SetMainWindow(Window window)
         {
             this.window = window;
         }
 
+        /// <summary>
+        /// Toggles the fullscreen.
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if set to fullscreen;otherwise <c>false</c>.
+        /// </returns>
+        /// <remarks>
+        /// This is done for the main window.
+        /// </remarks>
         public bool ToggleFullscreen()
         {
             if (window == null) {
