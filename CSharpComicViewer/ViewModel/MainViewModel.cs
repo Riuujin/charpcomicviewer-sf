@@ -57,6 +57,7 @@ namespace CSharpComicViewer.ViewModel
                         };
 
                         Bookmarks.Add(bookmark);
+                        NotificationText = "Bookmark added.";
                     }, () => { return Comic != null; });
                 }
 
