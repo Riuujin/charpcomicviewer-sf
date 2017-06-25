@@ -165,7 +165,7 @@ namespace CSharpComicViewer.ViewModel
                                    try
                                    {
                                        var files = openFileDialog.FileNames;
-                                       await LoadComic(files);
+                                       await LoadComic(files, 1);
                                    }
                                    catch (Exception ex)
                                    {
@@ -180,14 +180,14 @@ namespace CSharpComicViewer.ViewModel
             }
         }
 
-        private async Task LoadComic(string[] files)
+        private async Task LoadComic(string[] files, int pageNumber)
         {
             var previousComic = Comic;
             var comic = ComicFactory.Create(files);
             if (comic != null)
             {
                 NumberOfPages = comic.Pages();
-                PageNumber = 1;
+                PageNumber = pageNumber;
                 var page = await comic.GetPage(PageNumber);
                 Page = page;
                 Comic = comic;
@@ -290,7 +290,7 @@ namespace CSharpComicViewer.ViewModel
                 {
                     resumeCommand = new RelayCommand(async () =>
                     {
-                        await LoadComic(resumeData.FilePaths);
+                        await LoadComic(resumeData.FilePaths, resumeData.Page);
                     }, () => { return resumeData?.FilePaths.Length > 0; });
                 }
 
@@ -483,7 +483,7 @@ namespace CSharpComicViewer.ViewModel
                             Bookmark = bookmark,
                             Command = new RelayCommand<Bookmark>(async (Bookmark b) =>
                             {
-                                await LoadComic(b.FilePaths);
+                                await LoadComic(b.FilePaths, b.Page);
                             }),
                             IsEnabled = bookmark.FilePaths.All(filePath => System.IO.File.Exists(filePath))
                         });
