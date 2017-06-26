@@ -7,9 +7,35 @@ namespace CSharpComicViewer.Service
     {
         private Window window;
 
+        /// <summary>
+        /// Confirms the specified confirmation text.
+        /// </summary>
+        /// <param name="messageBoxText">The message box text.</param>
+        /// <param name="caption">The caption.</param>
+        /// <returns>
+        ///   <c>true</c> if confirmed; otherwise <c>false</c>.
+        /// </returns>
+        public bool Confirm(string messageBoxText, string caption)
+        {
+            MessageBoxResult messageBoxResult = MessageBox.Show(messageBoxText, caption, System.Windows.MessageBoxButton.YesNo);
+            return messageBoxResult == MessageBoxResult.Yes;
+        }
+
+        /// <summary>
+        /// Opens the about window.
+        /// </summary>
         public void OpenAboutWindow()
         {
             var window = new AboutWindow();
+            window.ShowDialog();
+        }
+
+        /// <summary>
+        /// Opens the bookmark manager window.
+        /// </summary>
+        public void OpenBookmarkManagerWindow()
+        {
+            var window = new BookmarkManager();
             window.ShowDialog();
         }
 

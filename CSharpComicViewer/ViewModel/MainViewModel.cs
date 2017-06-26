@@ -32,6 +32,7 @@ namespace CSharpComicViewer.ViewModel
         private bool pageCountVisible;
         private string notificationText;
         private RelayCommand openAboutCommand;
+        private RelayCommand openBookmarkManagerCommand;
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -57,6 +58,7 @@ namespace CSharpComicViewer.ViewModel
                         };
 
                         Bookmarks.Add(bookmark);
+                        NotificationText = null;
                         NotificationText = "Bookmark added.";
                     }, () => { return Comic != null; });
                 }
@@ -79,6 +81,25 @@ namespace CSharpComicViewer.ViewModel
                 }
 
                 return openAboutCommand;
+            }
+        }
+
+
+
+        public RelayCommand OpenBookmarkManagerCommand
+        {
+            get
+            {
+                if (openBookmarkManagerCommand == null)
+                {
+                    openBookmarkManagerCommand = new RelayCommand(() =>
+                    {
+                        var ws = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IWindowService)) as IWindowService;
+                        ws.OpenBookmarkManagerWindow();
+                    }, () => Bookmarks.Count > 0);
+                }
+
+                return openBookmarkManagerCommand;
             }
         }
 
@@ -165,7 +186,7 @@ namespace CSharpComicViewer.ViewModel
                                    try
                                    {
                                        var files = openFileDialog.FileNames;
-                                       await LoadComic(files, 1);
+                                       await OpenComic(files, 1);
                                    }
                                    catch (Exception ex)
                                    {
@@ -180,7 +201,7 @@ namespace CSharpComicViewer.ViewModel
             }
         }
 
-        private async Task LoadComic(string[] files, int pageNumber)
+        public async Task OpenComic(string[] files, int pageNumber)
         {
             var previousComic = Comic;
             var comic = ComicFactory.Create(files);
@@ -290,7 +311,7 @@ namespace CSharpComicViewer.ViewModel
                 {
                     resumeCommand = new RelayCommand(async () =>
                     {
-                        await LoadComic(resumeData.FilePaths, resumeData.Page);
+                        await OpenComic(resumeData.FilePaths, resumeData.Page);
                     }, () => { return resumeData?.FilePaths.Length > 0; });
                 }
 
@@ -464,7 +485,7 @@ namespace CSharpComicViewer.ViewModel
                 {
                     foreach (Bookmark bookmark in e.OldItems)
                     {
-                        var toDelete = BookmarkMenu.OfType<BookmarkContextMenuItem>().Where(x => x.Bookmark == bookmark);
+                        var toDelete = BookmarkMenu.OfType<BookmarkContextMenuItem>().Where(x => x.Bookmark == bookmark).ToArray();
                         foreach (BookmarkContextMenuItem item in toDelete)
                         {
                             BookmarkMenu.Remove(item);
@@ -483,7 +504,7 @@ namespace CSharpComicViewer.ViewModel
                             Bookmark = bookmark,
                             Command = new RelayCommand<Bookmark>(async (Bookmark b) =>
                             {
-                                await LoadComic(b.FilePaths, b.Page);
+                                await OpenComic(b.FilePaths, b.Page);
                             }),
                             IsEnabled = bookmark.FilePaths.All(filePath => System.IO.File.Exists(filePath))
                         });

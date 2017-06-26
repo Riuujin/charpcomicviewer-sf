@@ -21,6 +21,7 @@
         <KeyBinding Key="O" Modifiers="Ctrl" Command="{Binding OpenCommand}" />
         <KeyBinding Key="L" Command="{Binding OpenCommand}" />
         <KeyBinding Key="D" Modifiers="Ctrl" Command="{Binding AddBookmarkCommand}" />
+        <KeyBinding Key="O" Modifiers="Ctrl+Shift" Command="{Binding OpenBookmarkManagerCommand}"/>
         <KeyBinding Key="PageDown" Command="{Binding NextPageCommand}" />
         <KeyBinding Key="PageUp" Command="{Binding PreviousPageCommand}" />
         <KeyBinding Key="T" Command="{Binding ToggleViewModeCommand}" />
@@ -39,7 +40,7 @@
                 <MenuItem.ItemsSource>
                     <CompositeCollection>
                         <MenuItem Header="Add bookmark" InputGestureText="Ctrl+D" Command="{Binding AddBookmarkCommand}"/>
-                        <MenuItem Header="Manage bookmarks" InputGestureText="Ctrl+Shift+O"/>
+                        <MenuItem Header="Manage bookmarks" InputGestureText="Ctrl+Shift+O" Command="{Binding OpenBookmarkManagerCommand}"/>
                         <Separator/>
                         <CollectionContainer Collection="{Binding Source={StaticResource BookmarkMenu}}" />
                     </CompositeCollection>
@@ -121,12 +122,13 @@
             Visibility="{Binding NotificationText, Converter={StaticResource StringNullOrEmptyToVisibilityConverter}}" 
             Opacity="0"
 			Background="Black"
-			Height="40"
-			FontSize="30"
+			FontSize="24"
 			Foreground="White"
 			TextAlignment="Center"
-			VerticalAlignment="Center"
+			VerticalAlignment="Bottom"
 			Focusable="False" 
+            Width="400"
+            Margin="0,0,0,10"
 			Panel.ZIndex="50">
             <TextBlock.Triggers>
                 <EventTrigger RoutedEvent="Binding.TargetUpdated">

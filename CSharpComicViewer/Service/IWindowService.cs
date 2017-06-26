@@ -5,6 +5,16 @@ namespace CSharpComicViewer.Service
     public interface IWindowService
     {
         /// <summary>
+        /// Opens the about window.
+        /// </summary>
+        void OpenAboutWindow();
+
+        /// <summary>
+        /// Opens the bookmark manager window.
+        /// </summary>
+        void OpenBookmarkManagerWindow();
+
+        /// <summary>
         /// Sets the main window.
         /// </summary>
         /// <param name="window">The window.</param>
@@ -20,8 +30,13 @@ namespace CSharpComicViewer.Service
         bool ToggleFullscreen();
 
         /// <summary>
-        /// Opens the about window.
+        /// Confirms the specified confirmation text.
         /// </summary>
-        void OpenAboutWindow();
+        /// <param name="messageBoxText">The message box text.</param>
+        /// <param name="caption">The caption.</param>
+        /// <returns>
+        ///   <c>true</c> if confirmed; otherwise <c>false</c>.
+        /// </returns>
+        bool Confirm(string messageBoxText, string caption);
     }
 }

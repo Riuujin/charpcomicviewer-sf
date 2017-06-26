@@ -21,6 +21,7 @@ namespace CSharpComicViewer.ViewModel
             }
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<AboutViewModel>();
+            SimpleIoc.Default.Register<BookmarkManagerViewModel>();
         }
 
         public MainViewModel Main
@@ -36,6 +37,14 @@ namespace CSharpComicViewer.ViewModel
             get
             {
                 return ServiceLocator.Current.GetInstance<AboutViewModel>();
+            }
+        }
+
+        public BookmarkManagerViewModel BookmarkManager
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<BookmarkManagerViewModel>();
             }
         }
     }
