@@ -5,7 +5,7 @@ namespace CSharpComicViewer.Service
 {
     public class WindowService : IWindowService
     {
-        private Window window;
+        private Window mainWindow;
 
         /// <summary>
         /// Confirms the specified confirmation text.
@@ -27,6 +27,7 @@ namespace CSharpComicViewer.Service
         public void OpenAboutWindow()
         {
             var window = new AboutWindow();
+            window.Owner = mainWindow;
             window.ShowDialog();
         }
 
@@ -36,6 +37,7 @@ namespace CSharpComicViewer.Service
         public void OpenBookmarkManagerWindow()
         {
             var window = new BookmarkManager();
+            window.Owner = mainWindow;
             window.ShowDialog();
         }
 
@@ -45,7 +47,7 @@ namespace CSharpComicViewer.Service
         /// <param name="window">The window.</param>
         public void SetMainWindow(Window window)
         {
-            this.window = window;
+            this.mainWindow = window;
         }
 
         /// <summary>
@@ -59,22 +61,22 @@ namespace CSharpComicViewer.Service
         /// </remarks>
         public bool ToggleFullscreen()
         {
-            if (window == null) {
+            if (mainWindow == null) {
                 return false;
             }
 
-            if (window.WindowStyle == WindowStyle.None)
+            if (mainWindow.WindowStyle == WindowStyle.None)
             {
-                window.WindowStyle = WindowStyle.SingleBorderWindow;
-                window.ResizeMode = ResizeMode.CanResize;
-                window.WindowState = System.Windows.WindowState.Normal;
+                mainWindow.WindowStyle = WindowStyle.SingleBorderWindow;
+                mainWindow.ResizeMode = ResizeMode.CanResize;
+                mainWindow.WindowState = System.Windows.WindowState.Normal;
                 return false;
             }
             else
             {
-                window.WindowStyle = WindowStyle.None;
-                window.ResizeMode = ResizeMode.NoResize;
-                window.WindowState = System.Windows.WindowState.Maximized;
+                mainWindow.WindowStyle = WindowStyle.None;
+                mainWindow.ResizeMode = ResizeMode.NoResize;
+                mainWindow.WindowState = System.Windows.WindowState.Maximized;
                 return true;
             }
         }
