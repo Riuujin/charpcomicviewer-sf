@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CSharpComicViewer"
-        xmlns:ref="clr-namespace:System.Reflection;assembly=mscorlib"
+        xmlns:Localization="clr-namespace:CSharpComicViewer.Localization"
         mc:Ignorable="d"
         DataContext="{Binding About, Source={StaticResource Locator}}"
         Title="About" Height="110" Width="310" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
@@ -12,7 +12,11 @@
         <Image Height="48" Name="Logo" Stretch="None" Width="48"  Source="/csharp-comicviewer;component/Resources/icon_48x48x32.png" HorizontalAlignment="Left" VerticalAlignment="Top" />
         <StackPanel Margin="54,10,14,0">
             <TextBlock Text="{Binding ProgramName}"/>
-            <TextBlock Text="{Binding Version, StringFormat=Version: {0}}"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{x:Static Localization:AboutWindow.Version}" />
+                <TextBlock Text=": " />
+                <TextBlock Text="{Binding Version}" />
+            </StackPanel>
             <TextBlock Text="{Binding Copyright}"/>
             <TextBlock><Hyperlink Click="Hyperlink_Click" NavigateUri="http://riuujin.github.io/charpcomicviewer-sf">http://riuujin.github.io/charpcomicviewer-sf</Hyperlink></TextBlock>
         </StackPanel>

@@ -18,10 +18,14 @@ namespace CSharpComicViewer.ViewModel
         private IComic comic;
         private RelayCommand exitCommand;
         private bool isFullscreen;
-        private RelayCommand openCommand;
         private RelayCommand nextPageCommand;
+        private string notificationText;
         private int numberOfPages;
+        private RelayCommand openAboutCommand;
+        private RelayCommand openBookmarkManagerCommand;
+        private RelayCommand openCommand;
         private byte[] page;
+        private bool pageCountVisible;
         private int pageNumber;
         private RelayCommand previousPageCommand;
         private RelayCommand resumeCommand;
@@ -29,11 +33,6 @@ namespace CSharpComicViewer.ViewModel
         private RelayCommand toggleFullscreenCommand;
         private RelayCommand toggleViewModeCommand;
         private ViewMode viewMode;
-        private bool pageCountVisible;
-        private string notificationText;
-        private RelayCommand openAboutCommand;
-        private RelayCommand openBookmarkManagerCommand;
-
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
@@ -59,54 +58,12 @@ namespace CSharpComicViewer.ViewModel
 
                         Bookmarks.Add(bookmark);
                         NotificationText = null;
-                        NotificationText = "Bookmark added.";
+                        NotificationText = Localization.Notifications.BookmarkAdded;
                     }, () => { return Comic != null; });
                 }
 
                 return addBookmarkCommand;
             }
-        }
-
-        public RelayCommand OpenAboutCommand
-        {
-            get
-            {
-                if (openAboutCommand == null)
-                {
-                    openAboutCommand = new RelayCommand(() =>
-                    {
-                        var ws = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IWindowService)) as IWindowService;
-                        ws.OpenAboutWindow();
-                    });
-                }
-
-                return openAboutCommand;
-            }
-        }
-
-
-
-        public RelayCommand OpenBookmarkManagerCommand
-        {
-            get
-            {
-                if (openBookmarkManagerCommand == null)
-                {
-                    openBookmarkManagerCommand = new RelayCommand(() =>
-                    {
-                        var ws = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IWindowService)) as IWindowService;
-                        ws.OpenBookmarkManagerWindow();
-                    }, () => Bookmarks.Count > 0);
-                }
-
-                return openBookmarkManagerCommand;
-            }
-        }
-
-
-        internal void HandleException(Exception ex)
-        {
-            NotificationText = ex.Message;
         }
 
         public ObservableCollection<BookmarkContextMenuItem> BookmarkMenu { get; set; } = new ObservableCollection<BookmarkContextMenuItem>();
@@ -151,6 +108,34 @@ namespace CSharpComicViewer.ViewModel
             }
         }
 
+        public RelayCommand NextPageCommand
+        {
+            get
+            {
+                if (nextPageCommand == null)
+                {
+                    nextPageCommand = new RelayCommand(async () =>
+                   {
+                       var page = await Comic.GetPage(PageNumber + 1);
+                       if (page != null)
+                       {
+                           PageNumber++;
+                           Page = page;
+
+                           var cs = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IComicService)) as IComicService;
+                           cs.TriggerPageChange(this, new PageChangedEventArgs { PreviousPage = PageNumber - 1, CurrentPage = PageNumber });
+                       }
+                       else
+                       {
+                           NotificationText = Localization.Notifications.UnableToGetNextPage;
+                       }
+
+                   }, () => { return Comic != null && PageNumber < NumberOfPages; });
+                }
+
+                return nextPageCommand;
+            }
+        }
 
         public string NotificationText
         {
@@ -161,6 +146,52 @@ namespace CSharpComicViewer.ViewModel
             }
         }
 
+        public int NumberOfPages
+        {
+            get { return numberOfPages; }
+            set
+            {
+                Set(ref numberOfPages, value);
+            }
+        }
+
+        public RelayCommand OpenAboutCommand
+        {
+            get
+            {
+                if (openAboutCommand == null)
+                {
+                    openAboutCommand = new RelayCommand(() =>
+                    {
+                        var ws = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IWindowService)) as IWindowService;
+                        ws.OpenAboutWindow();
+                    });
+                }
+
+                return openAboutCommand;
+            }
+        }
+
+
+
+        public RelayCommand OpenBookmarkManagerCommand
+        {
+            get
+            {
+                if (openBookmarkManagerCommand == null)
+                {
+                    openBookmarkManagerCommand = new RelayCommand(() =>
+                    {
+                        var ws = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IWindowService)) as IWindowService;
+                        ws.OpenBookmarkManagerWindow();
+                    }, () => Bookmarks.Count > 0);
+                }
+
+                return openBookmarkManagerCommand;
+            }
+        }
+
+
         public RelayCommand OpenCommand
         {
             get
@@ -170,10 +201,19 @@ namespace CSharpComicViewer.ViewModel
                     openCommand = new RelayCommand(
                            async () =>
                            {
+                               //TODO: Migrate openfile dialog to service
                                OpenFileDialog openFileDialog = new OpenFileDialog();
 
                                openFileDialog.Filter = Utils.GetFileLoaderFilter();
                                openFileDialog.Multiselect = true;
+
+                               var initialPath = comic?.GetFilePaths()[0] ?? resumeData?.FilePaths[0];
+                               if (initialPath != null)
+                               {
+                                   initialPath = System.IO.Path.GetDirectoryName(initialPath);
+                                   openFileDialog.InitialDirectory = initialPath;
+                               }
+
                                openFileDialog.ShowDialog();
 
                                if (openFileDialog.FileNames.Length <= 0)
@@ -201,67 +241,21 @@ namespace CSharpComicViewer.ViewModel
             }
         }
 
-        public async Task OpenComic(string[] files, int pageNumber)
-        {
-            var previousComic = Comic;
-            var comic = ComicFactory.Create(files);
-            if (comic != null)
-            {
-                NumberOfPages = comic.Pages();
-                PageNumber = pageNumber;
-                var page = await comic.GetPage(PageNumber);
-                Page = page;
-                Comic = comic;
-
-                var cs = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IComicService)) as IComicService;
-                cs.TriggerComicLoaded(this, new ComicLoadedEventArgs { PreviousComic = previousComic, CurrentComic = Comic });
-            }
-        }
-
-        public RelayCommand NextPageCommand
-        {
-            get
-            {
-                if (nextPageCommand == null)
-                {
-                    nextPageCommand = new RelayCommand(async () =>
-                   {
-                       var page = await Comic.GetPage(PageNumber + 1);
-                       if (page != null)
-                       {
-                           PageNumber++;
-                           Page = page;
-
-                           var cs = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IComicService)) as IComicService;
-                           cs.TriggerPageChange(this, new PageChangedEventArgs { PreviousPage = PageNumber - 1, CurrentPage = PageNumber });
-                       }
-                       else
-                       {
-                           NotificationText = "Unable to get next page.";
-                       }
-
-                   }, () => { return Comic != null && PageNumber < NumberOfPages; });
-                }
-
-                return nextPageCommand;
-            }
-        }
-
-        public int NumberOfPages
-        {
-            get { return numberOfPages; }
-            set
-            {
-                Set(ref numberOfPages, value);
-            }
-        }
-
         public byte[] Page
         {
             get { return page; }
             set
             {
                 Set(ref page, value);
+            }
+        }
+
+        public bool PageCountVisible
+        {
+            get { return pageCountVisible; }
+            set
+            {
+                Set(ref pageCountVisible, value);
             }
         }
 
@@ -293,7 +287,7 @@ namespace CSharpComicViewer.ViewModel
                         }
                         else
                         {
-                            NotificationText = "Unable to get previous page.";
+                            NotificationText = Localization.Notifications.UnableToGetPreviousPage;
                         }
 
                     }, () => { return Comic != null && PageNumber > 1; });
@@ -344,24 +338,28 @@ namespace CSharpComicViewer.ViewModel
                 {
                     toggleViewModeCommand = new RelayCommand(() =>
                     {
+                        NotificationText = null;
+
                         if (ViewMode == ViewMode.Normal)
                         {
                             ViewMode = ViewMode.FitToScreen;
+                            NotificationText = Localization.Notifications.FitToScreen;
                         }
                         else if (ViewMode == ViewMode.FitToScreen)
                         {
                             ViewMode = ViewMode.FitToHeight;
+                            NotificationText = Localization.Notifications.FitToHeight;
                         }
                         else if (ViewMode == ViewMode.FitToHeight)
                         {
                             ViewMode = ViewMode.FitToWidth;
+                            NotificationText = Localization.Notifications.FitToWidth;
                         }
                         else if (ViewMode == ViewMode.FitToWidth)
                         {
                             ViewMode = ViewMode.Normal;
+                            NotificationText = Localization.Notifications.Normal;
                         }
-
-                        NotificationText = ViewMode.ToString();
                     });
                 }
 
@@ -375,15 +373,6 @@ namespace CSharpComicViewer.ViewModel
             set
             {
                 Set(ref viewMode, value);
-            }
-        }
-
-        public bool PageCountVisible
-        {
-            get { return pageCountVisible; }
-            set
-            {
-                Set(ref pageCountVisible, value);
             }
         }
 
@@ -450,6 +439,23 @@ namespace CSharpComicViewer.ViewModel
             }
         }
 
+        public async Task OpenComic(string[] files, int pageNumber)
+        {
+            var previousComic = Comic;
+            var comic = ComicFactory.Create(files);
+            if (comic != null)
+            {
+                NumberOfPages = await comic.GetNumberOfPages();
+                PageNumber = pageNumber;
+                var page = await comic.GetPage(PageNumber);
+                Page = page;
+                Comic = comic;
+
+                var cs = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IComicService)) as IComicService;
+                cs.TriggerComicLoaded(this, new ComicLoadedEventArgs { PreviousComic = previousComic, CurrentComic = Comic });
+            }
+        }
+
         /// <summary>
         /// Saves to storage.
         /// </summary>
@@ -477,6 +483,10 @@ namespace CSharpComicViewer.ViewModel
             });
         }
 
+        internal void HandleException(Exception ex)
+        {
+            NotificationText = ex.Message;
+        }
         private void InitBookmarkContextMenu()
         {
             Bookmarks.CollectionChanged += delegate (object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

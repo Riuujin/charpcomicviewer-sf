@@ -54,7 +54,7 @@ namespace CSharpComicViewer.Comic
             return data;
         }
 
-        public int Pages()
+        public async Task<int> GetNumberOfPages()
         {
             if (!File.Exists(this.filePath))
             {

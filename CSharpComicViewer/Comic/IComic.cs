@@ -8,7 +8,7 @@ namespace CSharpComicViewer.Comic
 
         string[] GetFilePaths();
 
-        int Pages();
+        Task<int> GetNumberOfPages();
 
         Task<byte[]> GetPage(int pageNumber);
 

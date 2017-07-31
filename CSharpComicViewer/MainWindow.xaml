@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.galasoft.ch/ignore"
         mc:Ignorable="d ignore"
+        xmlns:Localization="clr-namespace:CSharpComicViewer.Localization"
         xmlns:Controls="clr-namespace:CSharpComicViewer.Controls"
         xmlns:ValueConverters="clr-namespace:CSharpComicViewer.ValueConverters"
         DataContext="{Binding Main, Source={StaticResource Locator}}"
@@ -34,13 +35,13 @@
             <ContextMenu.Resources>
                 <CollectionViewSource Source="{Binding BookmarkMenu}" x:Key="BookmarkMenu"/>
             </ContextMenu.Resources>
-            <MenuItem Header="Resume reading" InputGestureText="Ctrl+R" Command="{Binding ResumeCommand}" />
-            <MenuItem Header="Open" InputGestureText="Ctrl+O" Command="{Binding OpenCommand}" />
+            <MenuItem Header="{x:Static Localization:ContextMenu.ResumeReading}" InputGestureText="Ctrl+R" Command="{Binding ResumeCommand}" />
+            <MenuItem Header="{x:Static Localization:ContextMenu.Open}" InputGestureText="Ctrl+O" Command="{Binding OpenCommand}" />
             <MenuItem Header="Bookmarks">
                 <MenuItem.ItemsSource>
                     <CompositeCollection>
-                        <MenuItem Header="Add bookmark" InputGestureText="Ctrl+D" Command="{Binding AddBookmarkCommand}"/>
-                        <MenuItem Header="Manage bookmarks" InputGestureText="Ctrl+Shift+O" Command="{Binding OpenBookmarkManagerCommand}"/>
+                        <MenuItem Header="{x:Static Localization:ContextMenu.AddBookmark}" InputGestureText="Ctrl+D" Command="{Binding AddBookmarkCommand}"/>
+                        <MenuItem Header="{x:Static Localization:ContextMenu.ManageBookmarks}" InputGestureText="Ctrl+Shift+O" Command="{Binding OpenBookmarkManagerCommand}"/>
                         <Separator/>
                         <CollectionContainer Collection="{Binding Source={StaticResource BookmarkMenu}}" />
                     </CompositeCollection>
@@ -66,15 +67,15 @@
                     </Style>
                 </MenuItem.ItemContainerStyle>
             </MenuItem>
-            <MenuItem Header="View modes"  InputGestureText="T">
-                <MenuItem Header="Normal" IsCheckable="True" IsChecked="{Binding Path=ViewMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Normal}" />
-                <MenuItem Header="Fit to screen" IsCheckable="True" IsChecked="{Binding Path=ViewMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=FitToScreen}" />
-                <MenuItem Header="Fit to height" IsCheckable="True" IsChecked="{Binding Path=ViewMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=FitToHeight}" />
-                <MenuItem Header="Fit to width" IsCheckable="True" IsChecked="{Binding Path=ViewMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=FitToWidth}" />
+            <MenuItem Header="{x:Static Localization:ContextMenu.ViewModes}"  InputGestureText="T">
+                <MenuItem Header="{x:Static Localization:ContextMenu.Normal}" IsCheckable="True" IsChecked="{Binding Path=ViewMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Normal}" />
+                <MenuItem Header="{x:Static Localization:ContextMenu.FitToScreen}" IsCheckable="True" IsChecked="{Binding Path=ViewMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=FitToScreen}" />
+                <MenuItem Header="{x:Static Localization:ContextMenu.FitToHeight}" IsCheckable="True" IsChecked="{Binding Path=ViewMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=FitToHeight}" />
+                <MenuItem Header="{x:Static Localization:ContextMenu.FitToWidth}" IsCheckable="True" IsChecked="{Binding Path=ViewMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=FitToWidth}" />
             </MenuItem>
-            <MenuItem Header="Full screen" IsCheckable="True" IsChecked="{Binding IsFullscreen, Mode=OneWay}" Command="{Binding ToggleFullscreenCommand}" />
-            <MenuItem Header="About" Command="{Binding OpenAboutCommand}"/>
-            <MenuItem Header="Exit" InputGestureText="Alt+F4" Command="{Binding ExitCommand}" />
+            <MenuItem Header="{x:Static Localization:ContextMenu.Fullscreen}" IsCheckable="True" IsChecked="{Binding IsFullscreen, Mode=OneWay}" Command="{Binding ToggleFullscreenCommand}" />
+            <MenuItem Header="{x:Static Localization:ContextMenu.About}" Command="{Binding OpenAboutCommand}"/>
+            <MenuItem Header="{x:Static Localization:ContextMenu.Exit}" InputGestureText="Alt+F4" Command="{Binding ExitCommand}" />
         </ContextMenu>
     </Window.ContextMenu>
 

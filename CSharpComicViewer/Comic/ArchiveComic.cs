@@ -22,7 +22,6 @@ namespace CSharpComicViewer.Comic
             }
 
             this.filePath = filePath ?? throw new ArgumentNullException(nameof(filePath));
-            tryGetInformationText = false;
         }
 
         public string getBookmarkName(int pageNumber)
@@ -99,7 +98,7 @@ namespace CSharpComicViewer.Comic
             return data;
         }
 
-        public int Pages()
+        public async Task<int> GetNumberOfPages()
         {
             if (!File.Exists(this.filePath))
             {
@@ -108,13 +107,16 @@ namespace CSharpComicViewer.Comic
 
             if (pages == null)
             {
-                using (var archive = ArchiveFactory.Open(filePath))
-                {
-                    var files = archive.Entries.Where(x => !x.IsDirectory &&
-                                                            SupportedExtensions.IsSupportedImage(x.Key) &&
-                                                            !x.Key.StartsWith("__MACOSX/", StringComparison.OrdinalIgnoreCase));
-                    pages = files.Count();
-                }
+				await Task.Run(() =>
+				{
+					using (var archive = ArchiveFactory.Open(filePath))
+					{
+						var files = archive.Entries.Where(x => !x.IsDirectory &&
+																SupportedExtensions.IsSupportedImage(x.Key) &&
+																!x.Key.StartsWith("__MACOSX/", StringComparison.OrdinalIgnoreCase));
+						pages = files.Count();
+					}
+				});
             }
 
             return pages.Value;

@@ -39,7 +39,7 @@ namespace CSharpComicViewer.Comic
 
             foreach (var comic in comics)
             {
-                int pages = count + comic.Pages();
+                int pages = count + comic.GetNumberOfPages().Result;
 
                 if (pageNumber <= pages)
                 {
@@ -69,7 +69,7 @@ namespace CSharpComicViewer.Comic
 
             foreach (var comic in comics)
             {
-                int pages = count + comic.Pages();
+                int pages = count + await comic.GetNumberOfPages();
 
                 if (pageNumber <= pages)
                 {
@@ -81,13 +81,13 @@ namespace CSharpComicViewer.Comic
             return null;
         }
 
-        public int Pages()
+        public async Task<int> GetNumberOfPages()
         {
             int count = 0;
 
             foreach (var comic in comics)
             {
-                count += comic.Pages();
+                count +=  await comic.GetNumberOfPages();
             }
 
             return count;
