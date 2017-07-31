@@ -15,20 +15,20 @@ namespace CSharpComicViewer.Data
 
         public static bool IsSupportedArchive(string filePath)
         {
-            var extension = Path.GetExtension(filePath).Replace(".","");
+            var extension = Path.GetExtension(filePath).Substring(1);
             return SupportedExtensions.SupportedArchives.Contains(extension, StringComparer.OrdinalIgnoreCase);
         }
 
         public static bool IsSupportedImage(string filePath)
         {
-            var extension = Path.GetExtension(filePath).Replace(".", "");
-            return SupportedExtensions.SupportedImages.Contains(extension, StringComparer.OrdinalIgnoreCase);
+            var extension = Path.GetExtension(filePath).Substring(1);
+			return SupportedExtensions.SupportedImages.Contains(extension, StringComparer.OrdinalIgnoreCase);
         }
 
         public static bool IsSupportedTextFile(string filePath)
         {
-            var extension = Path.GetExtension(filePath).Replace(".", "");
-            return SupportedExtensions.SupportedTextFiles.Contains(extension, StringComparer.OrdinalIgnoreCase);
+            var extension = Path.GetExtension(filePath).Substring(1);
+			return SupportedExtensions.SupportedTextFiles.Contains(extension, StringComparer.OrdinalIgnoreCase);
         }
     }
 
@@ -37,6 +37,7 @@ namespace CSharpComicViewer.Data
     /// </summary>
     public enum SupportedImages
 	{
+		jpeg,
 		jpg,
 		bmp,
 		png
