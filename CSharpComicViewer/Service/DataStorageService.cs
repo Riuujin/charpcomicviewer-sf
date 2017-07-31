@@ -10,7 +10,11 @@ namespace CSharpComicViewer.Service
 {
     public class DataStorageService : IDataStorageService
     {
-        private static readonly string localDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "C# Comicviewer");
+        #if DEBUG
+            private static readonly string localDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "C# Comicviewer","Debug");
+        #else
+            private static readonly string localDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "C# Comicviewer");
+        #endif
 
         /// <summary>
         /// Saves the specified data.
