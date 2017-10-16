@@ -58,7 +58,7 @@ namespace CSharpComicViewer.ViewModel
 
                         Bookmarks.Add(bookmark);
                         NotificationText = null;
-                        NotificationText = Localization.Notifications.BookmarkAdded;
+                        NotificationText = Utils.Translate("Notification_BookmarkAdded");
                     }, () => { return Comic != null; });
                 }
 
@@ -127,8 +127,9 @@ namespace CSharpComicViewer.ViewModel
                        }
                        else
                        {
-                           NotificationText = Localization.Notifications.UnableToGetNextPage;
-                       }
+                           NotificationText = Utils.Translate("Notification_UnableToGetNextPage");
+
+					   }
 
                    }, () => { return Comic != null && PageNumber < NumberOfPages; });
                 }
@@ -287,8 +288,9 @@ namespace CSharpComicViewer.ViewModel
                         }
                         else
                         {
-                            NotificationText = Localization.Notifications.UnableToGetPreviousPage;
-                        }
+                            NotificationText = Utils.Translate("Notification_UnableToGetPreviousPage");
+
+						}
 
                     }, () => { return Comic != null && PageNumber > 1; });
                 }
@@ -343,22 +345,22 @@ namespace CSharpComicViewer.ViewModel
                         if (ViewMode == ViewMode.Normal)
                         {
                             ViewMode = ViewMode.FitToScreen;
-                            NotificationText = Localization.Notifications.FitToScreen;
+                            NotificationText = Utils.Translate("Notification_FitToScreen");
                         }
                         else if (ViewMode == ViewMode.FitToScreen)
                         {
                             ViewMode = ViewMode.FitToHeight;
-                            NotificationText = Localization.Notifications.FitToHeight;
+                            NotificationText = Utils.Translate("Notification_FitToHeight");
                         }
                         else if (ViewMode == ViewMode.FitToHeight)
                         {
                             ViewMode = ViewMode.FitToWidth;
-                            NotificationText = Localization.Notifications.FitToWidth;
+                            NotificationText = Utils.Translate("Notification_FitToWidth");
                         }
                         else if (ViewMode == ViewMode.FitToWidth)
                         {
                             ViewMode = ViewMode.Normal;
-                            NotificationText = Localization.Notifications.Normal;
+                            NotificationText = Utils.Translate("Notification_Normal");
                         }
                     });
                 }

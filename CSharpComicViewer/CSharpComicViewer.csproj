@@ -145,31 +145,17 @@
     <Compile Include="Data\SupportedExtensions.cs" />
     <Compile Include="Data\ViewMode.cs" />
     <Compile Include="Data\Bookmark.cs" />
-    <Compile Include="Localization\ContextMenu.nl.Designer.cs">
-      <DependentUpon>ContextMenu.nl.resx</DependentUpon>
+    <Compile Include="Resources\Localization.nl.Designer.cs">
+      <DependentUpon>Localization.nl.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Localization\ContextMenu.Designer.cs">
+    <Compile Include="Resources\Localization.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ContextMenu.resx</DependentUpon>
+      <DependentUpon>Localization.resx</DependentUpon>
     </Compile>
-    <Compile Include="Localization\AboutWindow.Designer.cs">
-      <DependentUpon>AboutWindow.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Localization\Notifications.nl.Designer.cs">
-      <DependentUpon>Notifications.nl.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Localization\Notifications.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Notifications.resx</DependentUpon>
-    </Compile>
+    <Compile Include="Localization\TranslateExtension.cs" />
     <Compile Include="Service\ComicService.cs" />
     <Compile Include="Service\DataStorageService.cs" />
     <Compile Include="Service\IComicService.cs" />
@@ -195,25 +181,13 @@
       <DependentUpon>InformationText.xaml</DependentUpon>
     </None>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Localization\ContextMenu.nl.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ContextMenu.nl.Designer.cs</LastGenOutput>
+    <EmbeddedResource Include="Resources\Localization.nl.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Localization.nl.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Localization\ContextMenu.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ContextMenu.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Localization\AboutWindow.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>AboutWindow.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Localization\Notifications.nl.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Notifications.nl.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Localization\Notifications.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Notifications.Designer.cs</LastGenOutput>
+    <EmbeddedResource Include="Resources\Localization.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Localization.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

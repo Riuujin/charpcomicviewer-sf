@@ -117,25 +117,72 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BookmarkAdded" xml:space="preserve">
-    <value>Bookmark added</value>
+  <data name="About_Version" xml:space="preserve">
+    <value>Versie</value>
+    <comment>Version label</comment>
   </data>
-  <data name="FitToHeight" xml:space="preserve">
-    <value>Fit to screen</value>
+  <data name="ContextMenu_About" xml:space="preserve">
+    <value>Over</value>
   </data>
-  <data name="FitToScreen" xml:space="preserve">
-    <value>Fit to height</value>
+  <data name="ContextMenu_AddBookmark" xml:space="preserve">
+    <value>Bladwijzer toevoegen</value>
   </data>
-  <data name="FitToWidth" xml:space="preserve">
-    <value>Fit to width</value>
+  <data name="ContextMenu_Exit" xml:space="preserve">
+    <value>Afsluiten</value>
   </data>
-  <data name="Normal" xml:space="preserve">
-    <value>Normal</value>
+  <data name="ContextMenu_FitToHeight" xml:space="preserve">
+    <value>Aanpassen aan hoogte</value>
   </data>
-  <data name="UnableToGetNextPage" xml:space="preserve">
-    <value>Unable to get next page</value>
+  <data name="ContextMenu_FitToScreen" xml:space="preserve">
+    <value>Aanpassen aan scherm</value>
   </data>
-  <data name="UnableToGetPreviousPage" xml:space="preserve">
-    <value>Unable to get previous page</value>
+  <data name="ContextMenu_FitToWidth" xml:space="preserve">
+    <value>Aanpassen aan breedte</value>
+  </data>
+  <data name="ContextMenu_Fullscreen" xml:space="preserve">
+    <value>Volledig scherm</value>
+  </data>
+  <data name="ContextMenu_ManageBookmarks" xml:space="preserve">
+    <value>Bladwijzers beheren</value>
+  </data>
+  <data name="ContextMenu_Normal" xml:space="preserve">
+    <value>Normaal</value>
+  </data>
+  <data name="ContextMenu_Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="ContextMenu_ResumeReading" xml:space="preserve">
+    <value>Lezen hervatten</value>
+  </data>
+  <data name="ContextMenu_ViewModes" xml:space="preserve">
+    <value>Modes</value>
+  </data>
+  <data name="Notification_BookmarkAdded" xml:space="preserve">
+    <value>Bladwijzer toegevoegd</value>
+    <comment>Used in code</comment>
+  </data>
+  <data name="Notification_FitToHeight" xml:space="preserve">
+    <value>Aanpassen aan hoogte</value>
+    <comment>Used in code</comment>
+  </data>
+  <data name="Notification_FitToScreen" xml:space="preserve">
+    <value>Aanpassen aan scherm</value>
+    <comment>Used in code</comment>
+  </data>
+  <data name="Notification_FitToWidth" xml:space="preserve">
+    <value>Aanpassen aan breedte</value>
+    <comment>Used in code</comment>
+  </data>
+  <data name="Notification_Normal" xml:space="preserve">
+    <value>Normaal</value>
+    <comment>Used in code</comment>
+  </data>
+  <data name="Notification_UnableToGetNextPage" xml:space="preserve">
+    <value>Kan volgende pagina niet laden</value>
+    <comment>Used in code</comment>
+  </data>
+  <data name="Notification_UnableToGetPreviousPage" xml:space="preserve">
+    <value>Kan vorige pagina niet laden</value>
+    <comment>Used in code</comment>
   </data>
 </root>

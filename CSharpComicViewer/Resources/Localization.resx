@@ -117,11 +117,72 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Url" xml:space="preserve">
-    <value>http://riuujin.github.io/charpcomicviewer-sf</value>
-  </data>
-  <data name="Version" xml:space="preserve">
+  <data name="About_Version" xml:space="preserve">
     <value>Version</value>
     <comment>Version label</comment>
+  </data>
+  <data name="ContextMenu_About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="ContextMenu_AddBookmark" xml:space="preserve">
+    <value>Add bookmark</value>
+  </data>
+  <data name="ContextMenu_Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="ContextMenu_FitToHeight" xml:space="preserve">
+    <value>Fit to height</value>
+  </data>
+  <data name="ContextMenu_FitToScreen" xml:space="preserve">
+    <value>Fit to screen</value>
+  </data>
+  <data name="ContextMenu_FitToWidth" xml:space="preserve">
+    <value>Fit to width</value>
+  </data>
+  <data name="ContextMenu_Fullscreen" xml:space="preserve">
+    <value>Fullscreen</value>
+  </data>
+  <data name="ContextMenu_ManageBookmarks" xml:space="preserve">
+    <value>Manage bookmarks</value>
+  </data>
+  <data name="ContextMenu_Normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="ContextMenu_Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="ContextMenu_ResumeReading" xml:space="preserve">
+    <value>Resume reading</value>
+  </data>
+  <data name="ContextMenu_ViewModes" xml:space="preserve">
+    <value>View modes</value>
+  </data>
+  <data name="Notification_BookmarkAdded" xml:space="preserve">
+    <value>Bookmark added</value>
+    <comment>Used in code</comment>
+  </data>
+  <data name="Notification_FitToHeight" xml:space="preserve">
+    <value>Fit to height</value>
+    <comment>Used in code</comment>
+  </data>
+  <data name="Notification_FitToScreen" xml:space="preserve">
+    <value>Fit to screen</value>
+    <comment>Used in code</comment>
+  </data>
+  <data name="Notification_FitToWidth" xml:space="preserve">
+    <value>Fit to width</value>
+    <comment>Used in code</comment>
+  </data>
+  <data name="Notification_Normal" xml:space="preserve">
+    <value>Normal</value>
+    <comment>Used in code</comment>
+  </data>
+  <data name="Notification_UnableToGetNextPage" xml:space="preserve">
+    <value>Unable to get next page</value>
+    <comment>Used in code</comment>
+  </data>
+  <data name="Notification_UnableToGetPreviousPage" xml:space="preserve">
+    <value>Unable to get previous page</value>
+    <comment>Used in code</comment>
   </data>
 </root>

@@ -1,5 +1,7 @@
 ﻿using CSharpComicViewer.Data;
 using System;
+using System.Resources;
+using System.Threading;
 
 namespace CSharpComicViewer
 {
@@ -8,8 +10,12 @@ namespace CSharpComicViewer
     /// </summary>
     public static class Utils
     {
-        public static string GetFileLoaderFilter()
-        {
+		private const string ResourceId = "CSharpComicViewer.Resources.Localization";
+
+		private static readonly Lazy<ResourceManager> ResMgr = new Lazy<ResourceManager>(() => new ResourceManager(ResourceId, typeof(Utils).Assembly));
+
+		public static string GetFileLoaderFilter()
+		{
             string returnValue = "";
 
             //Add all supported to filter
@@ -66,5 +72,27 @@ namespace CSharpComicViewer
 
             return returnValue;
         }
-    }
+
+		public static string Translate(string text)
+		{
+			if (text == null)
+				return "";
+
+			var cultureInfo = Thread.CurrentThread.CurrentUICulture;
+
+			var translation = ResMgr.Value.GetString(text, cultureInfo);
+
+			if (translation == null)
+			{
+#if DEBUG
+				throw new ArgumentException(
+					String.Format("Key '{0}' was not found in resources '{1}' for culture '{2}'.", text, ResourceId, cultureInfo.Name),
+					"Text");
+#else
+				translation = Text; // returns the key, which GETS DISPLAYED TO THE USER
+#endif
+			}
+			return translation;
+		}
+	}
 }
