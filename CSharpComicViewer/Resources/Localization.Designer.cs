@@ -70,6 +70,15 @@ namespace CSharpComicViewer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        internal static string BookmarkManager_Name {
+            get {
+                return ResourceManager.GetString("BookmarkManager_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to About.
         /// </summary>
         internal static string ContextMenu_About {

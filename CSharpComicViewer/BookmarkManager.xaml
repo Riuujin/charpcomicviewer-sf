@@ -31,8 +31,40 @@
                 </i:Interaction.Triggers>
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="694" />
-                        <GridViewColumn Header="Page" DisplayMemberBinding="{Binding Page}" Width="50" />
+                        <GridViewColumn Header="Name" Width="694">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding AllFilesExist}" Value="False">
+                                                        <Setter Property="TextDecorations" Value="Strikethrough"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Page" Width="50">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Page}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding AllFilesExist}" Value="False">
+                                                        <Setter Property="TextDecorations" Value="Strikethrough"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                         <GridViewColumn Width="50">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
@@ -46,7 +78,9 @@
                         </GridViewColumn>
                     </GridView>
                 </ListView.View>
-            </ListView>
+            </ListView>           
+            
+            
             <ListView ItemsSource="{Binding Path=SelectedBookmark.FilePaths}" 
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                       BorderThickness="0,0,0,1" Width="794" Height="134">

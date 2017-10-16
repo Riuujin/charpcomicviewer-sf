@@ -518,7 +518,7 @@ namespace CSharpComicViewer.ViewModel
                             {
                                 await OpenComic(b.FilePaths, b.Page);
                             }),
-                            IsEnabled = bookmark.FilePaths.All(filePath => System.IO.File.Exists(filePath))
+                            IsEnabled = bookmark.AllFilesExist
                         });
                     }
                 }
