@@ -7,7 +7,7 @@
         xmlns:i18n="clr-namespace:CSharpComicViewer.Localization"
         mc:Ignorable="d"
         DataContext="{Binding About, Source={StaticResource Locator}}"
-        Title="About" Height="110" Width="310" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
+        Title="{i18n:Translate About_Title}" Height="110" Width="310" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
     <Grid>
         <Image Height="48" Name="Logo" Stretch="None" Width="48"  Source="/csharp-comicviewer;component/Resources/icon_48x48x32.png" HorizontalAlignment="Left" VerticalAlignment="Top" />
         <StackPanel Margin="54,10,14,0">

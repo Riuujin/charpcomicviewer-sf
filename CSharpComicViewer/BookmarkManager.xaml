@@ -6,9 +6,10 @@
         xmlns:local="clr-namespace:CSharpComicViewer"
         xmlns:ValueConverters="clr-namespace:CSharpComicViewer.ValueConverters"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:i18n="clr-namespace:CSharpComicViewer.Localization"
         mc:Ignorable="d"
         DataContext="{Binding BookmarkManager, Source={StaticResource Locator}}"
-        Title="BookmarkManager" Height="600" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
+        Title="{i18n:Translate BookmarkManager_Title}" Height="600" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <Style TargetType="{x:Type GridViewColumnHeader}">
             <Setter Property="IsHitTestVisible" Value="False" />
@@ -31,7 +32,7 @@
                 </i:Interaction.Triggers>
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Name" Width="694">
+                        <GridViewColumn Header="{i18n:Translate BookmarkManager_Name}" Width="694">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Name}">
@@ -39,7 +40,7 @@
                                             <Style TargetType="{x:Type TextBlock}">
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding AllFilesExist}" Value="False">
-                                                        <Setter Property="TextDecorations" Value="Strikethrough"/>
+                                                        <Setter Property="Foreground" Value="Gray"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -48,7 +49,7 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="Page" Width="50">
+                        <GridViewColumn Header="{i18n:Translate BookmarkManager_Page}" Width="50">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Page}">
@@ -56,7 +57,7 @@
                                             <Style TargetType="{x:Type TextBlock}">
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding AllFilesExist}" Value="False">
-                                                        <Setter Property="TextDecorations" Value="Strikethrough"/>
+                                                        <Setter Property="Foreground" Value="Gray"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -70,7 +71,7 @@
                                 <DataTemplate>
                                     <Button HorizontalAlignment="Right" Background="{x:Null}" BorderBrush="{x:Null}" 
                                 Command="{Binding ElementName=Bookmarks,Path=DataContext.DeleteBookmarkCommand}" 
-                                CommandParameter="{Binding}">
+                                CommandParameter="{Binding}" ToolTip="{i18n:Translate BookmarkManager_DeleteButtonTooltip}">
                                         <Image Height="16" Source="/csharp-comicviewer;component/Resources/font-awesome_4-7-0_times_16_0_a70000_none.png" />
                                     </Button>
                                 </DataTemplate>
@@ -91,7 +92,7 @@
                 </ListView.ItemContainerStyle>
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="FilePaths" DisplayMemberBinding="{Binding}"  Width="794"/>
+                        <GridViewColumn Header="{i18n:Translate BookmarkManager_FilePaths}" DisplayMemberBinding="{Binding}"  Width="794"/>
                     </GridView>
                 </ListView.View>
             </ListView>

@@ -61,6 +61,15 @@ namespace CSharpComicViewer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        internal static string About_Title {
+            get {
+                return ResourceManager.GetString("About_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Version.
         /// </summary>
         internal static string About_Version {
@@ -70,11 +79,47 @@ namespace CSharpComicViewer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete bookmark.
+        /// </summary>
+        internal static string BookmarkManager_DeleteButtonTooltip {
+            get {
+                return ResourceManager.GetString("BookmarkManager_DeleteButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Files.
+        /// </summary>
+        internal static string BookmarkManager_FilePaths {
+            get {
+                return ResourceManager.GetString("BookmarkManager_FilePaths", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         internal static string BookmarkManager_Name {
             get {
                 return ResourceManager.GetString("BookmarkManager_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Page.
+        /// </summary>
+        internal static string BookmarkManager_Page {
+            get {
+                return ResourceManager.GetString("BookmarkManager_Page", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bookmark manager.
+        /// </summary>
+        internal static string BookmarkManager_Title {
+            get {
+                return ResourceManager.GetString("BookmarkManager_Title", resourceCulture);
             }
         }
         
