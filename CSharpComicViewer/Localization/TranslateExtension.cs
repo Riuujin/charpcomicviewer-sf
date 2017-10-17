@@ -17,9 +17,6 @@ namespace CSharpComicViewer.Localization
 	[ContentProperty("Text")]
 	public class TranslateExtension : MarkupExtension
 	{
-		private const string ResourceId = "CSharpComicViewer.Resources.Localization";
-
-		private static readonly Lazy<ResourceManager> ResMgr = new Lazy<ResourceManager>(() => new ResourceManager(ResourceId, typeof(TranslateExtension).Assembly));
 		private string text;
 
 		/// <summary>
@@ -41,24 +38,7 @@ namespace CSharpComicViewer.Localization
 		/// <exception cref="ArgumentException">Text</exception>
 		public override object ProvideValue(IServiceProvider serviceProvider)
 		{
-			if (text == null)
-				return "";
-
-			var cultureInfo = Thread.CurrentThread.CurrentUICulture;
-
-			var translation = ResMgr.Value.GetString(text, cultureInfo);
-
-			if (translation == null)
-			{
-#if DEBUG
-                throw new ArgumentException(
-                    String.Format("Key '{0}' was not found in resources '{1}' for culture '{2}'.", text, ResourceId, cultureInfo.Name),
-                    "Text");
-#else
-				translation = Text; // returns the key, which GETS DISPLAYED TO THE USER
-#endif
-			}
-			return translation;
+			return Utils.Translate(text);
 		}
 	}
 }

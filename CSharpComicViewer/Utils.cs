@@ -14,6 +14,10 @@ namespace CSharpComicViewer
 
 		private static readonly Lazy<ResourceManager> ResMgr = new Lazy<ResourceManager>(() => new ResourceManager(ResourceId, typeof(Utils).Assembly));
 
+		/// <summary>
+		/// Gets the file loader filter.
+		/// </summary>
+		/// <returns>The filter.</returns>
 		public static string GetFileLoaderFilter()
 		{
             string returnValue = "";
@@ -73,6 +77,12 @@ namespace CSharpComicViewer
             return returnValue;
         }
 
+		/// <summary>
+		/// Translates the specified text.
+		/// </summary>
+		/// <param name="text">The text.</param>
+		/// <returns>The translation</returns>
+		/// <exception cref="ArgumentException">Text</exception>
 		public static string Translate(string text)
 		{
 			if (text == null)
