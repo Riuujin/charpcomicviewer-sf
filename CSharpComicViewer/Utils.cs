@@ -99,7 +99,7 @@ namespace CSharpComicViewer
 					String.Format("Key '{0}' was not found in resources '{1}' for culture '{2}'.", text, ResourceId, cultureInfo.Name),
 					"Text");
 #else
-				translation = Text; // returns the key, which GETS DISPLAYED TO THE USER
+				translation = text; // returns the key, which GETS DISPLAYED TO THE USER
 #endif
 			}
 			return translation;
