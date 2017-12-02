@@ -41,6 +41,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "..\CSharpComicViewer\bin\Release\csharp-comicviewer.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\CSharpComicViewer\bin\Release\csharp-comicviewer.exe.config"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

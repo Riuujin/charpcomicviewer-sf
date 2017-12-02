@@ -8,6 +8,9 @@
         mc:Ignorable="d"
         DataContext="{Binding About, Source={StaticResource Locator}}"
         Title="{i18n:Translate About_Title}" Height="110" Width="310" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+    </Window.Resources>
     <Grid>
         <Image Height="48" Name="Logo" Stretch="None" Width="48"  Source="/csharp-comicviewer;component/Resources/icon_48x48x32.png" HorizontalAlignment="Left" VerticalAlignment="Top" />
         <StackPanel Margin="54,10,14,0">
@@ -16,9 +19,17 @@
                 <TextBlock Text="{i18n:Translate About_Version}" />
                 <TextBlock Text=": " />
                 <TextBlock Text="{Binding Version}" />
+                <StackPanel Orientation="Horizontal"
+                        Visibility="{Binding Path=LatestVersionIsDifferent,Converter={StaticResource BoolToVisConverter}}">
+                    <TextBlock Text=" (" />
+                    <TextBlock Text="{i18n:Translate About_LatestVersion}" />
+                    <TextBlock Text=": " />
+                    <TextBlock><Hyperlink Click="Hyperlink_Click" NavigateUri="{Binding LatestVersionUrl}"><TextBlock Text="{Binding LatestVersion}" /></Hyperlink></TextBlock>
+                    <TextBlock Text=")" />
+                </StackPanel>
             </StackPanel>
             <TextBlock Text="{Binding Copyright}"/>
-            <TextBlock><Hyperlink Click="Hyperlink_Click" NavigateUri="http://riuujin.github.io/charpcomicviewer-sf">http://riuujin.github.io/charpcomicviewer-sf</Hyperlink></TextBlock>
+            <TextBlock><Hyperlink Click="Hyperlink_Click" NavigateUri="{Binding GitHubUrl}"><TextBlock Text="{Binding GitHubUrl}" /></Hyperlink></TextBlock>
         </StackPanel>
     </Grid>
 </Window>

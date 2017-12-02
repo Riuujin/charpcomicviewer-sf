@@ -61,6 +61,15 @@ namespace CSharpComicViewer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Latest.
+        /// </summary>
+        internal static string About_LatestVersion {
+            get {
+                return ResourceManager.GetString("About_LatestVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to About.
         /// </summary>
         internal static string About_Title {

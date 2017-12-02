@@ -22,6 +22,11 @@ namespace CSharpComicViewer
         public AboutWindow()
         {
             InitializeComponent();
+            var viewModel = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetInstance<ViewModel.AboutViewModel>();
+            if (viewModel.LatestVersion == null)
+            {
+                viewModel.CheckUpdateCommand.Execute(null);
+            }
         }
 
         private void Hyperlink_Click(object sender, RoutedEventArgs e)
