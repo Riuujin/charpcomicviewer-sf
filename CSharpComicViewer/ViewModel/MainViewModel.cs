@@ -1,37 +1,38 @@
 ﻿using CSharpComicViewer.Comic;
 using CSharpComicViewer.Data;
 using CSharpComicViewer.Service;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Linq;
 using System;
+using System.Windows.Input;
+using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight;
 
 namespace CSharpComicViewer.ViewModel
 {
-    public class MainViewModel : ViewModelBase
+    public class MainViewModel: ViewModelBase
     {
-        private RelayCommand addBookmarkCommand;
+        private ICommand addBookmarkCommand;
         private IComic comic;
-        private RelayCommand exitCommand;
+        private ICommand exitCommand;
         private bool isFullscreen;
-        private RelayCommand nextPageCommand;
+        private ICommand nextPageCommand;
         private string notificationText;
         private int numberOfPages;
-        private RelayCommand openAboutCommand;
-        private RelayCommand openBookmarkManagerCommand;
-        private RelayCommand openCommand;
+        private ICommand openAboutCommand;
+        private ICommand openBookmarkManagerCommand;
+        private ICommand openCommand;
         private byte[] page;
         private bool pageCountVisible;
         private int pageNumber;
-        private RelayCommand previousPageCommand;
-        private RelayCommand resumeCommand;
+        private ICommand previousPageCommand;
+        private ICommand resumeCommand;
         private Bookmark resumeData;
-        private RelayCommand toggleFullscreenCommand;
-        private RelayCommand toggleViewModeCommand;
+        private ICommand toggleFullscreenCommand;
+        private ICommand toggleViewModeCommand;
         private ViewMode viewMode;
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -41,7 +42,7 @@ namespace CSharpComicViewer.ViewModel
             InitBookmarkContextMenu();
         }
 
-        public RelayCommand AddBookmarkCommand
+        public ICommand AddBookmarkCommand
         {
             get
             {
@@ -83,7 +84,7 @@ namespace CSharpComicViewer.ViewModel
             }
         }
 
-        public RelayCommand ExitCommand
+        public ICommand ExitCommand
         {
             get
             {
@@ -108,7 +109,7 @@ namespace CSharpComicViewer.ViewModel
             }
         }
 
-        public RelayCommand NextPageCommand
+        public ICommand NextPageCommand
         {
             get
             {
@@ -156,7 +157,7 @@ namespace CSharpComicViewer.ViewModel
             }
         }
 
-        public RelayCommand OpenAboutCommand
+        public ICommand OpenAboutCommand
         {
             get
             {
@@ -175,7 +176,7 @@ namespace CSharpComicViewer.ViewModel
 
 
 
-        public RelayCommand OpenBookmarkManagerCommand
+        public ICommand OpenBookmarkManagerCommand
         {
             get
             {
@@ -193,7 +194,7 @@ namespace CSharpComicViewer.ViewModel
         }
 
 
-        public RelayCommand OpenCommand
+        public ICommand OpenCommand
         {
             get
             {
@@ -269,7 +270,7 @@ namespace CSharpComicViewer.ViewModel
             }
         }
 
-        public RelayCommand PreviousPageCommand
+        public ICommand PreviousPageCommand
         {
             get
             {
@@ -299,7 +300,7 @@ namespace CSharpComicViewer.ViewModel
             }
         }
 
-        public RelayCommand ResumeCommand
+        public ICommand ResumeCommand
         {
             get
             {
@@ -315,7 +316,7 @@ namespace CSharpComicViewer.ViewModel
             }
         }
 
-        public RelayCommand ToggleFullscreenCommand
+        public ICommand ToggleFullscreenCommand
         {
             get
             {
@@ -332,7 +333,7 @@ namespace CSharpComicViewer.ViewModel
             }
         }
 
-        public RelayCommand ToggleViewModeCommand
+        public ICommand ToggleViewModeCommand
         {
             get
             {

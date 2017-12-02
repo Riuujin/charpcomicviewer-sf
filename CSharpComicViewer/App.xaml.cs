@@ -10,12 +10,12 @@ namespace CSharpComicViewer
     /// </summary>
     public partial class App : Application
     {
-        private static Service.ServiceLocator ServiceLocator;
+        private static ServiceLocator serviceLocator;
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             this.DispatcherUnhandledException += App_DispatcherUnhandledException;
-            ServiceLocator = new Service.ServiceLocator();
+            serviceLocator = new Service.ServiceLocator();
 
             var mainWindow = new MainWindow();
 
