@@ -35,7 +35,7 @@ namespace CSharpComicViewer.ViewModel
             }
             else
             {
-                var mv = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetInstance<MainViewModel>();
+                var mv = CommonServiceLocator.ServiceLocator.Current.GetInstance<MainViewModel>();
                 Bookmarks = mv.Bookmarks;
             }
         }
@@ -59,7 +59,7 @@ namespace CSharpComicViewer.ViewModel
                 {
                     deleteBookmarkCommand = new RelayCommand<Bookmark>((bookmark) =>
                     {
-                        var ws = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IWindowService)) as IWindowService;
+                        var ws = CommonServiceLocator.ServiceLocator.Current.GetService(typeof(IWindowService)) as IWindowService;
                         if (ws.Confirm("Are you sure?", "Delete confirmation"))
                         {
                             Bookmarks.Remove(bookmark);
@@ -79,9 +79,9 @@ namespace CSharpComicViewer.ViewModel
                 {
                     openSelectedBookmarkCommand = new RelayCommand(() =>
                     {
-                        var mv = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetInstance<MainViewModel>();
+                        var mv = CommonServiceLocator.ServiceLocator.Current.GetInstance<MainViewModel>();
                         mv.OpenComic(SelectedBookmark.FilePaths, SelectedBookmark.Page);
-                    },()=> SelectedBookmark != null);
+                    }, () => SelectedBookmark != null);
                 }
 
                 return openSelectedBookmarkCommand;

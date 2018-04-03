@@ -14,7 +14,7 @@ namespace CSharpComicViewer.Service
     {
         public void Migrate()
         {
-            var service = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IDataStorageService)) as IDataStorageService;
+            var service = CommonServiceLocator.ServiceLocator.Current.GetService(typeof(IDataStorageService)) as IDataStorageService;
             string configurationPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "C# Comicviewer", "Configuration.xml");
 
             if (File.Exists(configurationPath))

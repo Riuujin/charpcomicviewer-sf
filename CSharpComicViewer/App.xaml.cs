@@ -19,10 +19,10 @@ namespace CSharpComicViewer
 
             var mainWindow = new MainWindow();
 
-            var ws = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IWindowService)) as IWindowService;
+            var ws = CommonServiceLocator.ServiceLocator.Current.GetService(typeof(IWindowService)) as IWindowService;
             ws.SetMainWindow(mainWindow);
 
-            var mv = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetInstance<MainViewModel>();
+            var mv = CommonServiceLocator.ServiceLocator.Current.GetInstance<MainViewModel>();
             mv.LoadFromStorage();
 
             mainWindow.Show();
@@ -30,13 +30,13 @@ namespace CSharpComicViewer
 
         private void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            var mv = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetInstance<MainViewModel>();
+            var mv = CommonServiceLocator.ServiceLocator.Current.GetInstance<MainViewModel>();
             mv.HandleException(e.Exception);
         }
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {
-            var mv = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetInstance<MainViewModel>();
+            var mv = CommonServiceLocator.ServiceLocator.Current.GetInstance<MainViewModel>();
             mv.SaveToStorage();
         }
 

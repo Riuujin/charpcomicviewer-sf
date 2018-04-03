@@ -23,7 +23,7 @@ namespace CSharpComicViewer
 		public MainWindow()
 		{
 			InitializeComponent();
-			var ws = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IWindowService)) as IWindowService;
+			var ws = CommonServiceLocator.ServiceLocator.Current.GetService(typeof(IWindowService)) as IWindowService;
 			ws.SetMainWindow(this);
 		}
 

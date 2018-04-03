@@ -13,9 +13,9 @@ namespace CSharpComicViewer.Service
         /// </summary>
         public ServiceLocator()
         {
-            if (!Microsoft.Practices.ServiceLocation.ServiceLocator.IsLocationProviderSet)
+            if (!CommonServiceLocator.ServiceLocator.IsLocationProviderSet)
             {
-                Microsoft.Practices.ServiceLocation.ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
+                CommonServiceLocator.ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
             }
             SimpleIoc.Default.Register<IComicService, ComicService>();
             SimpleIoc.Default.Register<IWindowService, WindowService>();

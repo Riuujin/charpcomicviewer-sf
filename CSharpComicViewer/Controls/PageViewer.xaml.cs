@@ -47,7 +47,7 @@ namespace CSharpComicViewer.Controls
 
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                var cs = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IComicService)) as IComicService;
+                var cs = CommonServiceLocator.ServiceLocator.Current.GetService(typeof(IComicService)) as IComicService;
                 cs.ComicLoaded += ComicService_ComicLoaded;
                 cs.PageChange += ComicService_PageChange;
             }

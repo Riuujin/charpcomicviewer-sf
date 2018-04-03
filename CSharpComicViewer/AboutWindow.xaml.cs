@@ -22,7 +22,7 @@ namespace CSharpComicViewer
         public AboutWindow()
         {
             InitializeComponent();
-            var viewModel = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetInstance<ViewModel.AboutViewModel>();
+            var viewModel = CommonServiceLocator.ServiceLocator.Current.GetInstance<ViewModel.AboutViewModel>();
             if (viewModel.LatestVersion == null)
             {
                 viewModel.CheckUpdateCommand.Execute(null);

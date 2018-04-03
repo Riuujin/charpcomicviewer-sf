@@ -123,7 +123,7 @@ namespace CSharpComicViewer.ViewModel
                            PageNumber++;
                            Page = page;
 
-                           var cs = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IComicService)) as IComicService;
+                           var cs = CommonServiceLocator.ServiceLocator.Current.GetService(typeof(IComicService)) as IComicService;
                            cs.TriggerPageChange(this, new PageChangedEventArgs { PreviousPage = PageNumber - 1, CurrentPage = PageNumber });
                        }
                        else
@@ -165,7 +165,7 @@ namespace CSharpComicViewer.ViewModel
                 {
                     openAboutCommand = new RelayCommand(() =>
                     {
-                        var ws = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IWindowService)) as IWindowService;
+                        var ws = CommonServiceLocator.ServiceLocator.Current.GetService(typeof(IWindowService)) as IWindowService;
                         ws.OpenAboutWindow();
                     });
                 }
@@ -184,7 +184,7 @@ namespace CSharpComicViewer.ViewModel
                 {
                     openBookmarkManagerCommand = new RelayCommand(() =>
                     {
-                        var ws = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IWindowService)) as IWindowService;
+                        var ws = CommonServiceLocator.ServiceLocator.Current.GetService(typeof(IWindowService)) as IWindowService;
                         ws.OpenBookmarkManagerWindow();
                     }, () => Bookmarks.Count > 0);
                 }
@@ -284,7 +284,7 @@ namespace CSharpComicViewer.ViewModel
                             PageNumber--;
                             Page = page;
 
-                            var cs = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IComicService)) as IComicService;
+                            var cs = CommonServiceLocator.ServiceLocator.Current.GetService(typeof(IComicService)) as IComicService;
                             cs.TriggerPageChange(this, new PageChangedEventArgs { PreviousPage = PageNumber + 1, CurrentPage = PageNumber });
                         }
                         else
@@ -324,7 +324,7 @@ namespace CSharpComicViewer.ViewModel
                 {
                     toggleFullscreenCommand = new RelayCommand(() =>
                     {
-                        var ws = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IWindowService)) as IWindowService;
+                        var ws = CommonServiceLocator.ServiceLocator.Current.GetService(typeof(IWindowService)) as IWindowService;
                         IsFullscreen = ws.ToggleFullscreen();
                     });
                 }
@@ -386,7 +386,7 @@ namespace CSharpComicViewer.ViewModel
         /// </summary>
         public void LoadFromStorage()
         {
-            var service = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IDataStorageService)) as IDataStorageService;
+            var service = CommonServiceLocator.ServiceLocator.Current.GetService(typeof(IDataStorageService)) as IDataStorageService;
 
             var state = service.Load<State>("state");
             var resumeData = service.Load<Bookmark>("resumeData");
@@ -394,7 +394,7 @@ namespace CSharpComicViewer.ViewModel
 
             if (state == null && resumeData == null && bookmarks == null)
             {
-                var legacyService = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(ILegacyConfigurationMigrationService)) as ILegacyConfigurationMigrationService;
+                var legacyService = CommonServiceLocator.ServiceLocator.Current.GetService(typeof(ILegacyConfigurationMigrationService)) as ILegacyConfigurationMigrationService;
                 legacyService.Migrate();
 
                 //Reload data, it might have been changed.
@@ -409,7 +409,7 @@ namespace CSharpComicViewer.ViewModel
                 if (state.IsFullScreen)
                 {
                     //Initial state will never be fullscreen, toggle to fullscreen if state requires it.
-                    var ws = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IWindowService)) as IWindowService;
+                    var ws = CommonServiceLocator.ServiceLocator.Current.GetService(typeof(IWindowService)) as IWindowService;
                     IsFullscreen = ws.ToggleFullscreen();
                 }
             }
@@ -454,7 +454,7 @@ namespace CSharpComicViewer.ViewModel
                 Page = page;
                 Comic = comic;
 
-                var cs = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IComicService)) as IComicService;
+                var cs = CommonServiceLocator.ServiceLocator.Current.GetService(typeof(IComicService)) as IComicService;
                 cs.TriggerComicLoaded(this, new ComicLoadedEventArgs { PreviousComic = previousComic, CurrentComic = Comic });
             }
         }
@@ -464,7 +464,7 @@ namespace CSharpComicViewer.ViewModel
         /// </summary>
         public void SaveToStorage()
         {
-            var service = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetService(typeof(IDataStorageService)) as IDataStorageService;
+            var service = CommonServiceLocator.ServiceLocator.Current.GetService(typeof(IDataStorageService)) as IDataStorageService;
 
             if (Comic != null)
             {
