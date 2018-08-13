@@ -1,7 +1,8 @@
-﻿using CSharpComicViewer.Data;
-using CSharpComicViewer.Service;
-using CSharpComicViewer.ViewModel;
+﻿using CSharpComicViewerLib.Data;
+using CSharpComicViewerLib.Service;
+using CSharpComicViewerLib.ViewModel;
 using System.Windows;
+using CSharpComicViewer.Service;
 
 namespace CSharpComicViewer
 {
@@ -19,7 +20,7 @@ namespace CSharpComicViewer
 
             var mainWindow = new MainWindow();
 
-            var ws = CommonServiceLocator.ServiceLocator.Current.GetService(typeof(IWindowService)) as IWindowService;
+            var ws = CommonServiceLocator.ServiceLocator.Current.GetInstance<IWindowService>();
             ws.SetMainWindow(mainWindow);
 
             var mv = CommonServiceLocator.ServiceLocator.Current.GetInstance<MainViewModel>();

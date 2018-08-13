@@ -75,12 +75,11 @@
     <StartupObject>CSharpComicViewer.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CommonServiceLocator, Version=2.0.3.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>..\packages\CommonServiceLocator.2.0.3\lib\net47\CommonServiceLocator.dll</HintPath>
+    <Reference Include="CommonServiceLocator, Version=2.0.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.2.0.4\lib\net47\CommonServiceLocator.dll</HintPath>
     </Reference>
-    <Reference Include="Costura, Version=1.6.2.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
-      <HintPath>..\packages\Costura.Fody.1.6.2\lib\dotnet\Costura.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Costura, Version=3.1.0.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
+      <HintPath>..\packages\Costura.Fody.3.1.0\lib\net46\Costura.dll</HintPath>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.4.1.0, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.4.1\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
@@ -96,8 +95,8 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="SharpCompress, Version=0.20.0.0, Culture=neutral, PublicKeyToken=afb0a02973931d96, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpCompress.0.20.0\lib\net45\SharpCompress.dll</HintPath>
+    <Reference Include="SharpCompress, Version=0.22.0.0, Culture=neutral, PublicKeyToken=afb0a02973931d96, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpCompress.0.22.0\lib\net45\SharpCompress.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -127,20 +126,9 @@
     <Compile Include="BookmarkManager.xaml.cs">
       <DependentUpon>BookmarkManager.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Comic\ArchiveComic.cs" />
-    <Compile Include="Comic\ComicFactory.cs" />
-    <Compile Include="Comic\IComic.cs" />
-    <Compile Include="Comic\ImageComic.cs" />
-    <Compile Include="Comic\SpannedComic.cs" />
     <Compile Include="Controls\PageViewer.xaml.cs">
       <DependentUpon>PageViewer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Data\ComicLoadedEventArgs.cs" />
-    <Compile Include="Data\PageChangedEventArgs.cs" />
-    <Compile Include="Data\State.cs" />
-    <Compile Include="Data\SupportedExtensions.cs" />
-    <Compile Include="Data\ViewMode.cs" />
-    <Compile Include="Data\Bookmark.cs" />
     <Compile Include="Resources\Localization.nl.Designer.cs">
       <DependentUpon>Localization.nl.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -152,27 +140,16 @@
       <DependentUpon>Localization.resx</DependentUpon>
     </Compile>
     <Compile Include="Localization\TranslateExtension.cs" />
-    <Compile Include="Service\ComicService.cs" />
-    <Compile Include="Service\DataStorageService.cs" />
-    <Compile Include="Service\IComicService.cs" />
-    <Compile Include="Service\IDataStorageService.cs" />
-    <Compile Include="Service\ILegacyConfigurationMigrationService.cs" />
-    <Compile Include="Service\IWindowService.cs" />
-    <Compile Include="Service\LegacyConfigurationMigrationService.cs" />
+    <Compile Include="Service\ApplicationService.cs" />
     <Compile Include="Service\ServiceLocator.cs" />
+    <Compile Include="Service\UtilityService.cs" />
     <Compile Include="Service\WindowService.cs" />
     <Compile Include="ValueConverters\EnumBooleanConverter.cs" />
     <Compile Include="ValueConverters\StringNullOrEmptyToVisibilityConverter.cs" />
-    <Compile Include="ViewModel\BookmarkManagerViewModel.cs" />
-    <Compile Include="ViewModel\AboutViewModel.cs" />
-    <Compile Include="ViewModel\BookmarkContextMenuItem.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <None Include="File\FileLoader.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utils.cs" />
+    <Compile Include="ViewModel\ViewModelLocator.cs" />
     <None Include="WPF\InformationText.xaml.cs">
       <DependentUpon>InformationText.xaml</DependentUpon>
     </None>
@@ -258,6 +235,15 @@
   <ItemGroup>
     <Resource Include="Resources\font-awesome_4-7-0_times_16_0_a70000_none.png" />
   </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CSharpComicViewerLib\CSharpComicViewerLib.csproj">
+      <Project>{c4ead8cb-699f-42da-b558-9cbfa3dd3e30}</Project>
+      <Name>CSharpComicViewerLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
@@ -267,13 +253,13 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets'))" />
-    <Error Condition="!Exists('..\packages\Fody.2.2.1.0\build\net452\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.2.2.1.0\build\net452\Fody.targets'))" />
     <Error Condition="!Exists('..\packages\Resource.Embedder.1.2.5\build\Resource.Embedder.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Resource.Embedder.1.2.5\build\Resource.Embedder.targets'))" />
+    <Error Condition="!Exists('..\packages\Fody.3.1.4\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.3.1.4\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\Costura.Fody.3.1.0\build\Costura.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.3.1.0\build\Costura.Fody.targets'))" />
   </Target>
-  <Import Project="..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets" Condition="Exists('..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets')" />
-  <Import Project="..\packages\Fody.2.2.1.0\build\net452\Fody.targets" Condition="Exists('..\packages\Fody.2.2.1.0\build\net452\Fody.targets')" />
   <Import Project="..\packages\Resource.Embedder.1.2.5\build\Resource.Embedder.targets" Condition="Exists('..\packages\Resource.Embedder.1.2.5\build\Resource.Embedder.targets')" />
+  <Import Project="..\packages\Fody.3.1.4\build\Fody.targets" Condition="Exists('..\packages\Fody.3.1.4\build\Fody.targets')" />
+  <Import Project="..\packages\Costura.Fody.3.1.0\build\Costura.Fody.targets" Condition="Exists('..\packages\Costura.Fody.3.1.0\build\Costura.Fody.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

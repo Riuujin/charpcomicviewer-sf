@@ -1,4 +1,4 @@
-﻿namespace CSharpComicViewer.Service
+﻿namespace CSharpComicViewerLib.Service
 {
     public interface ILegacyConfigurationMigrationService
     {

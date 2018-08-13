@@ -1,5 +1,5 @@
-﻿using CSharpComicViewer.Data;
-using CSharpComicViewer.Service;
+﻿using CSharpComicViewerLib.Data;
+using CSharpComicViewerLib.Service;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -47,7 +47,7 @@ namespace CSharpComicViewer.Controls
 
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                var cs = CommonServiceLocator.ServiceLocator.Current.GetService(typeof(IComicService)) as IComicService;
+                var cs = CommonServiceLocator.ServiceLocator.Current.GetInstance<IComicService>();
                 cs.ComicLoaded += ComicService_ComicLoaded;
                 cs.PageChange += ComicService_PageChange;
             }
@@ -112,7 +112,7 @@ namespace CSharpComicViewer.Controls
             }
         }
 
-        public async void OnMouseWheel(object sender, MouseWheelEventArgs e)
+        public void OnMouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (scrollLock)
             {

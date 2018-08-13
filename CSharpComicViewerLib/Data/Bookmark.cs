@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Linq;
 
-namespace CSharpComicViewer.Data
+namespace CSharpComicViewerLib.Data
 {
 	public class Bookmark
 	{

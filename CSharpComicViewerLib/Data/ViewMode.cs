@@ -1,4 +1,4 @@
-﻿namespace CSharpComicViewer.Data
+﻿namespace CSharpComicViewerLib.Data
 {
     public enum ViewMode
     {

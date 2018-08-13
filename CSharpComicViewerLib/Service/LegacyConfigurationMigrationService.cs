@@ -1,4 +1,4 @@
-﻿using CSharpComicViewer.Data;
+﻿using CSharpComicViewerLib.Data;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -8,13 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace CSharpComicViewer.Service
+namespace CSharpComicViewerLib.Service
 {
     public class LegacyConfigurationMigrationService : ILegacyConfigurationMigrationService
     {
         public void Migrate()
         {
-            var service = CommonServiceLocator.ServiceLocator.Current.GetService(typeof(IDataStorageService)) as IDataStorageService;
+            var service = CommonServiceLocator.ServiceLocator.Current.GetInstance<IDataStorageService>();
             string configurationPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "C# Comicviewer", "Configuration.xml");
 
             if (File.Exists(configurationPath))

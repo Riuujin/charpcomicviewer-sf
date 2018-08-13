@@ -4,17 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using CSharpComicViewer.Data;
-using CSharpComicViewer.ViewModel;
+using CSharpComicViewerLib.Data;
+using CSharpComicViewerLib.ViewModel;
 using GalaSoft.MvvmLight;
 
-namespace CSharpComicViewer.ViewModel
+namespace CSharpComicViewerLib.ViewModel
 {
     public class BookmarkContextMenuItem : ViewModelBase
     {
         private string header;
         private string inputGestureText;
-        private ICommand action;
         private string toolTip;
 
         /// <summary>

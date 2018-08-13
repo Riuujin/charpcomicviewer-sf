@@ -1,7 +1,7 @@
 ﻿using System;
-using CSharpComicViewer.Data;
+using CSharpComicViewerLib.Data;
 
-namespace CSharpComicViewer.Service
+namespace CSharpComicViewerLib.Service
 {
     public interface IComicService
     {

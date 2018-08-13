@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 
-namespace CSharpComicViewer.Comic
+namespace CSharpComicViewerLib.Comic
 {
     internal class ImageComic : IComic
     {
@@ -54,7 +54,9 @@ namespace CSharpComicViewer.Comic
             return data;
         }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task<int> GetNumberOfPages()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             if (!File.Exists(this.filePath))
             {

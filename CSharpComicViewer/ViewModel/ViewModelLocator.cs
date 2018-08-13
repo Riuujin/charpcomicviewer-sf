@@ -1,4 +1,5 @@
 using CommonServiceLocator;
+using CSharpComicViewerLib.ViewModel;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 

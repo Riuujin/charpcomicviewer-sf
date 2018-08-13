@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CSharpComicViewerLib.Service;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -38,7 +39,7 @@ namespace CSharpComicViewer.Localization
 		/// <exception cref="ArgumentException">Text</exception>
 		public override object ProvideValue(IServiceProvider serviceProvider)
 		{
-			return Utils.Translate(text);
+			return CommonServiceLocator.ServiceLocator.Current.GetInstance<IUtilityService>().Translate(text);
 		}
 	}
 }

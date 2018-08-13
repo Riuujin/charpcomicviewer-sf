@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CSharpComicViewer.Service
+namespace CSharpComicViewerLib.Service
 {
     public class DataStorageService : IDataStorageService
     {

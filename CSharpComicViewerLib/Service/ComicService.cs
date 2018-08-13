@@ -1,11 +1,11 @@
-﻿using CSharpComicViewer.Data;
+﻿using CSharpComicViewerLib.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CSharpComicViewer.Service
+namespace CSharpComicViewerLib.Service
 {
     public class ComicService : IComicService
     {

@@ -1,11 +1,11 @@
-﻿using CSharpComicViewer.Comic;
+﻿using CSharpComicViewerLib.Comic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CSharpComicViewer.Data
+namespace CSharpComicViewerLib.Data
 {
     public class ComicLoadedEventArgs: EventArgs
     {

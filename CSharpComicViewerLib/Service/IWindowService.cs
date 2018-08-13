@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace CSharpComicViewer.Service
+namespace CSharpComicViewerLib.Service
 {
     public interface IWindowService
     {
@@ -18,7 +18,7 @@ namespace CSharpComicViewer.Service
         /// Sets the main window.
         /// </summary>
         /// <param name="window">The window.</param>
-        void SetMainWindow(Window window);
+        void SetMainWindow(object window);
 
         /// <summary>
         /// Toggles the fullscreen.
@@ -38,5 +38,14 @@ namespace CSharpComicViewer.Service
         ///   <c>true</c> if confirmed; otherwise <c>false</c>.
         /// </returns>
         bool Confirm(string messageBoxText, string caption);
+
+        /// <summary>
+        /// Opens the file dialog.
+        /// </summary>
+        /// <param name="initialPath">The initial path.</param>
+        /// <returns>
+        /// The selected files if any.
+        /// </returns>
+        string[] OpenFileDialog(string initialPath);
     }
 }

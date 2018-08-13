@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace CSharpComicViewer.Data
+namespace CSharpComicViewerLib.Data
 {
     public static class SupportedExtensions
     {

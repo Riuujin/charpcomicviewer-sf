@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace CSharpComicViewer.Comic
+namespace CSharpComicViewerLib.Comic
 {
     public interface IComic
     {

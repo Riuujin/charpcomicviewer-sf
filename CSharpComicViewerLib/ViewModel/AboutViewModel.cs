@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CSharpComicViewerLib.Service;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Newtonsoft.Json.Linq;
 using System.Configuration;
@@ -7,7 +8,7 @@ using System.Net;
 using System.Reflection;
 using System.Windows.Input;
 
-namespace CSharpComicViewer.ViewModel
+namespace CSharpComicViewerLib.ViewModel
 {
     public class AboutViewModel : ViewModelBase
     {
@@ -26,16 +27,6 @@ namespace CSharpComicViewer.ViewModel
                 latestVersionIsDifferent = false;
             }
         }
-        private Assembly GetAssembly()
-        {
-            if (assembly == null)
-            {
-
-                assembly = Assembly.GetExecutingAssembly();
-            }
-            return assembly;
-        }
-
 
         /// <summary>
         /// Gets the name of the program.
@@ -47,7 +38,7 @@ namespace CSharpComicViewer.ViewModel
         {
             get
             {
-                return ((AssemblyTitleAttribute)AssemblyTitleAttribute.GetCustomAttribute(GetAssembly(), typeof(AssemblyTitleAttribute))).Title;
+                return CommonServiceLocator.ServiceLocator.Current.GetInstance<IApplicationService>().GetProgramName();
             }
         }
 
@@ -61,7 +52,7 @@ namespace CSharpComicViewer.ViewModel
         {
             get
             {
-                return ((AssemblyCopyrightAttribute)AssemblyTitleAttribute.GetCustomAttribute(GetAssembly(), typeof(AssemblyCopyrightAttribute))).Copyright;
+                return CommonServiceLocator.ServiceLocator.Current.GetInstance<IApplicationService>().GetCopyright();
             }
         }
 
@@ -72,7 +63,7 @@ namespace CSharpComicViewer.ViewModel
         {
             get
             {
-                return FileVersionInfo.GetVersionInfo(GetAssembly().Location).FileVersion;
+                return CommonServiceLocator.ServiceLocator.Current.GetInstance<IApplicationService>().GetFileVersion();
             }
         }
 
@@ -91,7 +82,7 @@ namespace CSharpComicViewer.ViewModel
                     return "http://riuujin.github.io/charpcomicviewer-sf";
                 }
 
-                return ConfigurationManager.AppSettings.Get("GitHubUrl");
+                return CommonServiceLocator.ServiceLocator.Current.GetInstance<IApplicationService>().GetGitHubUrl();
             }
         }
 
@@ -170,7 +161,7 @@ namespace CSharpComicViewer.ViewModel
                                 //Use chrome user agent, github api requires a user agent.
                                 wc.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36");
                                 wc.Headers.Add("Accept", "application/vnd.github.v3+json");
-                                var url = ConfigurationManager.AppSettings.Get("LatestVersionUrl");
+                                var url = CommonServiceLocator.ServiceLocator.Current.GetInstance<IApplicationService>().GetLatestVersionUrl();
                                 var json = await wc.DownloadStringTaskAsync(url);
                                 dynamic data = JObject.Parse(json);
                                 LatestVersion = data.name;
@@ -182,7 +173,7 @@ namespace CSharpComicViewer.ViewModel
                         {
                             //This should never cause the app to crash
                         }
-                       
+
                     });
                 }
 

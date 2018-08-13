@@ -1,11 +1,11 @@
-﻿using CSharpComicViewer.Data;
+﻿using CSharpComicViewerLib.Data;
 using SharpCompress.Archives;
 using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CSharpComicViewer.Comic
+namespace CSharpComicViewerLib.Comic
 {
     internal class ArchiveComic : IComic
     {

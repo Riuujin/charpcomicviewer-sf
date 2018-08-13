@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CSharpComicViewer.Data
+namespace CSharpComicViewerLib.Data
 {
     public class PageChangedEventArgs : EventArgs
     {

@@ -1,11 +1,11 @@
-﻿using CSharpComicViewer.Data;
+﻿using CSharpComicViewerLib.Data;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Linq;
 
-namespace CSharpComicViewer.Comic
+namespace CSharpComicViewerLib.Comic
 {
     public static class ComicFactory
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CSharpComicViewer.Data
+namespace CSharpComicViewerLib.Data
 {
    public class State
     {

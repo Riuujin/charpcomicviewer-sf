@@ -1,3 +1,4 @@
+using CSharpComicViewerLib.Service;
 using GalaSoft.MvvmLight.Ioc;
 
 namespace CSharpComicViewer.Service
@@ -21,6 +22,8 @@ namespace CSharpComicViewer.Service
             SimpleIoc.Default.Register<IWindowService, WindowService>();
             SimpleIoc.Default.Register<IDataStorageService, DataStorageService>();
             SimpleIoc.Default.Register<ILegacyConfigurationMigrationService, LegacyConfigurationMigrationService>();
+            SimpleIoc.Default.Register<IUtilityService, UtilityService>();
+            SimpleIoc.Default.Register<IApplicationService, ApplicationService>();
         }
     }
 }
