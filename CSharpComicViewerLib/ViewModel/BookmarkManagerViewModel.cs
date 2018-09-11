@@ -59,7 +59,7 @@ namespace CSharpComicViewerLib.ViewModel
                 {
                     deleteBookmarkCommand = new RelayCommand<Bookmark>((bookmark) =>
                     {
-                        var ws = CommonServiceLocator.ServiceLocator.Current.GetInstance<IWindowService>();
+                        var ws = CommonServiceLocator.ServiceLocator.Current.GetInstance<IApplicationService>();
                         if (ws.Confirm("Are you sure?", "Delete confirmation"))
                         {
                             Bookmarks.Remove(bookmark);

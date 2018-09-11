@@ -141,9 +141,10 @@
     </Compile>
     <Compile Include="Localization\TranslateExtension.cs" />
     <Compile Include="Service\ApplicationService.cs" />
+    <Compile Include="Service\DataStorageService.cs" />
+    <Compile Include="Service\LegacyConfigurationMigrationService.cs" />
     <Compile Include="Service\ServiceLocator.cs" />
     <Compile Include="Service\UtilityService.cs" />
-    <Compile Include="Service\WindowService.cs" />
     <Compile Include="ValueConverters\EnumBooleanConverter.cs" />
     <Compile Include="ValueConverters\StringNullOrEmptyToVisibilityConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">

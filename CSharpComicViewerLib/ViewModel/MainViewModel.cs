@@ -85,6 +85,11 @@ namespace CSharpComicViewerLib.ViewModel
             }
         }
 
+        public void SetResumeData(Bookmark resumeData)
+        {
+            this.resumeData = resumeData;
+        }
+
         public ICommand ExitCommand
         {
             get
@@ -166,7 +171,7 @@ namespace CSharpComicViewerLib.ViewModel
                 {
                     openAboutCommand = new RelayCommand(() =>
                     {
-                        var ws = CommonServiceLocator.ServiceLocator.Current.GetInstance<IWindowService>();
+                        var ws = CommonServiceLocator.ServiceLocator.Current.GetInstance<IApplicationService>();
                         ws.OpenAboutWindow();
                     });
                 }
@@ -185,7 +190,7 @@ namespace CSharpComicViewerLib.ViewModel
                 {
                     openBookmarkManagerCommand = new RelayCommand(() =>
                     {
-                        var ws = CommonServiceLocator.ServiceLocator.Current.GetInstance<IWindowService>();
+                        var ws = CommonServiceLocator.ServiceLocator.Current.GetInstance<IApplicationService>();
                         ws.OpenBookmarkManagerWindow();
                     }, () => Bookmarks.Count > 0);
                 }
@@ -204,7 +209,7 @@ namespace CSharpComicViewerLib.ViewModel
                     openCommand = new RelayCommand(
                            async () =>
                            {
-                               var ws = CommonServiceLocator.ServiceLocator.Current.GetInstance<IWindowService>();
+                               var ws = CommonServiceLocator.ServiceLocator.Current.GetInstance<IApplicationService>();
 
                                var initialPath = comic?.GetFilePaths()[0] ?? resumeData?.FilePaths[0];
                                if (initialPath != null)
@@ -319,7 +324,7 @@ namespace CSharpComicViewerLib.ViewModel
                 {
                     toggleFullscreenCommand = new RelayCommand(() =>
                     {
-                        var ws = CommonServiceLocator.ServiceLocator.Current.GetInstance<IWindowService>();
+                        var ws = CommonServiceLocator.ServiceLocator.Current.GetInstance<IApplicationService>();
                         IsFullscreen = ws.ToggleFullscreen();
                     });
                 }
@@ -381,60 +386,7 @@ namespace CSharpComicViewerLib.ViewModel
         /// </summary>
         public void LoadFromStorage()
         {
-            var service = CommonServiceLocator.ServiceLocator.Current.GetInstance<IDataStorageService>();
-
-            var state = service.Load<State>("state");
-            var resumeData = service.Load<Bookmark>("resumeData");
-            var bookmarks = service.Load<Bookmark[]>("bookmarks");
-
-            if (state == null && resumeData == null && bookmarks == null)
-            {
-                var legacyService = CommonServiceLocator.ServiceLocator.Current.GetInstance<ILegacyConfigurationMigrationService>();
-                legacyService.Migrate();
-
-                //Reload data, it might have been changed.
-                resumeData = service.Load<Bookmark>("resumeData");
-                bookmarks = service.Load<Bookmark[]>("bookmarks");
-            }
-
-            if (state != null)
-            {
-                this.ViewMode = state.ViewMode;
-
-                if (state.IsFullScreen)
-                {
-                    //Initial state will never be fullscreen, toggle to fullscreen if state requires it.
-                    var ws = CommonServiceLocator.ServiceLocator.Current.GetInstance<IWindowService>();
-                    IsFullscreen = ws.ToggleFullscreen();
-                }
-            }
-
-            if (resumeData?.FilePaths?.Length >= 1)
-            {
-                bool allFilesExist = true;
-
-                foreach (var filePath in resumeData.FilePaths)
-                {
-                    if (!System.IO.File.Exists(filePath))
-                    {
-                        allFilesExist = false;
-                        break;
-                    }
-                }
-
-                if (allFilesExist)
-                {
-                    this.resumeData = resumeData;
-                }
-            }
-
-            if (bookmarks?.Length > 0)
-            {
-                foreach (var bookmark in bookmarks)
-                {
-                    Bookmarks.Add(bookmark);
-                }
-            }
+            
         }
 
         public async Task OpenComic(string[] files, int pageNumber)
@@ -454,32 +406,6 @@ namespace CSharpComicViewerLib.ViewModel
             }
         }
 
-        /// <summary>
-        /// Saves to storage.
-        /// </summary>
-        public void SaveToStorage()
-        {
-            var service = CommonServiceLocator.ServiceLocator.Current.GetInstance<IDataStorageService>();
-
-            if (Comic != null)
-            {
-                var resumeData = new Bookmark
-                {
-                    FilePaths = Comic.GetFilePaths(),
-                    Page = PageNumber
-                };
-
-                service.Save("resumeData", resumeData);
-            }
-
-            service.Save("bookmarks", Bookmarks);
-
-            service.Save("state", new State
-            {
-                ViewMode = ViewMode,
-                IsFullScreen = IsFullscreen
-            });
-        }
 
         public void HandleException(Exception ex)
         {

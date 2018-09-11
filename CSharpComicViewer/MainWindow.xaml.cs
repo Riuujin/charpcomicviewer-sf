@@ -9,14 +9,22 @@ namespace CSharpComicViewer
     /// </summary>
     public partial class MainWindow : Window
 	{
-		public MainWindow()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainWindow"/> class.
+        /// </summary>
+        public MainWindow()
 		{
 			InitializeComponent();
-			var ws = CommonServiceLocator.ServiceLocator.Current.GetInstance<IWindowService>();
+			var ws = CommonServiceLocator.ServiceLocator.Current.GetInstance<IApplicationService>();
 			ws.SetMainWindow(this);
 		}
 
-		private void OnMouseWheel(object sender, MouseWheelEventArgs e)
+        /// <summary>
+        /// Called when mouse wheel is used.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="MouseWheelEventArgs"/> instance containing the event data.</param>
+        private void OnMouseWheel(object sender, MouseWheelEventArgs e)
 		{
 			pageViewer.OnMouseWheel(sender, e);
 		}

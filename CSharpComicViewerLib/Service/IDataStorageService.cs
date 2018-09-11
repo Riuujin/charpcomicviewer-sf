@@ -1,5 +1,9 @@
 ﻿namespace CSharpComicViewerLib.Service
 {
+
+    /// <summary>
+    /// Service that provides saving and loading of data.
+    /// </summary>
     public interface IDataStorageService
     {
         /// <summary>

@@ -23,7 +23,6 @@
             <ListView Name="Bookmarks" Height="400" ItemsSource="{Binding Bookmarks}" 
                       SelectedItem="{Binding SelectedBookmark, Mode=TwoWay}"
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                      MouseDoubleClick="Close_DoubleClick" 
                       BorderThickness="0" Width="794">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">

@@ -12,7 +12,6 @@ namespace CSharpComicViewerLib.ViewModel
 {
     public class AboutViewModel : ViewModelBase
     {
-        private Assembly assembly;
         private ICommand checkUpdateCommand;
         private string latestVersion;
         private string latestVersionUrl;
@@ -180,6 +179,5 @@ namespace CSharpComicViewerLib.ViewModel
                 return checkUpdateCommand;
             }
         }
-
     }
 }

@@ -25,6 +25,12 @@ namespace CSharpComicViewer.ViewModel
             SimpleIoc.Default.Register<BookmarkManagerViewModel>();
         }
 
+        /// <summary>
+        /// Gets the main view model.
+        /// </summary>
+        /// <value>
+        /// The main view model.
+        /// </value>
         public MainViewModel Main
         {
             get
@@ -33,6 +39,12 @@ namespace CSharpComicViewer.ViewModel
             }
         }
 
+        /// <summary>
+        /// Gets the about view model.
+        /// </summary>
+        /// <value>
+        /// The about view model.
+        /// </value>
         public AboutViewModel About
         {
             get
@@ -41,6 +53,12 @@ namespace CSharpComicViewer.ViewModel
             }
         }
 
+        /// <summary>
+        /// Gets the bookmark manager.
+        /// </summary>
+        /// <value>
+        /// The bookmark manager.
+        /// </value>
         public BookmarkManagerViewModel BookmarkManager
         {
             get

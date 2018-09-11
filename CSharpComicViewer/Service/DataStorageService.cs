@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CSharpComicViewerLib.Service;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,8 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CSharpComicViewerLib.Service
+namespace CSharpComicViewer.Service
 {
+    /// <summary>
+    /// Service that provides saving and loading of data.
+    /// </summary>
+    /// <seealso cref="CSharpComicViewerLib.Service.IDataStorageService" />
     public class DataStorageService : IDataStorageService
     {
         #if DEBUG

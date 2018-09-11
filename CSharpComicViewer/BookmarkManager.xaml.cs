@@ -19,17 +19,20 @@ namespace CSharpComicViewer
     /// </summary>
     public partial class BookmarkManager : Window
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BookmarkManager"/> class.
+        /// </summary>
         public BookmarkManager()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Handles the Click event of the Close control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void Close_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-
-        private void Close_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             this.Close();
         }

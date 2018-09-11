@@ -18,19 +18,27 @@ namespace CSharpComicViewer.Controls
     /// </summary>
     public partial class PageViewer : UserControl
     {
-        // Using a DependencyProperty as the backing store for GoToNextCommand.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// The go to next command property
+        /// </summary>
         public static readonly DependencyProperty GoToNextCommandProperty =
            DependencyProperty.Register(nameof(GoToNextCommand), typeof(ICommand), typeof(PageViewer), new PropertyMetadata(null));
 
-        // Using a DependencyProperty as the backing store for GoToNextCommand.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// The go to previous command property
+        /// </summary>
         public static readonly DependencyProperty GoToPreviousCommandProperty =
            DependencyProperty.Register(nameof(GoToPreviousCommand), typeof(ICommand), typeof(PageViewer), new PropertyMetadata(null));
 
-        // Using a DependencyProperty as the backing store for ImageSource.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// The image source property
+        /// </summary>
         public static readonly DependencyProperty ImageSourceProperty =
             DependencyProperty.Register(nameof(ImageSource), typeof(ImageSource), typeof(PageViewer), new PropertyMetadata(null, new PropertyChangedCallback(OnImageSourceChanged)));
 
-        // Using a DependencyProperty as the backing store for ViewMode.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// The view mode property
+        /// </summary>
         public static readonly DependencyProperty ViewModeProperty =
             DependencyProperty.Register(nameof(ViewMode), typeof(ViewMode), typeof(PageViewer), new PropertyMetadata(ViewMode.Normal, new PropertyChangedCallback(OnViewModeChanged)));
 
@@ -41,6 +49,9 @@ namespace CSharpComicViewer.Controls
         private LastScrollDirection lastScrollDirection = LastScrollDirection.Down;
         private bool scrollLock = false;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PageViewer"/> class.
+        /// </summary>
         public PageViewer()
         {
             InitializeComponent();
@@ -79,6 +90,12 @@ namespace CSharpComicViewer.Controls
             });
         }
 
+        /// <summary>
+        /// Gets or sets the go to next command.
+        /// </summary>
+        /// <value>
+        /// The go to next command.
+        /// </value>
         public ICommand GoToNextCommand
         {
             get { return (ICommand)GetValue(GoToNextCommandProperty); }
@@ -88,6 +105,12 @@ namespace CSharpComicViewer.Controls
             }
         }
 
+        /// <summary>
+        /// Gets or sets the go to previous command.
+        /// </summary>
+        /// <value>
+        /// The go to previous command.
+        /// </value>
         public ICommand GoToPreviousCommand
         {
             get { return (ICommand)GetValue(GoToPreviousCommandProperty); }
@@ -97,12 +120,24 @@ namespace CSharpComicViewer.Controls
             }
         }
 
+        /// <summary>
+        /// Gets or sets the image source.
+        /// </summary>
+        /// <value>
+        /// The image source.
+        /// </value>
         public ImageSource ImageSource
         {
             get { return (ImageSource)GetValue(ImageSourceProperty); }
             set { SetValue(ImageSourceProperty, value); }
         }
 
+        /// <summary>
+        /// Gets or sets the view mode.
+        /// </summary>
+        /// <value>
+        /// The view mode.
+        /// </value>
         public ViewMode ViewMode
         {
             get { return (ViewMode)GetValue(ViewModeProperty); }
@@ -112,6 +147,11 @@ namespace CSharpComicViewer.Controls
             }
         }
 
+        /// <summary>
+        /// Called when mouse wheel is used.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="MouseWheelEventArgs"/> instance containing the event data.</param>
         public void OnMouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (scrollLock)
@@ -184,12 +224,18 @@ namespace CSharpComicViewer.Controls
             }
         }
 
+        /// <summary>
+        /// Scrolls to beginning.
+        /// </summary>
         public void ScrollToBeginning()
         {
             ScrollViewer.ScrollToLeftEnd();
             ScrollViewer.ScrollToTop();
         }
 
+        /// <summary>
+        /// Scrolls to end.
+        /// </summary>
         public void ScrollToEnd()
         {
             ScrollViewer.ScrollToRightEnd();

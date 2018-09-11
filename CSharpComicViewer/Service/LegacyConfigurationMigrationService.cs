@@ -1,4 +1,5 @@
 ﻿using CSharpComicViewerLib.Data;
+using CSharpComicViewerLib.Service;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -8,10 +9,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace CSharpComicViewerLib.Service
+namespace CSharpComicViewer.Service
 {
+    /// <summary>
+    /// Service that provides migration from legacy data format to the new data format.
+    /// </summary>
+    /// <seealso cref="CSharpComicViewerLib.Service.ILegacyConfigurationMigrationService" />
     public class LegacyConfigurationMigrationService : ILegacyConfigurationMigrationService
     {
+        /// <summary>
+        /// Migrates legacy data (v1.5.4) to the latest format.
+        /// </summary>
         public void Migrate()
         {
             var service = CommonServiceLocator.ServiceLocator.Current.GetInstance<IDataStorageService>();
