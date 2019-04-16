@@ -151,15 +151,14 @@ namespace CSharpComicViewerLib.ViewModel
                         {
                             using (WebClient wc = new WebClient())
                             {
-                                //Use chrome user agent, github api requires a user agent.
-                               // wc.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36");
+                                //Use custom user agent, github api requires a user agent.
                                 wc.Headers.Add("user-agent", "CSharpComicViewer version checker");
                                 wc.Headers.Add("Accept", "application/vnd.github.v3+json");
                                 var url = applicationService.GetLatestVersionUrl();
                                 var json = await wc.DownloadStringTaskAsync(url);
                                 dynamic data = JObject.Parse(json);
                                 LatestVersion = data.name;
-                                LatestVersionUrl = new Uri(data.html_url);
+                                LatestVersionUrl = new Uri((string)data.html_url);
                                 LatestVersionIsDifferent = data.tag_name != "v" + Version;
                             }
                         }
@@ -167,7 +166,6 @@ namespace CSharpComicViewerLib.ViewModel
                         {
                             //This should never cause the app to crash
                         }
-
                     });
                 }
 
