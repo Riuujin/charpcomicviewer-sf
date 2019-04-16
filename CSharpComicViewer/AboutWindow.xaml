@@ -7,7 +7,7 @@
         xmlns:i18n="clr-namespace:CSharpComicViewer.Localization"
         mc:Ignorable="d"
         DataContext="{Binding About, Source={StaticResource Locator}}"
-        Title="{i18n:Translate About_Title}" Height="110" Width="310" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
+        Title="{i18n:Translate About_Title}" Height="120" Width="320" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
     </Window.Resources>

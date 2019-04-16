@@ -1,7 +1,8 @@
 ﻿using CSharpComicViewerLib.Data;
 using CSharpComicViewerLib.Service;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Ioc;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Reflection;
@@ -35,7 +36,7 @@ namespace CSharpComicViewerLib.ViewModel
             }
             else
             {
-                var mv = CommonServiceLocator.ServiceLocator.Current.GetInstance<MainViewModel>();
+                var mv = SimpleIoc.Default.GetInstance<MainViewModel>();
                 Bookmarks = mv.Bookmarks;
             }
         }
@@ -59,7 +60,7 @@ namespace CSharpComicViewerLib.ViewModel
                 {
                     deleteBookmarkCommand = new RelayCommand<Bookmark>((bookmark) =>
                     {
-                        var ws = CommonServiceLocator.ServiceLocator.Current.GetInstance<IApplicationService>();
+                        var ws = SimpleIoc.Default.GetInstance<IApplicationService>();
                         if (ws.Confirm("Are you sure?", "Delete confirmation"))
                         {
                             Bookmarks.Remove(bookmark);
@@ -79,7 +80,7 @@ namespace CSharpComicViewerLib.ViewModel
                 {
                     openSelectedBookmarkCommand = new RelayCommand(async () =>
                     {
-                        var mv = CommonServiceLocator.ServiceLocator.Current.GetInstance<MainViewModel>();
+                        var mv = SimpleIoc.Default.GetInstance<MainViewModel>();
                         await mv.OpenComic(SelectedBookmark.FilePaths, SelectedBookmark.Page);
                     }, () => SelectedBookmark != null);
                 }

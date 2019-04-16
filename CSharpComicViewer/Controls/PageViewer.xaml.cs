@@ -1,5 +1,6 @@
 ﻿using CSharpComicViewerLib.Data;
 using CSharpComicViewerLib.Service;
+using GalaSoft.MvvmLight.Ioc;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -58,7 +59,7 @@ namespace CSharpComicViewer.Controls
 
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                var cs = CommonServiceLocator.ServiceLocator.Current.GetInstance<IComicService>();
+                var cs = SimpleIoc.Default.GetInstance<IComicService>();
                 cs.ComicLoaded += ComicService_ComicLoaded;
                 cs.PageChange += ComicService_PageChange;
             }

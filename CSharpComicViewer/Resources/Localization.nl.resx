@@ -148,6 +148,9 @@
   <data name="ContextMenu_AddBookmark" xml:space="preserve">
     <value>Bladwijzer toevoegen</value>
   </data>
+  <data name="ContextMenu_Bookmarks" xml:space="preserve">
+    <value>Bladwijzers</value>
+  </data>
   <data name="ContextMenu_Exit" xml:space="preserve">
     <value>Afsluiten</value>
   </data>

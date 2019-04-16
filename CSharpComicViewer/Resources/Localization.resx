@@ -148,6 +148,9 @@
   <data name="ContextMenu_AddBookmark" xml:space="preserve">
     <value>Add bookmark</value>
   </data>
+  <data name="ContextMenu_Bookmarks" xml:space="preserve">
+    <value>Bookmarks</value>
+  </data>
   <data name="ContextMenu_Exit" xml:space="preserve">
     <value>Exit</value>
   </data>

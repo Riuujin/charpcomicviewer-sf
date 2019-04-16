@@ -19,7 +19,7 @@ namespace CSharpComicViewer.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Localization {
@@ -147,6 +147,15 @@ namespace CSharpComicViewer.Resources {
         internal static string ContextMenu_AddBookmark {
             get {
                 return ResourceManager.GetString("ContextMenu_AddBookmark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bookmarks.
+        /// </summary>
+        internal static string ContextMenu_Bookmarks {
+            get {
+                return ResourceManager.GetString("ContextMenu_Bookmarks", resourceCulture);
             }
         }
         

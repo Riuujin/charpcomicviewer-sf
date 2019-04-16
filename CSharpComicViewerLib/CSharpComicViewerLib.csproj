@@ -13,11 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommonServiceLocator" Version="2.0.4" />
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
-    <PackageReference Include="MvvmLightLibs" Version="5.4.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="SharpCompress" Version="0.22.0" />
+    <PackageReference Include="MvvmLightLibsStd10" Version="5.4.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="SharpCompress" Version="0.23.0" />
   </ItemGroup>
 
 </Project>

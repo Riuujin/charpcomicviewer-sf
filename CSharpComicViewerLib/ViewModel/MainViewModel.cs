@@ -8,8 +8,9 @@ using System.Windows;
 using System.Linq;
 using System;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Ioc;
 
 namespace CSharpComicViewerLib.ViewModel
 {
@@ -34,13 +35,19 @@ namespace CSharpComicViewerLib.ViewModel
         private ICommand toggleFullscreenCommand;
         private ICommand toggleViewModeCommand;
         private ViewMode viewMode;
+        private readonly IComicService comicService;
+        private readonly IUtilityService utilityService;
+        private readonly IApplicationService applicationService;
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
-        public MainViewModel()
+        public MainViewModel(IComicService comicService, IUtilityService utilityService, IApplicationService applicationService)
         {
             InitBookmarkContextMenu();
+            this.comicService = comicService;
+            this.utilityService = utilityService;
+            this.applicationService = applicationService;
         }
 
         public ICommand AddBookmarkCommand
@@ -60,7 +67,7 @@ namespace CSharpComicViewerLib.ViewModel
 
                         Bookmarks.Add(bookmark);
                         NotificationText = null;
-                        NotificationText = CommonServiceLocator.ServiceLocator.Current.GetInstance<IUtilityService>().Translate("Notification_BookmarkAdded");
+                        NotificationText = utilityService.Translate("Notification_BookmarkAdded");
                     }, () => { return Comic != null; });
                 }
 
@@ -98,7 +105,7 @@ namespace CSharpComicViewerLib.ViewModel
                 {
                     exitCommand = new RelayCommand(() =>
                     {
-                        CommonServiceLocator.ServiceLocator.Current.GetInstance<IApplicationService>().ApplicationShutdown();
+                        applicationService.ApplicationShutdown();
                     });
                 }
 
@@ -129,12 +136,11 @@ namespace CSharpComicViewerLib.ViewModel
                            PageNumber++;
                            Page = page;
 
-                           var cs = CommonServiceLocator.ServiceLocator.Current.GetInstance<IComicService>();
-                           cs.TriggerPageChange(this, new PageChangedEventArgs { PreviousPage = PageNumber - 1, CurrentPage = PageNumber });
+                           comicService.TriggerPageChange(this, new PageChangedEventArgs { PreviousPage = PageNumber - 1, CurrentPage = PageNumber });
                        }
                        else
                        {
-                           NotificationText = CommonServiceLocator.ServiceLocator.Current.GetInstance<IUtilityService>().Translate("Notification_UnableToGetNextPage");
+                           NotificationText = utilityService.Translate("Notification_UnableToGetNextPage");
 
                        }
 
@@ -171,8 +177,7 @@ namespace CSharpComicViewerLib.ViewModel
                 {
                     openAboutCommand = new RelayCommand(() =>
                     {
-                        var ws = CommonServiceLocator.ServiceLocator.Current.GetInstance<IApplicationService>();
-                        ws.OpenAboutWindow();
+                        applicationService.OpenAboutWindow();
                     });
                 }
 
@@ -190,8 +195,7 @@ namespace CSharpComicViewerLib.ViewModel
                 {
                     openBookmarkManagerCommand = new RelayCommand(() =>
                     {
-                        var ws = CommonServiceLocator.ServiceLocator.Current.GetInstance<IApplicationService>();
-                        ws.OpenBookmarkManagerWindow();
+                        applicationService.OpenBookmarkManagerWindow();
                     }, () => Bookmarks.Count > 0);
                 }
 
@@ -209,15 +213,14 @@ namespace CSharpComicViewerLib.ViewModel
                     openCommand = new RelayCommand(
                            async () =>
                            {
-                               var ws = CommonServiceLocator.ServiceLocator.Current.GetInstance<IApplicationService>();
 
-                               var initialPath = comic?.GetFilePaths()[0] ?? resumeData?.FilePaths[0];
-                               if (initialPath != null)
+                               var initialFileDialogPath = comic?.GetFilePaths()[0] ?? resumeData?.FilePaths[0];
+                               if (initialFileDialogPath != null)
                                {
-                                   initialPath = System.IO.Path.GetDirectoryName(initialPath);
+                                   initialFileDialogPath = System.IO.Path.GetDirectoryName(initialFileDialogPath);
                                }
 
-                               var files = ws.OpenFileDialog(initialPath);
+                               var files = applicationService.OpenFileDialog(initialFileDialogPath);
 
                                if (files?.Length <= 0)
                                {
@@ -284,12 +287,11 @@ namespace CSharpComicViewerLib.ViewModel
                             PageNumber--;
                             Page = page;
 
-                            var cs = CommonServiceLocator.ServiceLocator.Current.GetInstance<IComicService>();
-                            cs.TriggerPageChange(this, new PageChangedEventArgs { PreviousPage = PageNumber + 1, CurrentPage = PageNumber });
+                            comicService.TriggerPageChange(this, new PageChangedEventArgs { PreviousPage = PageNumber + 1, CurrentPage = PageNumber });
                         }
                         else
                         {
-                            NotificationText = CommonServiceLocator.ServiceLocator.Current.GetInstance<IUtilityService>().Translate("Notification_UnableToGetPreviousPage");
+                            NotificationText = utilityService.Translate("Notification_UnableToGetPreviousPage");
 
                         }
 
@@ -324,8 +326,7 @@ namespace CSharpComicViewerLib.ViewModel
                 {
                     toggleFullscreenCommand = new RelayCommand(() =>
                     {
-                        var ws = CommonServiceLocator.ServiceLocator.Current.GetInstance<IApplicationService>();
-                        IsFullscreen = ws.ToggleFullscreen();
+                        IsFullscreen = applicationService.ToggleFullscreen();
                     });
                 }
 
@@ -346,22 +347,22 @@ namespace CSharpComicViewerLib.ViewModel
                         if (ViewMode == ViewMode.Normal)
                         {
                             ViewMode = ViewMode.FitToScreen;
-                            NotificationText = CommonServiceLocator.ServiceLocator.Current.GetInstance<IUtilityService>().Translate("Notification_FitToScreen");
+                            NotificationText = utilityService.Translate("Notification_FitToScreen");
                         }
                         else if (ViewMode == ViewMode.FitToScreen)
                         {
                             ViewMode = ViewMode.FitToHeight;
-                            NotificationText = CommonServiceLocator.ServiceLocator.Current.GetInstance<IUtilityService>().Translate("Notification_FitToHeight");
+                            NotificationText = utilityService.Translate("Notification_FitToHeight");
                         }
                         else if (ViewMode == ViewMode.FitToHeight)
                         {
                             ViewMode = ViewMode.FitToWidth;
-                            NotificationText = CommonServiceLocator.ServiceLocator.Current.GetInstance<IUtilityService>().Translate("Notification_FitToWidth");
+                            NotificationText = utilityService.Translate("Notification_FitToWidth");
                         }
                         else if (ViewMode == ViewMode.FitToWidth)
                         {
                             ViewMode = ViewMode.Normal;
-                            NotificationText = CommonServiceLocator.ServiceLocator.Current.GetInstance<IUtilityService>().Translate("Notification_Normal");
+                            NotificationText = utilityService.Translate("Notification_Normal");
                         }
                     });
                 }
@@ -401,8 +402,7 @@ namespace CSharpComicViewerLib.ViewModel
                 Page = page;
                 Comic = comic;
 
-                var cs = CommonServiceLocator.ServiceLocator.Current.GetInstance<IComicService>();
-                cs.TriggerComicLoaded(this, new ComicLoadedEventArgs { PreviousComic = previousComic, CurrentComic = Comic });
+                comicService.TriggerComicLoaded(this, new ComicLoadedEventArgs { PreviousComic = previousComic, CurrentComic = Comic });
             }
         }
 

@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("C# Comicviewer")]
-[assembly: AssemblyCopyright("Copyright © Rutger Spruyt 2017")]
+[assembly: AssemblyCopyright("Copyright © Rutger Spruyt 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

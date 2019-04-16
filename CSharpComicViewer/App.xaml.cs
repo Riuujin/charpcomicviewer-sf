@@ -1,7 +1,9 @@
 ﻿using CSharpComicViewer.Service;
+using CSharpComicViewerLib;
 using CSharpComicViewerLib.Data;
 using CSharpComicViewerLib.Service;
 using CSharpComicViewerLib.ViewModel;
+using GalaSoft.MvvmLight.Ioc;
 using System.Windows;
 
 namespace CSharpComicViewer
@@ -20,7 +22,7 @@ namespace CSharpComicViewer
         /// <param name="e">The <see cref="System.Windows.Threading.DispatcherUnhandledExceptionEventArgs"/> instance containing the event data.</param>
         private void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            var mv = CommonServiceLocator.ServiceLocator.Current.GetInstance<MainViewModel>();
+            var mv = SimpleIoc.Default.GetInstance<MainViewModel>();
             mv.HandleException(e.Exception);
         }
 
@@ -46,13 +48,18 @@ namespace CSharpComicViewer
 
             var mainWindow = new MainWindow();
 
-            var ws = CommonServiceLocator.ServiceLocator.Current.GetInstance<IApplicationService>();
+            var ws = SimpleIoc.Default.GetInstance<IApplicationService>();
             ws.SetMainWindow(mainWindow);
 
-            var mv = CommonServiceLocator.ServiceLocator.Current.GetInstance<MainViewModel>();
+            var mv = SimpleIoc.Default.GetInstance<MainViewModel>();
             LoadFromStorage(mv);
 
             mainWindow.Show();
+
+            if (e.Args.Length > 0)
+            {
+                System.Threading.Tasks.Task.Run(() => mv.OpenComic(e.Args, 1));
+            }
         }
 
         /// <summary>
@@ -61,7 +68,7 @@ namespace CSharpComicViewer
         /// <param name="mv">The mv.</param>
         private void LoadFromStorage(MainViewModel mv)
         {
-            var service = CommonServiceLocator.ServiceLocator.Current.GetInstance<IDataStorageService>();
+            var service = SimpleIoc.Default.GetInstance<IDataStorageService>();
 
             var state = service.Load<State>("state");
             var resumeData = service.Load<Bookmark>("resumeData");
@@ -69,7 +76,7 @@ namespace CSharpComicViewer
 
             if (state == null && resumeData == null && bookmarks == null)
             {
-                var legacyService = CommonServiceLocator.ServiceLocator.Current.GetInstance<ILegacyConfigurationMigrationService>();
+                var legacyService = SimpleIoc.Default.GetInstance<ILegacyConfigurationMigrationService>();
                 legacyService.Migrate();
 
                 //Reload data, it might have been changed.
@@ -84,7 +91,7 @@ namespace CSharpComicViewer
                 if (state.IsFullScreen)
                 {
                     //Initial state will never be fullscreen, toggle to fullscreen if state requires it.
-                    var ws = CommonServiceLocator.ServiceLocator.Current.GetInstance<IApplicationService>();
+                    var ws = SimpleIoc.Default.GetInstance<IApplicationService>();
                     mv.IsFullscreen = ws.ToggleFullscreen();
                 }
             }
@@ -122,8 +129,8 @@ namespace CSharpComicViewer
         /// </summary>
         private void SaveToStorage()
         {
-            var mv = CommonServiceLocator.ServiceLocator.Current.GetInstance<MainViewModel>();
-            var service = CommonServiceLocator.ServiceLocator.Current.GetInstance<IDataStorageService>();
+            var mv = SimpleIoc.Default.GetInstance<MainViewModel>();
+            var service = SimpleIoc.Default.GetInstance<IDataStorageService>();
 
             if (mv.Comic != null)
             {
@@ -144,5 +151,27 @@ namespace CSharpComicViewer
                 IsFullScreen = mv.IsFullscreen
             });
         }
+
+
+#if DEBUG
+        private static bool? isInDesignMode;
+
+        /// <summary>
+        /// Retruns wether or not the application is running in design mode (in visual studio).
+        /// </summary>
+        public static bool IsInDesignMode
+        {
+            get
+            {
+                if (isInDesignMode == null)
+                {
+                    System.Windows.DependencyObject dep = new System.Windows.DependencyObject();
+                    isInDesignMode = System.ComponentModel.DesignerProperties.GetIsInDesignMode(dep);
+                }
+
+                return isInDesignMode.GetValueOrDefault(false);
+            }
+        }
+#endif
     }
 }

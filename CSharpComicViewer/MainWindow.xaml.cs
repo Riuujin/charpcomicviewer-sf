@@ -1,4 +1,5 @@
 ﻿using CSharpComicViewerLib.Service;
+using GalaSoft.MvvmLight.Ioc;
 using System.Windows;
 using System.Windows.Input;
 
@@ -15,7 +16,7 @@ namespace CSharpComicViewer
         public MainWindow()
 		{
 			InitializeComponent();
-			var ws = CommonServiceLocator.ServiceLocator.Current.GetInstance<IApplicationService>();
+			var ws = SimpleIoc.Default.GetInstance<IApplicationService>();
 			ws.SetMainWindow(this);
 		}
 

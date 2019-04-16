@@ -14,10 +14,6 @@ namespace CSharpComicViewer.Service
         /// </summary>
         public ServiceLocator()
         {
-            if (!CommonServiceLocator.ServiceLocator.IsLocationProviderSet)
-            {
-                CommonServiceLocator.ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
-            }
             SimpleIoc.Default.Register<IComicService, ComicService>();
             SimpleIoc.Default.Register<IDataStorageService, DataStorageService>();
             SimpleIoc.Default.Register<ILegacyConfigurationMigrationService, LegacyConfigurationMigrationService>();

@@ -1,4 +1,3 @@
-using CommonServiceLocator;
 using CSharpComicViewerLib.ViewModel;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
@@ -16,10 +15,6 @@ namespace CSharpComicViewer.ViewModel
         /// </summary>
         public ViewModelLocator()
         {
-            if (!ServiceLocator.IsLocationProviderSet)
-            {
-                ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
-            }
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<AboutViewModel>();
             SimpleIoc.Default.Register<BookmarkManagerViewModel>();
@@ -35,7 +30,7 @@ namespace CSharpComicViewer.ViewModel
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<MainViewModel>();
+                return SimpleIoc.Default.GetInstance<MainViewModel>();
             }
         }
 
@@ -45,11 +40,17 @@ namespace CSharpComicViewer.ViewModel
         /// <value>
         /// The about view model.
         /// </value>
-        public AboutViewModel About
+        public IAboutViewModel About
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<AboutViewModel>();
+#if DEBUG
+                if (App.IsInDesignMode)
+                {
+                    return new CSharpComicViewerLib.ViewModel.Mocks.MockedAboutViewModel();
+                }
+#endif
+                return SimpleIoc.Default.GetInstance<AboutViewModel>();
             }
         }
 
@@ -63,7 +64,7 @@ namespace CSharpComicViewer.ViewModel
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<BookmarkManagerViewModel>();
+                return SimpleIoc.Default.GetInstance<BookmarkManagerViewModel>();
             }
         }
     }

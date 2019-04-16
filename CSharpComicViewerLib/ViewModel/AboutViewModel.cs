@@ -1,7 +1,9 @@
 ﻿using CSharpComicViewerLib.Service;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Ioc;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Configuration;
 using System.Diagnostics;
 using System.Net;
@@ -10,21 +12,18 @@ using System.Windows.Input;
 
 namespace CSharpComicViewerLib.ViewModel
 {
-    public class AboutViewModel : ViewModelBase
+    public class AboutViewModel : ViewModelBase, IAboutViewModel
     {
+        private readonly IApplicationService applicationService;
         private ICommand checkUpdateCommand;
         private string latestVersion;
-        private string latestVersionUrl;
+        private Uri latestVersionUrl;
         private bool latestVersionIsDifferent;
 
 
-        public AboutViewModel()
+        public AboutViewModel(IApplicationService applicationService)
         {
-            if (ViewModelBase.IsInDesignModeStatic)
-            {
-                LatestVersion = Version;
-                latestVersionIsDifferent = false;
-            }
+            this.applicationService = applicationService;
         }
 
         /// <summary>
@@ -37,7 +36,7 @@ namespace CSharpComicViewerLib.ViewModel
         {
             get
             {
-                return CommonServiceLocator.ServiceLocator.Current.GetInstance<IApplicationService>().GetProgramName();
+                return applicationService.GetProgramName();
             }
         }
 
@@ -51,7 +50,7 @@ namespace CSharpComicViewerLib.ViewModel
         {
             get
             {
-                return CommonServiceLocator.ServiceLocator.Current.GetInstance<IApplicationService>().GetCopyright();
+                return applicationService.GetCopyright();
             }
         }
 
@@ -62,7 +61,7 @@ namespace CSharpComicViewerLib.ViewModel
         {
             get
             {
-                return CommonServiceLocator.ServiceLocator.Current.GetInstance<IApplicationService>().GetFileVersion();
+                return applicationService.GetFileVersion();
             }
         }
 
@@ -76,12 +75,7 @@ namespace CSharpComicViewerLib.ViewModel
         {
             get
             {
-                if (ViewModelBase.IsInDesignModeStatic)
-                {
-                    return "http://riuujin.github.io/charpcomicviewer-sf";
-                }
-
-                return CommonServiceLocator.ServiceLocator.Current.GetInstance<IApplicationService>().GetGitHubUrl();
+                return applicationService.GetGitHubUrl();
             }
         }
 
@@ -97,7 +91,7 @@ namespace CSharpComicViewerLib.ViewModel
             {
                 return latestVersion;
             }
-            set
+            private set
             {
                 Set(ref latestVersion, value);
             }
@@ -109,7 +103,7 @@ namespace CSharpComicViewerLib.ViewModel
         /// <value>
         /// The latest version URL.
         /// </value>
-        public string LatestVersionUrl
+        public Uri LatestVersionUrl
         {
             get
             {
@@ -158,13 +152,14 @@ namespace CSharpComicViewerLib.ViewModel
                             using (WebClient wc = new WebClient())
                             {
                                 //Use chrome user agent, github api requires a user agent.
-                                wc.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36");
+                               // wc.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36");
+                                wc.Headers.Add("user-agent", "CSharpComicViewer version checker");
                                 wc.Headers.Add("Accept", "application/vnd.github.v3+json");
-                                var url = CommonServiceLocator.ServiceLocator.Current.GetInstance<IApplicationService>().GetLatestVersionUrl();
+                                var url = applicationService.GetLatestVersionUrl();
                                 var json = await wc.DownloadStringTaskAsync(url);
                                 dynamic data = JObject.Parse(json);
                                 LatestVersion = data.name;
-                                LatestVersionUrl = data.html_url;
+                                LatestVersionUrl = new Uri(data.html_url);
                                 LatestVersionIsDifferent = data.tag_name != "v" + Version;
                             }
                         }

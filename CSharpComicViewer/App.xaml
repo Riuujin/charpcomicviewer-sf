@@ -13,6 +13,10 @@
     <Application.Resources>
         <!--Global View Model Locator-->
         <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
+        <Style TargetType="{x:Type MenuItem}">
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="VerticalContentAlignment" Value="Top" />
+        </Style>
     </Application.Resources>
 
 </Application>

@@ -1,4 +1,5 @@
 ﻿using CSharpComicViewerLib.ViewModel;
+using GalaSoft.MvvmLight.Ioc;
 using System.Windows;
 using System.Windows.Documents;
 
@@ -15,7 +16,7 @@ namespace CSharpComicViewer
         public AboutWindow()
         {
             InitializeComponent();
-            var viewModel = CommonServiceLocator.ServiceLocator.Current.GetInstance<AboutViewModel>();
+            var viewModel = SimpleIoc.Default.GetInstance<AboutViewModel>();
             if (viewModel.LatestVersion == null)
             {
                 viewModel.CheckUpdateCommand.Execute(null);
