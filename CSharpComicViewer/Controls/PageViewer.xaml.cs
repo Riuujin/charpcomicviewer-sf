@@ -19,29 +19,20 @@ namespace CSharpComicViewer.Controls
     /// </summary>
     public partial class PageViewer : UserControl
     {
-        /// <summary>
-        /// The go to next command property
-        /// </summary>
         public static readonly DependencyProperty GoToNextCommandProperty =
            DependencyProperty.Register(nameof(GoToNextCommand), typeof(ICommand), typeof(PageViewer), new PropertyMetadata(null));
 
-        /// <summary>
-        /// The go to previous command property
-        /// </summary>
         public static readonly DependencyProperty GoToPreviousCommandProperty =
            DependencyProperty.Register(nameof(GoToPreviousCommand), typeof(ICommand), typeof(PageViewer), new PropertyMetadata(null));
 
-        /// <summary>
-        /// The image source property
-        /// </summary>
         public static readonly DependencyProperty ImageSourceProperty =
             DependencyProperty.Register(nameof(ImageSource), typeof(ImageSource), typeof(PageViewer), new PropertyMetadata(null, new PropertyChangedCallback(OnImageSourceChanged)));
 
-        /// <summary>
-        /// The view mode property
-        /// </summary>
         public static readonly DependencyProperty ViewModeProperty =
             DependencyProperty.Register(nameof(ViewMode), typeof(ViewMode), typeof(PageViewer), new PropertyMetadata(ViewMode.Normal, new PropertyChangedCallback(OnViewModeChanged)));
+
+        public static readonly DependencyProperty AdjustBackgroundColorProperty =
+           DependencyProperty.Register(nameof(AdjustBackgroundColor), typeof(bool), typeof(PageViewer), new PropertyMetadata(false, new PropertyChangedCallback(OnAdjustBackgroundColorChanged)));
 
         private const int PAGE_SWITCH_TRESHOLD = 10;
 
@@ -147,6 +138,16 @@ namespace CSharpComicViewer.Controls
                 SetValue(ViewModeProperty, value);
             }
         }
+
+        public bool AdjustBackgroundColor
+        {
+            get { return (bool)GetValue(AdjustBackgroundColorProperty); }
+            set
+            {
+                SetValue(AdjustBackgroundColorProperty, value);
+            }
+        }
+
 
         /// <summary>
         /// Called when mouse wheel is used.
@@ -341,74 +342,109 @@ namespace CSharpComicViewer.Controls
         {
             PageViewer pv = d as PageViewer;
             pv.scrollLock = false;
+            var src = e.NewValue as BitmapSource;
 
-
-            return;
-
-            //var src = e.NewValue as BitmapSource;
-            //System.Drawing.Bitmap bitmap = null;
-
-            //using (MemoryStream ms = new MemoryStream())
-            //{
-            //    BitmapEncoder encoder = new PngBitmapEncoder();
-            //    encoder.Frames.Add(BitmapFrame.Create(src));
-            //    encoder.Save(ms);
-            //    ms.Seek(0, SeekOrigin.Begin);
-            //    bitmap = new System.Drawing.Bitmap(ms);
-            //}
-
-            //var brush = GetBackgroundColor(bitmap);
-            //pv.ScrollViewer.Background = brush;
+            if (src != null && pv.AdjustBackgroundColor)
+            {
+                var brush = GetBackgroundColor(src);
+                pv.ScrollViewer.Background = brush;
+            }
+            else
+            {
+                pv.ScrollViewer.Background = null;
+            }
         }
 
-        //private static Brush GetBackgroundColor(System.Drawing.Bitmap objBitmap)
-        //{
-        //    int dividedBy = 100;
-        //    System.Drawing.Color[] colors = new System.Drawing.Color[dividedBy * 4];
+        private static void OnAdjustBackgroundColorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            PageViewer pv = d as PageViewer;
+            var src = pv.ImageSource as BitmapSource;
 
-        //    //get the color of a pixels at the edge of image
-        //    int i = 0;
+            if (src != null && (bool)e.NewValue)
+            {
+                var brush = GetBackgroundColor(src);
+                pv.ScrollViewer.Background = brush;
+            }
+            else
+            {
+                pv.ScrollViewer.Background = null;
+            }
+        }
 
-        //    //left
-        //    for (int y = 0; y < dividedBy; y++)
-        //    {
-        //        colors[i++] = objBitmap.GetPixel(0, y * (objBitmap.Height / dividedBy));
-        //    }
+        private static Brush GetBackgroundColor(BitmapSource bitmap)
+        {
+            int dividedBy = 100;
+            Color[] colors = new Color[dividedBy * 4];
 
-        //    //top
-        //    for (int x = 0; x < dividedBy; x++)
-        //    {
-        //        colors[i++] = objBitmap.GetPixel(x * (objBitmap.Width / dividedBy), 0);
-        //    }
+            //get the color of a pixels at the edge of image
+            int i = 0;
 
-        //    //right
-        //    for (int y = 0; y < dividedBy; y++)
-        //    {
-        //        colors[i++] = objBitmap.GetPixel(objBitmap.Width - 1, y * (objBitmap.Height / dividedBy));
-        //    }
+            //left
+            for (int y = 0; y < dividedBy; y++)
+            {
+                colors[i++] = GetPixelColor(bitmap, 0, y * (bitmap.PixelHeight / dividedBy));
+            }
 
-        //    //bottom
-        //    for (int x = 0; x < dividedBy; x++)
-        //    {
-        //        colors[i++] = objBitmap.GetPixel(x * (objBitmap.Width / dividedBy), objBitmap.Height - 1);
-        //    }
+            //top
+            for (int x = 0; x < dividedBy; x++)
+            {
+                colors[i++] = GetPixelColor(bitmap, x * (bitmap.PixelWidth / dividedBy), 0);
+            }
 
-        //    var colorFrequency = from color in colors
-        //                         group color by color into grouped
-        //                         select new { Color = grouped.Key, Freq = grouped.Count() };
+            //right
+            for (int y = 0; y < dividedBy; y++)
+            {
+                colors[i++] = GetPixelColor(bitmap, bitmap.PixelWidth - 1, y * (bitmap.PixelHeight / dividedBy));
+            }
 
-        //    var backColor = colorFrequency
-        //                        .OrderByDescending(x => x.Freq)
-        //                        .First()
-        //                        .Color;
+            //bottom
+            for (int x = 0; x < dividedBy; x++)
+            {
+                colors[i++] = GetPixelColor(bitmap, x * (bitmap.PixelWidth / dividedBy), bitmap.PixelHeight - 1);
+            }
 
-        //    Color BackColorWPF = new Color();
-        //    BackColorWPF.A = backColor.A;
-        //    BackColorWPF.B = backColor.B;
-        //    BackColorWPF.G = backColor.G;
-        //    BackColorWPF.R = backColor.R;
-        //    return new SolidColorBrush(BackColorWPF);
-        //}
+            var colorFrequency = from color in colors
+                                 group color by color into grouped
+                                 select new { Color = grouped.Key, Freq = grouped.Count() };
+
+            var backColor = colorFrequency
+                                .OrderByDescending(x => x.Freq)
+                                .First()
+                                .Color;
+
+            Color BackColorWPF = new Color();
+            BackColorWPF.A = backColor.A;
+            BackColorWPF.B = backColor.B;
+            BackColorWPF.G = backColor.G;
+            BackColorWPF.R = backColor.R;
+            return new SolidColorBrush(BackColorWPF);
+        }
+
+        public static Color GetPixelColor(BitmapSource bitmap, int x, int y)
+        {
+            Color color;
+            var bytesPerPixel = (bitmap.Format.BitsPerPixel + 7) / 8;
+            var bytes = new byte[bytesPerPixel];
+            var rect = new Int32Rect(x, y, 1, 1);
+
+            bitmap.CopyPixels(rect, bytes, bytesPerPixel, 0);
+
+            if (bitmap.Format == PixelFormats.Bgra32)
+            {
+                color = Color.FromArgb(bytes[3], bytes[2], bytes[1], bytes[0]);
+            }
+            else if (bitmap.Format == PixelFormats.Bgr32)
+            {
+                color = Color.FromRgb(bytes[2], bytes[1], bytes[0]);
+            }
+            // handle other required formats
+            else
+            {
+                color = Colors.White;
+            }
+
+            return color;
+        }
 
         private enum LastScrollDirection
         {

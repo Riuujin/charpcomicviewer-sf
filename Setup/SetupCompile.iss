@@ -14,7 +14,7 @@ AppUpdatesURL=http://riuujin.github.io/charpcomicviewer-sf
 DefaultDirName={pf}\C# Comicviewer
 DefaultGroupName=C# Comicviewer
 LicenseFile=Licence.txt
-OutputBaseFilename=CSharp.Comic.viewer.2.0.0-beta
+OutputBaseFilename=CSharp.Comic.viewer.2.0.0-beta-core
 Compression=lzma
 SolidCompression=yes
 ChangesAssociations=yes
@@ -38,10 +38,10 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
             
-
+			
 [Files]
-Source: "..\CSharpComicViewer\bin\Release\csharp-comicviewer.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\CSharpComicViewer\bin\Release\csharp-comicviewer.exe.config"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\CSharpComicViewer\bin\Release\netcoreapp3.0\publish\win-x64\csharp-comicviewer.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "..\CSharpComicViewer\bin\Release\csharp-comicviewer.exe.config"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
