@@ -35,6 +35,8 @@ namespace CSharpComicViewerLib.ViewModel
         private ICommand toggleFullscreenCommand;
         private ICommand toggleViewModeCommand;
         private ViewMode viewMode;
+        private bool adjustBackgroundColor;
+        private RelayCommand toggleAdjustBackgroundColorCommand;
         private readonly IComicService comicService;
         private readonly IUtilityService utilityService;
         private readonly IApplicationService applicationService;
@@ -227,6 +229,8 @@ namespace CSharpComicViewerLib.ViewModel
                                    return;
                                }
 
+                               Array.Sort(files);
+
                                await Task.Run(async () =>
                                {
                                    try
@@ -334,6 +338,22 @@ namespace CSharpComicViewerLib.ViewModel
             }
         }
 
+        public ICommand ToggleAdjustBackgroundColorCommand
+        {
+            get
+            {
+                if (toggleAdjustBackgroundColorCommand == null)
+                {
+                    toggleAdjustBackgroundColorCommand = new RelayCommand(() =>
+                    {
+                        AdjustBackgroundColor = !AdjustBackgroundColor;
+                    });
+                }
+
+                return toggleAdjustBackgroundColorCommand;
+            }
+        }
+
         public ICommand ToggleViewModeCommand
         {
             get
@@ -380,6 +400,15 @@ namespace CSharpComicViewerLib.ViewModel
             }
         }
 
+        public bool AdjustBackgroundColor
+        {
+            get { return adjustBackgroundColor; }
+            set
+            {
+                Set(ref adjustBackgroundColor, value);
+            }
+        }
+
         public string WindowTitle => "C# Comic Viewer";
 
         /// <summary>
@@ -387,7 +416,7 @@ namespace CSharpComicViewerLib.ViewModel
         /// </summary>
         public void LoadFromStorage()
         {
-            
+
         }
 
         public async Task OpenComic(string[] files, int pageNumber)

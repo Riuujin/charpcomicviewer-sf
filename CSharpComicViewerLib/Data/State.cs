@@ -11,5 +11,7 @@ namespace CSharpComicViewerLib.Data
         public ViewMode ViewMode { get; set; }
 
         public bool IsFullScreen { get; set; }
+
+        public bool AdjustBackgroundColor { get; set; }
     }
 }

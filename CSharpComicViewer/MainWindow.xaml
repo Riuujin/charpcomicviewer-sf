@@ -79,6 +79,7 @@
                 <MenuItem Header="{i18n:Translate ContextMenu_FitToWidth}" IsCheckable="True" IsChecked="{Binding Path=ViewMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=FitToWidth}" />
             </MenuItem>
             <MenuItem Header="{i18n:Translate ContextMenu_Fullscreen}" IsCheckable="True" IsChecked="{Binding IsFullscreen, Mode=OneWay}" Command="{Binding ToggleFullscreenCommand}" />
+            <MenuItem Header="{i18n:Translate ContextMenu_AdjustBackgroundColor}" IsCheckable="True" IsChecked="{Binding AdjustBackgroundColor, Mode=OneWay}" Command="{Binding ToggleAdjustBackgroundColorCommand}" />
             <MenuItem Header="{i18n:Translate ContextMenu_About}" Command="{Binding OpenAboutCommand}"/>
             <MenuItem Header="{i18n:Translate ContextMenu_Exit}" InputGestureText="Alt+F4" Command="{Binding ExitCommand}" />
         </ContextMenu>
@@ -90,6 +91,7 @@
             x:Name="pageViewer"
             ImageSource="{Binding Page, Converter={StaticResource NullImageConverter}}"
             ViewMode="{Binding ViewMode}"
+            AdjustBackgroundColor="{Binding AdjustBackgroundColor}"
             GoToNextCommand="{Binding NextPageCommand}"
             GoToPreviousCommand="{Binding PreviousPageCommand}"
             Focusable="False" />

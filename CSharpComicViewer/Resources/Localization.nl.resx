@@ -148,6 +148,9 @@
   <data name="ContextMenu_AddBookmark" xml:space="preserve">
     <value>Bladwijzer toevoegen</value>
   </data>
+  <data name="ContextMenu_AdjustBackgroundColor" xml:space="preserve">
+    <value>Pas achtergrondkleur aan</value>
+  </data>
   <data name="ContextMenu_Bookmarks" xml:space="preserve">
     <value>Bladwijzers</value>
   </data>

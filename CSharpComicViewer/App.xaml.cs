@@ -87,6 +87,7 @@ namespace CSharpComicViewer
             if (state != null)
             {
                 mv.ViewMode = state.ViewMode;
+                mv.AdjustBackgroundColor = state.AdjustBackgroundColor;
 
                 if (state.IsFullScreen)
                 {
@@ -148,7 +149,8 @@ namespace CSharpComicViewer
             service.Save("state", new State
             {
                 ViewMode = mv.ViewMode,
-                IsFullScreen = mv.IsFullscreen
+                IsFullScreen = mv.IsFullscreen,
+                AdjustBackgroundColor = mv.AdjustBackgroundColor
             });
         }
 
