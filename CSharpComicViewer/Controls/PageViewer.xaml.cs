@@ -345,70 +345,70 @@ namespace CSharpComicViewer.Controls
 
             return;
 
-            var src = e.NewValue as BitmapSource;
-            System.Drawing.Bitmap bitmap = null;
+            //var src = e.NewValue as BitmapSource;
+            //System.Drawing.Bitmap bitmap = null;
 
-            using (MemoryStream ms = new MemoryStream())
-            {
-                BitmapEncoder encoder = new PngBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(src));
-                encoder.Save(ms);
-                ms.Seek(0, SeekOrigin.Begin);
-                bitmap = new System.Drawing.Bitmap(ms);
-            }
+            //using (MemoryStream ms = new MemoryStream())
+            //{
+            //    BitmapEncoder encoder = new PngBitmapEncoder();
+            //    encoder.Frames.Add(BitmapFrame.Create(src));
+            //    encoder.Save(ms);
+            //    ms.Seek(0, SeekOrigin.Begin);
+            //    bitmap = new System.Drawing.Bitmap(ms);
+            //}
 
-            var brush = GetBackgroundColor(bitmap);
-            pv.ScrollViewer.Background = brush;
+            //var brush = GetBackgroundColor(bitmap);
+            //pv.ScrollViewer.Background = brush;
         }
 
-        private static Brush GetBackgroundColor(System.Drawing.Bitmap objBitmap)
-        {
-            int dividedBy = 100;
-            System.Drawing.Color[] colors = new System.Drawing.Color[dividedBy * 4];
+        //private static Brush GetBackgroundColor(System.Drawing.Bitmap objBitmap)
+        //{
+        //    int dividedBy = 100;
+        //    System.Drawing.Color[] colors = new System.Drawing.Color[dividedBy * 4];
 
-            //get the color of a pixels at the edge of image
-            int i = 0;
+        //    //get the color of a pixels at the edge of image
+        //    int i = 0;
 
-            //left
-            for (int y = 0; y < dividedBy; y++)
-            {
-                colors[i++] = objBitmap.GetPixel(0, y * (objBitmap.Height / dividedBy));
-            }
+        //    //left
+        //    for (int y = 0; y < dividedBy; y++)
+        //    {
+        //        colors[i++] = objBitmap.GetPixel(0, y * (objBitmap.Height / dividedBy));
+        //    }
 
-            //top
-            for (int x = 0; x < dividedBy; x++)
-            {
-                colors[i++] = objBitmap.GetPixel(x * (objBitmap.Width / dividedBy), 0);
-            }
+        //    //top
+        //    for (int x = 0; x < dividedBy; x++)
+        //    {
+        //        colors[i++] = objBitmap.GetPixel(x * (objBitmap.Width / dividedBy), 0);
+        //    }
 
-            //right
-            for (int y = 0; y < dividedBy; y++)
-            {
-                colors[i++] = objBitmap.GetPixel(objBitmap.Width - 1, y * (objBitmap.Height / dividedBy));
-            }
+        //    //right
+        //    for (int y = 0; y < dividedBy; y++)
+        //    {
+        //        colors[i++] = objBitmap.GetPixel(objBitmap.Width - 1, y * (objBitmap.Height / dividedBy));
+        //    }
 
-            //bottom
-            for (int x = 0; x < dividedBy; x++)
-            {
-                colors[i++] = objBitmap.GetPixel(x * (objBitmap.Width / dividedBy), objBitmap.Height - 1);
-            }
+        //    //bottom
+        //    for (int x = 0; x < dividedBy; x++)
+        //    {
+        //        colors[i++] = objBitmap.GetPixel(x * (objBitmap.Width / dividedBy), objBitmap.Height - 1);
+        //    }
 
-            var colorFrequency = from color in colors
-                                 group color by color into grouped
-                                 select new { Color = grouped.Key, Freq = grouped.Count() };
+        //    var colorFrequency = from color in colors
+        //                         group color by color into grouped
+        //                         select new { Color = grouped.Key, Freq = grouped.Count() };
 
-            var backColor = colorFrequency
-                                .OrderByDescending(x => x.Freq)
-                                .First()
-                                .Color;
+        //    var backColor = colorFrequency
+        //                        .OrderByDescending(x => x.Freq)
+        //                        .First()
+        //                        .Color;
 
-            Color BackColorWPF = new Color();
-            BackColorWPF.A = backColor.A;
-            BackColorWPF.B = backColor.B;
-            BackColorWPF.G = backColor.G;
-            BackColorWPF.R = backColor.R;
-            return new SolidColorBrush(BackColorWPF);
-        }
+        //    Color BackColorWPF = new Color();
+        //    BackColorWPF.A = backColor.A;
+        //    BackColorWPF.B = backColor.B;
+        //    BackColorWPF.G = backColor.G;
+        //    BackColorWPF.R = backColor.R;
+        //    return new SolidColorBrush(BackColorWPF);
+        //}
 
         private enum LastScrollDirection
         {

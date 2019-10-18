@@ -15,12 +15,12 @@ namespace CSharpComicViewerLib.Service
 
         public void TriggerComicLoaded(object sender, ComicLoadedEventArgs e)
         {
-            ComicLoaded?.BeginInvoke(sender, e, null, null);
+            Task.Run(() => ComicLoaded.Invoke(sender, e));
         }
 
         public void TriggerPageChange(object sender, PageChangedEventArgs e)
         {
-            PageChange?.BeginInvoke(sender, e, null, null);
+            Task.Run(() => PageChange.Invoke(sender, e));
         }
     }
 }

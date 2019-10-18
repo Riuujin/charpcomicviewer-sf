@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.Linq;
+﻿using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace CSharpComicViewerLib.Data
 {
@@ -7,7 +7,6 @@ namespace CSharpComicViewerLib.Data
 	{
 		private bool? allFilesExist;
 
-		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string Name { get; set; }
 
 		public string[] FilePaths { get; set; }

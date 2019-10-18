@@ -1,5 +1,4 @@
 ﻿using CSharpComicViewerLib.Service;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -35,7 +34,7 @@ namespace CSharpComicViewer.Service
 
             var path = Path.Combine(localDataPath, key + ".json");
 
-            var json = JsonConvert.SerializeObject(data);
+            var json = System.Text.Json.JsonSerializer.Serialize(data);
             File.WriteAllText(path, json);
         }
 
@@ -54,7 +53,7 @@ namespace CSharpComicViewer.Service
             if (File.Exists(path))
             {
                 var json = File.ReadAllText(path);
-                return JsonConvert.DeserializeObject<T>(json);
+                return System.Text.Json.JsonSerializer.Deserialize<T>(json);
             }
 
             return default(T);

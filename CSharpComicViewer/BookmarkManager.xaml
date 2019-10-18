@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CSharpComicViewer"
         xmlns:ValueConverters="clr-namespace:CSharpComicViewer.ValueConverters"
-        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:i="clr-namespace:Microsoft.Xaml.Behaviors;assembly=Microsoft.Xaml.Behaviors"
         xmlns:i18n="clr-namespace:CSharpComicViewer.Localization"
         mc:Ignorable="d"
         DataContext="{Binding BookmarkManager, Source={StaticResource Locator}}"

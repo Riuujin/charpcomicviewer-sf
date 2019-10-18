@@ -2,7 +2,6 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Configuration;
 using System.Diagnostics;
@@ -156,7 +155,7 @@ namespace CSharpComicViewerLib.ViewModel
                                 wc.Headers.Add("Accept", "application/vnd.github.v3+json");
                                 var url = applicationService.GetLatestVersionUrl();
                                 var json = await wc.DownloadStringTaskAsync(url);
-                                dynamic data = JObject.Parse(json);
+                                dynamic data = System.Text.Json.JsonDocument.Parse(json);
                                 LatestVersion = data.name;
                                 LatestVersionUrl = new Uri((string)data.html_url);
                                 LatestVersionIsDifferent = data.tag_name != "v" + Version;
