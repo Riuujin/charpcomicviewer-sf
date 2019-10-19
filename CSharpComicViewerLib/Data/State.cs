@@ -13,5 +13,7 @@ namespace CSharpComicViewerLib.Data
         public bool IsFullScreen { get; set; }
 
         public bool AdjustBackgroundColor { get; set; }
+
+        public string CultureName { get; set; }
     }
 }

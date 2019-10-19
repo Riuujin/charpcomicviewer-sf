@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Resources;
 using System.Text;
@@ -9,11 +10,29 @@ using CSharpComicViewerLib.Service;
 
 namespace CSharpComicViewer.Service
 {
-    class UtilityService: IUtilityService
+    class TranslationService : ITranslationService
     {
         private const string ResourceId = "CSharpComicViewer.Resources.Localization";
 
-        private readonly Lazy<ResourceManager> ResMgr = new Lazy<ResourceManager>(() => new ResourceManager(ResourceId, typeof(UtilityService).Assembly));
+        private readonly Lazy<ResourceManager> ResMgr = new Lazy<ResourceManager>(() => new ResourceManager(ResourceId, typeof(TranslationService).Assembly));
+
+        public static event EventHandler LanguageChangedEvent;
+
+        private CultureInfo translationCulture = new CultureInfo("en");
+
+        public void SetTranslationCultureName(string name)
+        {
+            if (name != translationCulture.Name)
+            {
+                translationCulture = new CultureInfo(name);
+                Task.Run(() => LanguageChangedEvent.Invoke(this, null));
+            }
+        }
+
+        public string GetTranslationCultureName()
+        {
+            return translationCulture.Name;
+        }
 
         /// <summary>
         /// Translates the specified text.
@@ -26,7 +45,7 @@ namespace CSharpComicViewer.Service
             if (text == null)
                 return "";
 
-            var cultureInfo = Thread.CurrentThread.CurrentUICulture;
+            var cultureInfo = translationCulture;
 
             var translation = ResMgr.Value.GetString(text, cultureInfo);
 

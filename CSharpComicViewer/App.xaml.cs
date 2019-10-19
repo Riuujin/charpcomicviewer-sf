@@ -86,6 +86,12 @@ namespace CSharpComicViewer
 
             if (state != null)
             {
+                if (!string.IsNullOrWhiteSpace(state.CultureName))
+                {
+                    var translationService = SimpleIoc.Default.GetInstance<ITranslationService>();
+                    translationService.SetTranslationCultureName(state.CultureName);
+                }
+
                 mv.ViewMode = state.ViewMode;
                 mv.AdjustBackgroundColor = state.AdjustBackgroundColor;
 
@@ -132,6 +138,7 @@ namespace CSharpComicViewer
         {
             var mv = SimpleIoc.Default.GetInstance<MainViewModel>();
             var service = SimpleIoc.Default.GetInstance<IDataStorageService>();
+            var translationService = SimpleIoc.Default.GetInstance<ITranslationService>();
 
             if (mv.Comic != null)
             {
@@ -150,7 +157,8 @@ namespace CSharpComicViewer
             {
                 ViewMode = mv.ViewMode,
                 IsFullScreen = mv.IsFullscreen,
-                AdjustBackgroundColor = mv.AdjustBackgroundColor
+                AdjustBackgroundColor = mv.AdjustBackgroundColor,
+                CultureName = translationService.GetTranslationCultureName()
             });
         }
 

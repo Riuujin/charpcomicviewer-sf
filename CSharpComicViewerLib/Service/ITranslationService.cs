@@ -4,8 +4,10 @@ using System.Text;
 
 namespace CSharpComicViewerLib.Service
 {
-    public interface IUtilityService
+    public interface ITranslationService
     {
+        void SetTranslationCultureName(string code);
         string Translate(string text);
+        string GetTranslationCultureName();
     }
 }

@@ -17,7 +17,7 @@ namespace CSharpComicViewer.Service
             SimpleIoc.Default.Register<IComicService, ComicService>();
             SimpleIoc.Default.Register<IDataStorageService, DataStorageService>();
             SimpleIoc.Default.Register<ILegacyConfigurationMigrationService, LegacyConfigurationMigrationService>();
-            SimpleIoc.Default.Register<IUtilityService, UtilityService>();
+            SimpleIoc.Default.Register<ITranslationService, TranslationService>();
             SimpleIoc.Default.Register<IApplicationService, ApplicationService>();
         }
     }

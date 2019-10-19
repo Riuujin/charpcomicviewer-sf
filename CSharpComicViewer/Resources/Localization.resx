@@ -169,6 +169,9 @@
   <data name="ContextMenu_Fullscreen" xml:space="preserve">
     <value>Fullscreen</value>
   </data>
+  <data name="ContextMenu_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
   <data name="ContextMenu_ManageBookmarks" xml:space="preserve">
     <value>Manage bookmarks</value>
   </data>

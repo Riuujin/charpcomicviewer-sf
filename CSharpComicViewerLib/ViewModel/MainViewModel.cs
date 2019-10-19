@@ -11,6 +11,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
+using System.Globalization;
 
 namespace CSharpComicViewerLib.ViewModel
 {
@@ -37,18 +38,19 @@ namespace CSharpComicViewerLib.ViewModel
         private ViewMode viewMode;
         private bool adjustBackgroundColor;
         private RelayCommand toggleAdjustBackgroundColorCommand;
+        private RelayCommand<string> setTranslationCultureCommand;
         private readonly IComicService comicService;
-        private readonly IUtilityService utilityService;
+        private readonly ITranslationService translationService;
         private readonly IApplicationService applicationService;
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
-        public MainViewModel(IComicService comicService, IUtilityService utilityService, IApplicationService applicationService)
+        public MainViewModel(IComicService comicService, ITranslationService translationService, IApplicationService applicationService)
         {
             InitBookmarkContextMenu();
             this.comicService = comicService;
-            this.utilityService = utilityService;
+            this.translationService = translationService;
             this.applicationService = applicationService;
         }
 
@@ -69,7 +71,7 @@ namespace CSharpComicViewerLib.ViewModel
 
                         Bookmarks.Add(bookmark);
                         NotificationText = null;
-                        NotificationText = utilityService.Translate("Notification_BookmarkAdded");
+                        NotificationText = translationService.Translate("Notification_BookmarkAdded");
                     }, () => { return Comic != null; });
                 }
 
@@ -142,7 +144,7 @@ namespace CSharpComicViewerLib.ViewModel
                        }
                        else
                        {
-                           NotificationText = utilityService.Translate("Notification_UnableToGetNextPage");
+                           NotificationText = translationService.Translate("Notification_UnableToGetNextPage");
 
                        }
 
@@ -295,7 +297,7 @@ namespace CSharpComicViewerLib.ViewModel
                         }
                         else
                         {
-                            NotificationText = utilityService.Translate("Notification_UnableToGetPreviousPage");
+                            NotificationText = translationService.Translate("Notification_UnableToGetPreviousPage");
 
                         }
 
@@ -354,6 +356,22 @@ namespace CSharpComicViewerLib.ViewModel
             }
         }
 
+        public ICommand SetTranslationCultureCommand
+        {
+            get
+            {
+                if (setTranslationCultureCommand == null)
+                {
+                    setTranslationCultureCommand = new RelayCommand<string>((string cultureName) =>
+                    {
+                        translationService.SetTranslationCultureName(cultureName);
+                    });
+                }
+
+                return setTranslationCultureCommand;
+            }
+        }
+
         public ICommand ToggleViewModeCommand
         {
             get
@@ -367,22 +385,22 @@ namespace CSharpComicViewerLib.ViewModel
                         if (ViewMode == ViewMode.Normal)
                         {
                             ViewMode = ViewMode.FitToScreen;
-                            NotificationText = utilityService.Translate("Notification_FitToScreen");
+                            NotificationText = translationService.Translate("Notification_FitToScreen");
                         }
                         else if (ViewMode == ViewMode.FitToScreen)
                         {
                             ViewMode = ViewMode.FitToHeight;
-                            NotificationText = utilityService.Translate("Notification_FitToHeight");
+                            NotificationText = translationService.Translate("Notification_FitToHeight");
                         }
                         else if (ViewMode == ViewMode.FitToHeight)
                         {
                             ViewMode = ViewMode.FitToWidth;
-                            NotificationText = utilityService.Translate("Notification_FitToWidth");
+                            NotificationText = translationService.Translate("Notification_FitToWidth");
                         }
                         else if (ViewMode == ViewMode.FitToWidth)
                         {
                             ViewMode = ViewMode.Normal;
-                            NotificationText = utilityService.Translate("Notification_Normal");
+                            NotificationText = translationService.Translate("Notification_Normal");
                         }
                     });
                 }
@@ -418,7 +436,6 @@ namespace CSharpComicViewerLib.ViewModel
         {
 
         }
-
         public async Task OpenComic(string[] files, int pageNumber)
         {
             var previousComic = Comic;
