@@ -25,7 +25,7 @@ namespace CSharpComicViewer.Service
             if (name != translationCulture.Name)
             {
                 translationCulture = new CultureInfo(name);
-                Task.Run(() => LanguageChangedEvent.Invoke(this, null));
+                Task.Run(() => LanguageChangedEvent?.Invoke(this, null));
             }
         }
 
