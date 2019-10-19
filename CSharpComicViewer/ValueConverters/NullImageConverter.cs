@@ -1,6 +1,4 @@
-﻿using CSharpComicViewerLib.Service;
-using GalaSoft.MvvmLight.Ioc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -32,13 +30,12 @@ namespace CSharpComicViewer.ValueConverters
         /// </returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string parameterString = parameter as string;
-            if (parameterString == null)
+            if (value == null)
             {
                 return DependencyProperty.UnsetValue;
             }
-            var translationService = SimpleIoc.Default.GetInstance<ITranslationService>();
-            return parameterString == translationService.GetTranslationCultureName();
+
+            return value;
         }
 
         /// <summary>
