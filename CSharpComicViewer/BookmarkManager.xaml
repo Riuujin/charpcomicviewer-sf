@@ -8,7 +8,6 @@
         xmlns:i="clr-namespace:Microsoft.Xaml.Behaviors;assembly=Microsoft.Xaml.Behaviors"
         xmlns:i18n="clr-namespace:CSharpComicViewer.Localization"
         mc:Ignorable="d"
-        DataContext="{Binding BookmarkManager, Source={StaticResource Locator}}"
         Title="{i18n:Translate BookmarkManager_Title}" Height="600" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <Style TargetType="{x:Type GridViewColumnHeader}">

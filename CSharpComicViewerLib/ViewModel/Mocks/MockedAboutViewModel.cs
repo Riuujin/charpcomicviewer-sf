@@ -1,17 +1,10 @@
 ﻿#if DEBUG
-using CSharpComicViewerLib.Service;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
 using System;
-using System.Configuration;
-using System.Diagnostics;
-using System.Net;
-using System.Reflection;
 using System.Windows.Input;
 
 namespace CSharpComicViewerLib.ViewModel.Mocks
 {
-    public class MockedAboutViewModel : ViewModelBase, IAboutViewModel
+    public class MockedAboutViewModel : IAboutViewModel
     {
         /// <summary>
         /// Gets the name of the program.

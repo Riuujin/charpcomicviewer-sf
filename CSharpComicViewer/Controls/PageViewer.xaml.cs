@@ -1,9 +1,8 @@
 ﻿using CSharpComicViewerLib.Data;
 using CSharpComicViewerLib.Service;
-using GalaSoft.MvvmLight.Ioc;
+using Microsoft.Toolkit.Mvvm.DependencyInjection;
 using System;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -50,7 +49,7 @@ namespace CSharpComicViewer.Controls
 
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                var cs = SimpleIoc.Default.GetInstance<IComicService>();
+                var cs = Ioc.Default.GetRequiredService<IComicService>();
                 cs.ComicLoaded += ComicService_ComicLoaded;
                 cs.PageChange += ComicService_PageChange;
             }

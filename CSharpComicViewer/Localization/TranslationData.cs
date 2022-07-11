@@ -1,6 +1,6 @@
 ﻿using CSharpComicViewer.Service;
 using CSharpComicViewerLib.Service;
-using GalaSoft.MvvmLight.Ioc;
+using Microsoft.Toolkit.Mvvm.DependencyInjection;
 using System;
 using System.ComponentModel;
 
@@ -47,7 +47,7 @@ namespace CSharpComicViewer.Localization
         {
             get
             {
-                return SimpleIoc.Default.GetInstance<ITranslationService>().Translate(text);
+                return Ioc.Default.GetRequiredService<ITranslationService>().Translate(text);
             }
         }
     }

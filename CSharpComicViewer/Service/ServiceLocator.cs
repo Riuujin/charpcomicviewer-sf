@@ -1,24 +1,40 @@
 using CSharpComicViewerLib.Service;
-using GalaSoft.MvvmLight.Ioc;
+using CSharpComicViewerLib.ViewModel;
+using CSharpComicViewerLib.ViewModel.Mocks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Toolkit.Mvvm.DependencyInjection;
 
 namespace CSharpComicViewer.Service
 {
-    /// <summary>
-    /// This class contains static references to all the services in the
-    /// application and provides an entry point for the bindings.
-    /// </summary>
     public class ServiceLocator
     {
-        /// <summary>
-        /// Initializes a new instance of the ViewModelLocator class.
-        /// </summary>
         public ServiceLocator()
         {
-            SimpleIoc.Default.Register<IComicService, ComicService>();
-            SimpleIoc.Default.Register<IDataStorageService, DataStorageService>();
-            SimpleIoc.Default.Register<ILegacyConfigurationMigrationService, LegacyConfigurationMigrationService>();
-            SimpleIoc.Default.Register<ITranslationService, TranslationService>();
-            SimpleIoc.Default.Register<IApplicationService, ApplicationService>();
+            var services = new ServiceCollection();
+
+            services.AddTransient<IComicService, ComicService>();
+            services.AddTransient<IDataStorageService, DataStorageService>();
+            services.AddTransient<ILegacyConfigurationMigrationService, LegacyConfigurationMigrationService>();
+            services.AddTransient<ITranslationService, TranslationService>();
+            services.AddTransient<IApplicationService, ApplicationService>();
+           
+            services.AddSingleton<MainViewModel>();
+            services.AddTransient<BookmarkManagerViewModel>();
+
+#if DEBUG
+            if (App.IsInDesignMode)
+            {
+                services.AddTransient<IAboutViewModel, MockedAboutViewModel>();
+            }
+            else
+            {
+                services.AddTransient<IAboutViewModel, AboutViewModel>();
+            }
+#endif
+#if !DEBUG
+                services.AddTransient<IAboutViewModel, AboutViewModel>();
+#endif
+            Ioc.Default.ConfigureServices(services.BuildServiceProvider());
         }
     }
 }

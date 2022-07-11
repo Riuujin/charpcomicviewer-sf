@@ -1,44 +1,44 @@
 ﻿using CSharpComicViewerLib.Data;
 using CSharpComicViewerLib.Service;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Ioc;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using Microsoft.Toolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Reflection;
 
 namespace CSharpComicViewerLib.ViewModel
 {
-    public class BookmarkManagerViewModel : ViewModelBase
+    public class BookmarkManagerViewModel : ObservableRecipient
     {
 
         private Bookmark selectedBookmark;
         private RelayCommand<Bookmark> deleteBookmarkCommand;
-        private RelayCommand openSelectedBookmarkCommand;
+        private AsyncRelayCommand openSelectedBookmarkCommand;
 
         public BookmarkManagerViewModel()
         {
-            if (ViewModelBase.IsInDesignModeStatic)
-            {
-                Bookmarks.Add(new Bookmark
-                {
-                    FilePaths = new string[] { "c:\\test.zip" },
-                    Name = "test",
-                    Page = 1
-                });
+            //if (ViewModelBase.IsInDesignModeStatic)
+            //{
+            //    Bookmarks.Add(new Bookmark
+            //    {
+            //        FilePaths = new string[] { "c:\\test.zip" },
+            //        Name = "test",
+            //        Page = 1
+            //    });
 
-                Bookmarks.Add(new Bookmark
-                {
-                    FilePaths = new string[] { "c:\\test2.zip" },
-                    Name = "test2",
-                    Page = 55
-                });
-            }
-            else
-            {
-                var mv = SimpleIoc.Default.GetInstance<MainViewModel>();
+            //    Bookmarks.Add(new Bookmark
+            //    {
+            //        FilePaths = new string[] { "c:\\test2.zip" },
+            //        Name = "test2",
+            //        Page = 55
+            //    });
+            //}
+            //else
+            //{
+                var mv = Ioc.Default.GetRequiredService<MainViewModel>();
                 Bookmarks = mv.Bookmarks;
-            }
+        //    }
         }
 
         public ObservableCollection<Bookmark> Bookmarks { get; set; } = new ObservableCollection<Bookmark>();
@@ -48,7 +48,7 @@ namespace CSharpComicViewerLib.ViewModel
             get { return selectedBookmark; }
             set
             {
-                Set(ref selectedBookmark, value);
+                SetProperty(ref selectedBookmark, value,true);
             }
         }
 
@@ -60,7 +60,7 @@ namespace CSharpComicViewerLib.ViewModel
                 {
                     deleteBookmarkCommand = new RelayCommand<Bookmark>((bookmark) =>
                     {
-                        var ws = SimpleIoc.Default.GetInstance<IApplicationService>();
+                        var ws = Ioc.Default.GetRequiredService<IApplicationService>();
                         if (ws.Confirm("Are you sure?", "Delete confirmation"))
                         {
                             Bookmarks.Remove(bookmark);
@@ -72,15 +72,15 @@ namespace CSharpComicViewerLib.ViewModel
             }
         }
 
-        public RelayCommand OpenSelectedBookmarkCommand
+        public AsyncRelayCommand OpenSelectedBookmarkCommand
         {
             get
             {
                 if (openSelectedBookmarkCommand == null)
                 {
-                    openSelectedBookmarkCommand = new RelayCommand(async () =>
+                    openSelectedBookmarkCommand = new AsyncRelayCommand(async () =>
                     {
-                        var mv = SimpleIoc.Default.GetInstance<MainViewModel>();
+                        var mv = Ioc.Default.GetRequiredService<MainViewModel>();
                         await mv.OpenComic(SelectedBookmark.FilePaths, SelectedBookmark.Page);
                     }, () => SelectedBookmark != null);
                 }

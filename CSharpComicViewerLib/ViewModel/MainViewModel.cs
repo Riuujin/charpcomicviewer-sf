@@ -1,21 +1,17 @@
 ﻿using CSharpComicViewerLib.Comic;
 using CSharpComicViewerLib.Data;
 using CSharpComicViewerLib.Service;
-using Microsoft.Win32;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Linq;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.Input;
 using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Ioc;
-using System.Globalization;
 
 namespace CSharpComicViewerLib.ViewModel
 {
-    public class MainViewModel : ViewModelBase
+    public class MainViewModel : ObservableRecipient
     {
         private ICommand addBookmarkCommand;
         private IComic comic;
@@ -91,7 +87,7 @@ namespace CSharpComicViewerLib.ViewModel
             }
             set
             {
-                Set(ref comic, value);
+                SetProperty(ref comic, value, true);
                 PageCountVisible = value != null;
             }
         }
@@ -122,7 +118,7 @@ namespace CSharpComicViewerLib.ViewModel
             get { return isFullscreen; }
             set
             {
-                Set(ref isFullscreen, value);
+                SetProperty(ref isFullscreen, value, true);
             }
         }
 
@@ -132,7 +128,7 @@ namespace CSharpComicViewerLib.ViewModel
             {
                 if (nextPageCommand == null)
                 {
-                    nextPageCommand = new RelayCommand(async () =>
+                    nextPageCommand = new AsyncRelayCommand(async () =>
                    {
                        var page = await Comic.GetPage(PageNumber + 1);
                        if (page != null)
@@ -160,7 +156,7 @@ namespace CSharpComicViewerLib.ViewModel
             get { return notificationText; }
             set
             {
-                Set(ref notificationText, value);
+                SetProperty(ref notificationText, value, true);
             }
         }
 
@@ -169,7 +165,7 @@ namespace CSharpComicViewerLib.ViewModel
             get { return numberOfPages; }
             set
             {
-                Set(ref numberOfPages, value);
+                SetProperty(ref numberOfPages, value, true);
             }
         }
 
@@ -214,7 +210,7 @@ namespace CSharpComicViewerLib.ViewModel
             {
                 if (openCommand == null)
                 {
-                    openCommand = new RelayCommand(
+                    openCommand = new AsyncRelayCommand(
                            async () =>
                            {
 
@@ -257,7 +253,7 @@ namespace CSharpComicViewerLib.ViewModel
             get { return page; }
             set
             {
-                Set(ref page, value);
+                SetProperty(ref page, value, true);
             }
         }
 
@@ -266,7 +262,7 @@ namespace CSharpComicViewerLib.ViewModel
             get { return pageCountVisible; }
             set
             {
-                Set(ref pageCountVisible, value);
+                SetProperty(ref pageCountVisible, value, true);
             }
         }
 
@@ -275,7 +271,7 @@ namespace CSharpComicViewerLib.ViewModel
             get { return pageNumber; }
             set
             {
-                Set(ref pageNumber, value);
+                SetProperty(ref pageNumber, value, true);
             }
         }
 
@@ -285,7 +281,7 @@ namespace CSharpComicViewerLib.ViewModel
             {
                 if (previousPageCommand == null)
                 {
-                    previousPageCommand = new RelayCommand(async () =>
+                    previousPageCommand = new AsyncRelayCommand(async () =>
                     {
                         var page = await Comic.GetPage(PageNumber - 1);
                         if (page != null)
@@ -314,7 +310,7 @@ namespace CSharpComicViewerLib.ViewModel
             {
                 if (resumeCommand == null)
                 {
-                    resumeCommand = new RelayCommand(async () =>
+                    resumeCommand = new AsyncRelayCommand(async () =>
                     {
                         await OpenComic(resumeData.FilePaths, resumeData.Page);
                     }, () => { return resumeData?.FilePaths.Length > 0; });
@@ -414,7 +410,7 @@ namespace CSharpComicViewerLib.ViewModel
             get { return viewMode; }
             set
             {
-                Set(ref viewMode, value);
+                SetProperty(ref viewMode, value, true);
             }
         }
 
@@ -423,7 +419,7 @@ namespace CSharpComicViewerLib.ViewModel
             get { return adjustBackgroundColor; }
             set
             {
-                Set(ref adjustBackgroundColor, value);
+                SetProperty(ref adjustBackgroundColor, value, true);
             }
         }
 
@@ -482,7 +478,7 @@ namespace CSharpComicViewerLib.ViewModel
                             Header = $"{bookmark.Name}{Environment.NewLine}Page: {bookmark.Page}",
                             ToolTip = $"{string.Join(Environment.NewLine, bookmark.FilePaths)}",
                             Bookmark = bookmark,
-                            Command = new RelayCommand<Bookmark>(async (Bookmark b) =>
+                            Command = new AsyncRelayCommand<Bookmark>(async (Bookmark b) =>
                             {
                                 await OpenComic(b.FilePaths, b.Page);
                             }),

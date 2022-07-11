@@ -1,17 +1,13 @@
 ﻿using CSharpComicViewerLib.Service;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Ioc;
 using System;
-using System.Configuration;
-using System.Diagnostics;
 using System.Net;
-using System.Reflection;
 using System.Windows.Input;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.Input;
 
 namespace CSharpComicViewerLib.ViewModel
 {
-    public class AboutViewModel : ViewModelBase, IAboutViewModel
+    public class AboutViewModel : ObservableRecipient, IAboutViewModel
     {
         private readonly IApplicationService applicationService;
         private ICommand checkUpdateCommand;
@@ -92,7 +88,7 @@ namespace CSharpComicViewerLib.ViewModel
             }
             private set
             {
-                Set(ref latestVersion, value);
+                SetProperty(ref latestVersion, value, true);
             }
         }
 
@@ -110,7 +106,7 @@ namespace CSharpComicViewerLib.ViewModel
             }
             set
             {
-                Set(ref latestVersionUrl, value);
+                SetProperty(ref latestVersionUrl, value,true);
             }
         }
 
@@ -128,7 +124,7 @@ namespace CSharpComicViewerLib.ViewModel
             }
             set
             {
-                Set(ref latestVersionIsDifferent, value);
+                SetProperty(ref latestVersionIsDifferent, value,true);
             }
         }
 
@@ -144,7 +140,7 @@ namespace CSharpComicViewerLib.ViewModel
             {
                 if (checkUpdateCommand == null)
                 {
-                    checkUpdateCommand = new RelayCommand(async () =>
+                    checkUpdateCommand = new AsyncRelayCommand(async () =>
                     {
                         try
                         {

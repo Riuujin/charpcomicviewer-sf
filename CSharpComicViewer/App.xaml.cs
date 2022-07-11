@@ -1,9 +1,8 @@
 ﻿using CSharpComicViewer.Service;
-using CSharpComicViewerLib;
 using CSharpComicViewerLib.Data;
 using CSharpComicViewerLib.Service;
 using CSharpComicViewerLib.ViewModel;
-using GalaSoft.MvvmLight.Ioc;
+using Microsoft.Toolkit.Mvvm.DependencyInjection;
 using System.Windows;
 
 namespace CSharpComicViewer
@@ -22,7 +21,7 @@ namespace CSharpComicViewer
         /// <param name="e">The <see cref="System.Windows.Threading.DispatcherUnhandledExceptionEventArgs"/> instance containing the event data.</param>
         private void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            var mv = SimpleIoc.Default.GetInstance<MainViewModel>();
+            var mv = Ioc.Default.GetRequiredService<MainViewModel>();
             mv.HandleException(e.Exception);
         }
 
@@ -48,10 +47,10 @@ namespace CSharpComicViewer
 
             var mainWindow = new MainWindow();
 
-            var ws = SimpleIoc.Default.GetInstance<IApplicationService>();
+            var ws = Ioc.Default.GetRequiredService<IApplicationService>();
             ws.SetMainWindow(mainWindow);
 
-            var mv = SimpleIoc.Default.GetInstance<MainViewModel>();
+            var mv = Ioc.Default.GetRequiredService<MainViewModel>();
             LoadFromStorage(mv);
 
             mainWindow.Show();
@@ -68,7 +67,7 @@ namespace CSharpComicViewer
         /// <param name="mv">The mv.</param>
         private void LoadFromStorage(MainViewModel mv)
         {
-            var service = SimpleIoc.Default.GetInstance<IDataStorageService>();
+            var service = Ioc.Default.GetRequiredService<IDataStorageService>();
 
             var state = service.Load<State>("state");
             var resumeData = service.Load<Bookmark>("resumeData");
@@ -76,7 +75,7 @@ namespace CSharpComicViewer
 
             if (state == null && resumeData == null && bookmarks == null)
             {
-                var legacyService = SimpleIoc.Default.GetInstance<ILegacyConfigurationMigrationService>();
+                var legacyService = Ioc.Default.GetRequiredService<ILegacyConfigurationMigrationService>();
                 legacyService.Migrate();
 
                 //Reload data, it might have been changed.
@@ -88,7 +87,7 @@ namespace CSharpComicViewer
             {
                 if (!string.IsNullOrWhiteSpace(state.CultureName))
                 {
-                    var translationService = SimpleIoc.Default.GetInstance<ITranslationService>();
+                    var translationService = Ioc.Default.GetRequiredService<ITranslationService>();
                     translationService.SetTranslationCultureName(state.CultureName);
                 }
 
@@ -98,7 +97,7 @@ namespace CSharpComicViewer
                 if (state.IsFullScreen)
                 {
                     //Initial state will never be fullscreen, toggle to fullscreen if state requires it.
-                    var ws = SimpleIoc.Default.GetInstance<IApplicationService>();
+                    var ws = Ioc.Default.GetRequiredService<IApplicationService>();
                     mv.IsFullscreen = ws.ToggleFullscreen();
                 }
             }
@@ -136,9 +135,9 @@ namespace CSharpComicViewer
         /// </summary>
         private void SaveToStorage()
         {
-            var mv = SimpleIoc.Default.GetInstance<MainViewModel>();
-            var service = SimpleIoc.Default.GetInstance<IDataStorageService>();
-            var translationService = SimpleIoc.Default.GetInstance<ITranslationService>();
+            var mv = Ioc.Default.GetRequiredService<MainViewModel>();
+            var service = Ioc.Default.GetRequiredService<IDataStorageService>();
+            var translationService = Ioc.Default.GetRequiredService<ITranslationService>();
 
             if (mv.Comic != null)
             {

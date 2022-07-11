@@ -1,6 +1,6 @@
 ﻿using CSharpComicViewerLib.Data;
 using CSharpComicViewerLib.Service;
-using GalaSoft.MvvmLight.Ioc;
+using Microsoft.Toolkit.Mvvm.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -23,7 +23,7 @@ namespace CSharpComicViewer.Service
         /// </summary>
         public void Migrate()
         {
-            var service = SimpleIoc.Default.GetInstance<IDataStorageService>();
+            var service = Ioc.Default.GetRequiredService<IDataStorageService>();
             string configurationPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "C# Comicviewer", "Configuration.xml");
 
             if (File.Exists(configurationPath))

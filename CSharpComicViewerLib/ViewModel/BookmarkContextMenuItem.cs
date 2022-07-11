@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using CSharpComicViewerLib.Data;
 using CSharpComicViewerLib.ViewModel;
-using GalaSoft.MvvmLight;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 
 namespace CSharpComicViewerLib.ViewModel
 {
-    public class BookmarkContextMenuItem : ViewModelBase
+    public class BookmarkContextMenuItem : ObservableRecipient
     {
         private string header;
         private string inputGestureText;
@@ -27,7 +27,7 @@ namespace CSharpComicViewerLib.ViewModel
             get { return toolTip; }
             set
             {
-                Set(ref toolTip, value);
+                SetProperty(ref toolTip, value, true);
             }
         }
 
@@ -42,7 +42,7 @@ namespace CSharpComicViewerLib.ViewModel
             get { return header; }
             set
             {
-                Set(ref header, value);
+                SetProperty(ref header, value, true);
             }
         }
 
@@ -57,7 +57,7 @@ namespace CSharpComicViewerLib.ViewModel
             get { return inputGestureText; }
             set
             {
-                Set(ref inputGestureText, value);
+                SetProperty(ref inputGestureText, value, true);
             }
         }
 
@@ -69,7 +69,7 @@ namespace CSharpComicViewerLib.ViewModel
         /// </value>
         public ICommand Command
         {
-            get;set;
+            get; set;
         }
 
         /// <summary>
